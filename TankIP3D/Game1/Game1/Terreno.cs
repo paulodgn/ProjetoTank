@@ -27,7 +27,7 @@ namespace Game1
         {
 
             
-            tamanhoMapa = imagemMapaAlturas.Height * imagemMapaAlturas.Width;
+            tamanhoMapa = (imagemMapaAlturas.Height * imagemMapaAlturas.Width);
             this.texturaMapa = imagemMapaAlturas;
             effect = new BasicEffect(device);
             worldMatrix = Matrix.Identity;
@@ -54,7 +54,7 @@ namespace Game1
         {
             vertexCount = tamanhoMapa;
             vertices = new VertexPositionColor[vertexCount];
-            float escala = 0.8f;
+            float escala = 0.05f;
             //ler imagem
 
             //criar vertices
@@ -62,22 +62,23 @@ namespace Game1
             {
                 for (int z = 0; z < texturaMapa.Width; z++)
                 {
-                    vertices[x * texturaMapa.Width + z] = new VertexPositionColor(new Vector3(x, alturas[x, z]*0.05f, -z), Color.Red);
+                    vertices[x * texturaMapa.Width + z] = new VertexPositionColor(new Vector3(x, alturas[x, z] * escala, -z), Color.Red);
                 }
             }
 
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                //Console.WriteLine(vertices[i]);
-            }
+            //for (int i = 0; i < vertices.Length; i++)
+            //{
+            //    //Console.WriteLine(vertices[i]);
+            //}
             //aplicar textura
 
             //criar indice
-            indice = new short[texturaMapa.Height * texturaMapa.Width];
+            indice = new short[(texturaMapa.Height * texturaMapa.Width)*2];
             for (int i = 0; i < indice.Length/2; i++)
             {
-                indice[2*i+1] = (short)(i);
-                indice[2*i]=(short)(i+texturaMapa.Width);
+                indice[2 * i] = (short)(i );
+                indice[2 * i + 1] = (short)(i + texturaMapa.Width);
+                
             }
             
             vertexBuffer = new VertexBuffer(device, typeof(VertexPositionColorTexture), vertices.GetLength(0), BufferUsage.WriteOnly);
@@ -123,6 +124,7 @@ namespace Game1
             //}
             //device.DrawUserIndexedPrimitives<VertexPositionColor>(
             device.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleStrip, vertices, 0, vertices.Length, indice, 0, tamanhoMapa-2);
+            device.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleStrip, vertices,0, vertices.Length, indice, 16384, tamanhoMapa - 2);
             //device.DrawUserPrimitives(PrimitiveType.TriangleList, vertices, 0, 128*2);
         }
     }
