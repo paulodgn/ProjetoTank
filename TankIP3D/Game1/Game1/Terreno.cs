@@ -66,10 +66,7 @@ namespace Game1
                 }
             }
 
-            //for (int i = 0; i < vertices.Length; i++)
-            //{
-            //    //Console.WriteLine(vertices[i]);
-            //}
+           
             //aplicar textura
 
             //criar indice
@@ -117,31 +114,15 @@ namespace Game1
             effect.CurrentTechnique.Passes[0].Apply();
 
             device.SetVertexBuffer(vertexBuffer);
-
-            //for (int i = 0; i < 64; i++)
-            //{
-            //    device.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleStrip, vertices,i*257, vertices.Length, indice, i*257, 128/*tamanhoMapa-2*/);
-            //}
-            //device.DrawUserIndexedPrimitives<VertexPositionColor>(
-            device.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleStrip, vertices, 0, vertices.Length, indice, 0, tamanhoMapa-2);
-            device.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleStrip, vertices,0, vertices.Length, indice, 16384, tamanhoMapa - 2);
-            //device.DrawUserPrimitives(PrimitiveType.TriangleList, vertices, 0, 128*2);
+            int var = 0;
+            for (int i = 0; i < texturaMapa.Width-1; i++)
+            {
+                device.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleStrip, vertices, i * texturaMapa.Width, texturaMapa.Width*2-1, indice, var, texturaMapa.Width*2-3);
+                
+            }
+           
         }
     }
 }
-//for (int x = 0; x < texturaMapa.Height; x++)
-//{
-//    for (int z = 0; z < texturaMapa.Width; z++)
-//    {
-//        vertices[x + z * texturaMapa.Width] = new VertexPositionColor(new Vector3(x, alturas[z], z), Color.Green);
-//    }
 
-//}
-//for (int i = 0; i < vertices.Length; i++)
-//{
-//    Console.WriteLine(vertices[i]);
-//}
-//for (int i = 0; i < vertices.Length; i++)
-//{
-//    vertices[i] = new VertexPositionColor(new Vector3(i * escala, alturas[i], i * escala + 1), Color.White);
 //}

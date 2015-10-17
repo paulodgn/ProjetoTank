@@ -24,8 +24,8 @@ namespace Game1
             //vetorBase = new Vector3(1, 0, 0);
             //time = gameTime.ElapsedGameTime.Milliseconds;
             velocidade = 0.01f;
-            vetorBase = new Vector3(1, 0, 0);
-            posicao = new Vector3(0, 0, 0);
+            vetorBase = new Vector3(1, -0.5f, 0);
+            posicao = new Vector3(-50, 50, -30);
             direcao = vetorBase;
             worldMatrix = Matrix.Identity;
         }
