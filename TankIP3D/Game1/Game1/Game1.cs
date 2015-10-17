@@ -14,7 +14,7 @@ namespace Game1
         SpriteBatch spriteBatch;
         CameraAula camera;
         Terreno terreno;
-        Texture2D mapaAlturas;
+        Texture2D mapaAlturas,textura;
         BasicEffect effect;
         Vector2 mousePosition;
         float posicaoInicialRatoX, posicaoInicialRatoY;
@@ -51,7 +51,7 @@ namespace Game1
             //Criar e definir o resterizerState a utilizar para desenhar a geometria
             RasterizerState rasterizerState = new RasterizerState();
             rasterizerState.CullMode = CullMode.None;
-            rasterizerState.FillMode = FillMode.WireFrame;
+            //rasterizerState.FillMode = FillMode.WireFrame;
             rasterizerState.MultiSampleAntiAlias = true;
             GraphicsDevice.RasterizerState = rasterizerState;
             // TODO: use this.Content to load your game content here
@@ -59,7 +59,8 @@ namespace Game1
             //Camera.Initialize(GraphicsDevice);
             
             mapaAlturas = Content.Load<Texture2D>("mapaAlturas");
-            terreno = new Terreno(GraphicsDevice, mapaAlturas,mapaAlturas,1f);
+            textura = Content.Load<Texture2D>("grass50x50");
+            terreno = new Terreno(GraphicsDevice, mapaAlturas,mapaAlturas,1f,textura);
             effect = new BasicEffect(GraphicsDevice);
             mousePosition = new Vector2(0, 0);
             
