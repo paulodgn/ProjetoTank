@@ -25,6 +25,10 @@ namespace Game1
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            graphics.IsFullScreen = false;
+            graphics.PreferredBackBufferHeight = 800;
+            graphics.PreferredBackBufferWidth = 1000;
         }
 
         /// <summary>
@@ -36,7 +40,7 @@ namespace Game1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            
             
             base.Initialize();
         }
@@ -65,6 +69,7 @@ namespace Game1
             terreno = new Terreno(GraphicsDevice, mapaAlturas,mapaAlturas,1f,textura);
             effect = new BasicEffect(GraphicsDevice);
             mousePosition = new Vector2(0, 0);
+            IsMouseVisible = false;
             
         }
 
