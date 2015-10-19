@@ -147,14 +147,14 @@ namespace Game1
             //effect.World = Camera.World;
             //effect.Projection = Camera.Projection;
             effect.World = worldMatrix;
-            effect.CurrentTechnique.Passes[0].Apply();
+             effect.CurrentTechnique.Passes[0].Apply();
 
             device.SetVertexBuffer(vertexBuffer);
-            int var = 0;
+            //int var = 0;
             for (int i = 0; i < texturaMapa.Width-1; i++)
             {
-                device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleStrip, vertices, i * texturaMapa.Width, texturaMapa.Width * 2 - 1, indice, var, texturaMapa.Width * 2 - 3);
-                
+                device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleStrip, vertices, i * texturaMapa.Width, texturaMapa.Width * 2 , indice, 0, texturaMapa.Width * 2-2 );
+                //Console.WriteLine(var);
             }
            
         }
