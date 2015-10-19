@@ -23,37 +23,30 @@ namespace Game1
 
         public CameraAula()
         {
-            //vetorBase = new Vector3(1, 0, 0);
-            //time = gameTime.ElapsedGameTime.Milliseconds;
-            velocidade = 0.01f;
+          
+            velocidade = 0.8f;
             vetorBase = new Vector3(1, -0.5f, 0);
             posicao = new Vector3(-50, 50, -30);
             direcao = vetorBase;
             worldMatrix = Matrix.Identity;
+            
         }
 
-        //public void iniciarCamera()
-        //{
-        //    vetorBase = new Vector3(1, 0, 0);
-        //    time = gameTime.ElapsedGameTime.Milliseconds;
-        //    velocidade = 0.5f;
-        //}
+    
         public void frente(GameTime gameTime)
         {
             time = gameTime.ElapsedGameTime.Milliseconds;
-            posicao = posicao + velocidade * vetorBase * time;
-            target = posicao+vetorBase;//posicao + direcao;
-            //Console.WriteLine(target);
-            //view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
+            posicao = posicao + velocidade * direcao;
+            target = posicao+direcao;//posicao + direcao;
+
         }
 
         public void moverTras(GameTime gameTime)
         {
             time = gameTime.ElapsedGameTime.Milliseconds;
-            posicao = posicao - velocidade * vetorBase * time;
-            target = posicao + vetorBase;//posicao + direcao;
-            //Console.WriteLine(target);
-            //view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
+            posicao = posicao - velocidade * direcao;
+            target = posicao + direcao;//posicao + direcao;
+
         }
 
         
@@ -69,15 +62,12 @@ namespace Game1
 
             //novadirecao=vector3.transform(baseVector,rot)rot=yawpitchroll
             time = gameTime.ElapsedGameTime.Milliseconds;
-            yaw = rodarX + velocidade * time/10;
-            rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, 0);
+            yaw = yaw + velocidade *time / 1000;
+            rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, pitch);
             worldMatrix = rotacao;
-            vetorBase = Vector3.Transform(vetorBase, rotacao);
-            //this.worldMatrix = rotacao;
-            target = posicao + vetorBase;
-            //Console.WriteLine(target);
-            //Console.WriteLine(yaw);
-            //view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
+            direcao = Vector3.Transform(vetorBase, rotacao);
+            target = posicao + direcao;
+
             
 
 
@@ -87,43 +77,38 @@ namespace Game1
         {
             
             time = gameTime.ElapsedGameTime.Milliseconds;
-            yaw = rodarX + velocidade * time/10;
-            rotacao = Matrix.CreateFromYawPitchRoll(-yaw, 0, 0);
-            vetorBase = Vector3.Transform(vetorBase, rotacao);
-            this.worldMatrix = rotacao;
-            target = posicao + vetorBase;
-            //Console.WriteLine(target);
-            //Console.WriteLine(-yaw);
-            //view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
+            yaw = yaw - velocidade *time / 1000;
+            rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, pitch);
+            worldMatrix = rotacao;
+            direcao = Vector3.Transform(vetorBase, rotacao);
+            
+            target = posicao + direcao;
+
             
         }
 
         public void rodarCima(GameTime gameTime, float rodarY)
         {
             time = gameTime.ElapsedGameTime.Milliseconds;
-            pitch = rodarY + velocidade * time/10;
-            rotacao = Matrix.CreateFromYawPitchRoll(0, 0, pitch);
+            pitch = pitch + velocidade * time/1000;
+            rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, pitch);
             worldMatrix = rotacao;
-            vetorBase = Vector3.Transform(vetorBase, rotacao);
-            //this.worldMatrix = rotacao;
-            target = posicao + vetorBase;
-            //Console.WriteLine(target);
-            vUpaux = Vector3.Cross(vetorBase, Vector3.Up);
-            vUp = Vector3.Cross(vUpaux, Vector3.Up);
-            //view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
+            direcao = Vector3.Transform(vetorBase, rotacao);
+
+            target = posicao + direcao;
+
 
         }
 
         public void rodarBaixo(GameTime gameTime,float rodarY)
         {
             time = gameTime.ElapsedGameTime.Milliseconds;
-            pitch = rodarY + velocidade * time / 10;
-            rotacao = Matrix.CreateFromYawPitchRoll(0, 0, -pitch);
+            pitch = pitch - velocidade * time / 1000;
+            rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, pitch);
             worldMatrix = rotacao;
-            vetorBase = Vector3.Transform(vetorBase, rotacao);
-            target = posicao + vetorBase;
-            //Console.WriteLine(target);
-            //view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
+            direcao = Vector3.Transform(vetorBase, rotacao);
+            target = posicao + direcao;
+
 
         }
 
@@ -134,7 +119,7 @@ namespace Game1
             posicao = posicao - velocidade * Vector3.Cross(vetorBase, Vector3.Up);
             
             target = posicao + vetorBase;
-            //view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
+
         }
 
         public void strafeDireita(GameTime gameTime, float strafe)
@@ -144,10 +129,10 @@ namespace Game1
             posicao = posicao + velocidade * Vector3.Cross(vetorBase, Vector3.Up);
 
             target = posicao + vetorBase;
-            //view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
+
         }
         
-        public void input(GameTime gameTime)
+        public void input(GameTime gameTime, GraphicsDeviceManager graphics)
         {
             KeyboardState kb = Keyboard.GetState();
 
@@ -177,34 +162,27 @@ namespace Game1
             //rotacao em x
             if (mouseState.X < posicaoRato.X)
             {
-                this.rodarDireita(gameTime, 0.01f);
-                //rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, pitch);
-                //this.worldMatrix = rotacao;
+                this.rodarDireita(gameTime, 0.001f);
                 view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
             }
             if (mouseState.X > posicaoRato.X)
             {
-                this.rodarEsquerda(gameTime, 0.01f);
-                //rotacao = Matrix.CreateFromYawPitchRoll(-yaw, 0, pitch);
-                //this.worldMatrix = rotacao;
+                this.rodarEsquerda(gameTime, 0.001f);
                 view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
 
             }
             //rotacao em y
             if (mouseState.Y > posicaoRato.Y)
             {
-                this.rodarBaixo(gameTime, 0.01f);
-                //rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, pitch);
-                //this.worldMatrix = rotacao;
+                this.rodarBaixo(gameTime, 0.001f);
                 view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
             }
             if (mouseState.Y < posicaoRato.Y)
             {
-                this.rodarCima(gameTime, 0.01f);
-                //rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, -pitch);
-                //this.worldMatrix = rotacao;
+                this.rodarCima(gameTime, 0.001f);
                 view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
             }
+            
             posicaoRato.X = mouseState.X;
             posicaoRato.Y = mouseState.Y;
         }

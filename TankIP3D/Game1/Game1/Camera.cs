@@ -90,7 +90,9 @@ namespace Game1
                 float yDifference = currentMouseState.Y - originalMouseState.Y;
                 leftrightRot -= rotationSpeed * xDifference * amount;
                 updownRot -= rotationSpeed * yDifference * amount;
-                //Mouse.SetPosition(graphics.Viewport.Width / 2, graphics.Viewport.Height / 2);
+                try
+                { Mouse.SetPosition(graphics.Viewport.Width / 2, graphics.Viewport.Height / 2); }
+                catch (Exception e) { }
                 UpdateViewMatrix();
             }
 

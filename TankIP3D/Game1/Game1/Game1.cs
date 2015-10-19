@@ -13,6 +13,7 @@ namespace Game1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         CameraAula camera;
+        CameraVersao2 camera2;
         Terreno terreno;
         Texture2D mapaAlturas,textura;
         BasicEffect effect;
@@ -56,6 +57,7 @@ namespace Game1
             GraphicsDevice.RasterizerState = rasterizerState;
             // TODO: use this.Content to load your game content here
             camera = new CameraAula();
+            camera2 = new CameraVersao2();
             //Camera.Initialize(GraphicsDevice);
             
             mapaAlturas = Content.Load<Texture2D>("mapaAlturas");
@@ -88,7 +90,7 @@ namespace Game1
             // TODO: Add your update logic here
             //Camera.Update(gameTime, GraphicsDevice);
             //input(gameTime);
-            camera.input(gameTime);
+            
             MouseState mouseState = Mouse.GetState();
             ////se a posicao se mantiver(rato parado) centra o rato
             if (mouseState.X == mousePosition.X && mouseState.Y == mousePosition.Y)
@@ -102,6 +104,8 @@ namespace Game1
             }
             mousePosition.X = mouseState.X;
             mousePosition.Y = mouseState.Y;
+            //camera2.input(gameTime, graphics);
+            camera.input(gameTime,graphics);
             base.Update(gameTime);
         }
 
