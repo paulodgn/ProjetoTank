@@ -50,7 +50,7 @@ namespace Game1
             spriteBatch = new SpriteBatch(GraphicsDevice);
             //Criar e definir o resterizerState a utilizar para desenhar a geometria
             RasterizerState rasterizerState = new RasterizerState();
-            rasterizerState.CullMode = CullMode.None;
+            //rasterizerState.CullMode = CullMode.None;
             //rasterizerState.FillMode = FillMode.WireFrame;
             rasterizerState.MultiSampleAntiAlias = true;
             GraphicsDevice.RasterizerState = rasterizerState;

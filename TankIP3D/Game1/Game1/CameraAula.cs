@@ -18,6 +18,8 @@ namespace Game1
         public Matrix view, projection,worldMatrix;
         Vector2 posicaoRato;
         Matrix rotacao;
+        Vector3 vUpaux;
+        Vector3 vUp;
 
         public CameraAula()
         {
@@ -106,8 +108,8 @@ namespace Game1
             //this.worldMatrix = rotacao;
             target = posicao + vetorBase;
             //Console.WriteLine(target);
-            //Vector3 vUpaux = Vector3.Cross(vetorBase, Vector3.Up);
-            //Vector3 vUp = Vector3.Cross(vUpaux, Vector3.Up);
+            vUpaux = Vector3.Cross(vetorBase, Vector3.Up);
+            vUp = Vector3.Cross(vUpaux, Vector3.Up);
             //view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
 
         }
