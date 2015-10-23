@@ -101,7 +101,8 @@ namespace Game1
                     }
                 }
             }
-
+            //
+          
            
             //aplicar textura
 
@@ -117,6 +118,11 @@ namespace Game1
             vertexBuffer = new VertexBuffer(device, typeof(VertexPositionColorTexture), vertices.GetLength(0), BufferUsage.WriteOnly);
         }
 
+        //get vertices
+        public VertexPositionColorTexture[] getVertices()
+        {
+            return (vertices);
+        }
         public void lerMapaAlturas(Texture2D texturaMapa)
         {
             valoresMapaAlturas = new Color[tamanhoMapa];
@@ -139,7 +145,7 @@ namespace Game1
           
         }
 
-        public void Draw(GraphicsDevice device,/*CameraVersao2 camera*/ CameraAula camera)
+        public void Draw(GraphicsDevice device,/*CameraVersao2 camera*/ CameraSurfaceFollow camera)
         {
             //plano.Draw(device, camera);
             effect.View = camera.view;

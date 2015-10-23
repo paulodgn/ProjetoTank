@@ -14,6 +14,7 @@ namespace Game1
         SpriteBatch spriteBatch;
         CameraAula camera;
         CameraVersao2 camera2;
+        CameraSurfaceFollow cameraSurfaceFollow;
         Terreno terreno;
         Texture2D mapaAlturas,textura;
         BasicEffect effect;
@@ -62,11 +63,14 @@ namespace Game1
             // TODO: use this.Content to load your game content here
             camera = new CameraAula();
             camera2 = new CameraVersao2();
+            
             //Camera.Initialize(GraphicsDevice);
             
             mapaAlturas = Content.Load<Texture2D>("mapaAlturas");
             textura = Content.Load<Texture2D>("grass50x50");
             terreno = new Terreno(GraphicsDevice, mapaAlturas,mapaAlturas,1f,textura);
+            VertexPositionColorTexture[] vertices = terreno.getVertices();
+            cameraSurfaceFollow = new CameraSurfaceFollow(vertices);
             effect = new BasicEffect(GraphicsDevice);
             mousePosition = new Vector2(0, 0);
             IsMouseVisible = false;
@@ -102,7 +106,7 @@ namespace Game1
             {
                 try
                 {
-                    Mouse.SetPosition(graphics.GraphicsDevice.Viewport.Height / 2, graphics.GraphicsDevice.Viewport.Width / 2);
+                   Mouse.SetPosition(graphics.GraphicsDevice.Viewport.Height / 2, graphics.GraphicsDevice.Viewport.Width / 2);
                 }
                 catch (Exception e)
                 { }
@@ -110,7 +114,8 @@ namespace Game1
             mousePosition.X = mouseState.X;
             mousePosition.Y = mouseState.Y;
             //camera2.input(gameTime, graphics);
-            camera.input(gameTime,graphics);
+            //camera.input(gameTime,graphics);
+            cameraSurfaceFollow.input(gameTime, graphics);
             base.Update(gameTime);
         }
 
@@ -123,7 +128,7 @@ namespace Game1
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            terreno.Draw(GraphicsDevice,camera);
+            terreno.Draw(GraphicsDevice,cameraSurfaceFollow);
             
 
             base.Draw(gameTime);
