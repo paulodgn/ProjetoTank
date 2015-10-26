@@ -21,10 +21,11 @@ namespace Game1
         Vector3 vUpaux;
         Vector3 vUp;
         VertexPositionColorTexture[] vertices;
+        int alturaMapa;
 
-        public CameraSurfaceFollow(VertexPositionColorTexture[] vertices)
+        public CameraSurfaceFollow(VertexPositionColorTexture[] vertices, int alturaMapa)
         {
-          
+            this.alturaMapa = alturaMapa;
             velocidade = 0.009f;
             vetorBase = new Vector3(1, -0.5f, 0);
             posicao = new Vector3(50, 10, 50);
@@ -55,25 +56,31 @@ namespace Game1
             zD = zC;
 
             //encontrar valor de Y de cada vertice
-            foreach (var vertice in vertices)
-            {
-                if(vertice.Position.X==xA && vertice.Position.Z==zA)
-                {
-                    yA = vertice.Position.Y;
-                }
-                if (vertice.Position.X == xB && vertice.Position.Z == zB)
-                {
-                    yB = vertice.Position.Y;
-                }
-                if (vertice.Position.X == xC && vertice.Position.Z == zC)
-                {
-                    yC = vertice.Position.Y;
-                }
-                if (vertice.Position.X == xD && vertice.Position.Z == zD)
-                {
-                    yD = vertice.Position.Y;
-                }
-            }
+
+            yA = vertices[xA * alturaMapa + zA].Position.Y;
+            yB = vertices[xB * alturaMapa + zB].Position.Y;
+            yC = vertices[xC * alturaMapa + zC].Position.Y;
+            yD = vertices[xD * alturaMapa + zD].Position.Y;
+
+            //foreach (var vertice in vertices)
+            //{
+            //    if(vertice.Position.X==xA && vertice.Position.Z==zA)
+            //    {
+            //        yA = vertice.Position.Y;
+            //    }
+            //    if (vertice.Position.X == xB && vertice.Position.Z == zB)
+            //    {
+            //        yB = vertice.Position.Y;
+            //    }
+            //    if (vertice.Position.X == xC && vertice.Position.Z == zC)
+            //    {
+            //        yC = vertice.Position.Y;
+            //    }
+            //    if (vertice.Position.X == xD && vertice.Position.Z == zD)
+            //    {
+            //        yD = vertice.Position.Y;
+            //    }
+            //}
 
             //calcular nova altura da camara
             float yAB, yCD, cameraY;

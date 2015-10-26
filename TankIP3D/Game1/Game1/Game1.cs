@@ -70,7 +70,8 @@ namespace Game1
             textura = Content.Load<Texture2D>("grass50x50");
             terreno = new Terreno(GraphicsDevice, mapaAlturas,mapaAlturas,1f,textura);
             VertexPositionColorTexture[] vertices = terreno.getVertices();
-            cameraSurfaceFollow = new CameraSurfaceFollow(vertices);
+
+            cameraSurfaceFollow = new CameraSurfaceFollow(vertices,mapaAlturas.Width);
             effect = new BasicEffect(GraphicsDevice);
             mousePosition = new Vector2(0, 0);
             IsMouseVisible = false;
