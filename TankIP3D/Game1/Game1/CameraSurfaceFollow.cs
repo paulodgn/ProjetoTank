@@ -134,7 +134,7 @@ namespace Game1
             posicao.Y = findAltura();
             time = gameTime.ElapsedGameTime.Milliseconds;
             this.strafe = strafe + velocidade * time;
-            posicao = posicao - velocidade * Vector3.Cross(vetorBase, Vector3.Up);
+            posicao = posicao - velocidade * Vector3.Cross(direcao, Vector3.Up);
             
             target = posicao + direcao;
 
@@ -145,7 +145,7 @@ namespace Game1
             posicao.Y = findAltura();
             time = gameTime.ElapsedGameTime.Milliseconds;
             this.strafe = strafe + velocidade * time;
-            posicao = posicao + velocidade * Vector3.Cross(vetorBase, Vector3.Up);
+            posicao = posicao + velocidade * Vector3.Cross(direcao, Vector3.Up);
 
             target = posicao + direcao;
 
