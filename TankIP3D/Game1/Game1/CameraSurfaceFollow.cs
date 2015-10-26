@@ -186,25 +186,25 @@ namespace Game1
             //rato
             MouseState mouseState = Mouse.GetState();
             //rotacao em x
-            if (mouseState.X < posicaoRato.X)
+            if (mouseState.X < posicaoRato.X || kb.IsKeyDown(Keys.Left))
             {
                 
                 this.rodarDireita(gameTime);
                 updateCamera();
             }
-            if (mouseState.X > posicaoRato.X)
+            if (mouseState.X > posicaoRato.X || kb.IsKeyDown(Keys.Right))
             {
                 this.rodarEsquerda(gameTime);
                 updateCamera();
 
             }
             //rotacao em y
-            if (mouseState.Y > posicaoRato.Y)
+            if (mouseState.Y > posicaoRato.Y || kb.IsKeyDown(Keys.Down))
             {
                 this.rodarBaixo(gameTime);
                 updateCamera();
             }
-            if (mouseState.Y < posicaoRato.Y)
+            if (mouseState.Y < posicaoRato.Y || kb.IsKeyDown(Keys.Up))
             {
                 this.rodarCima(gameTime);
                 updateCamera();
