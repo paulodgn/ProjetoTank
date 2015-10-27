@@ -62,8 +62,7 @@ namespace Game1
             rasterizerState.MultiSampleAntiAlias = true;
             GraphicsDevice.RasterizerState = rasterizerState;
             // TODO: use this.Content to load your game content here
-            camera = new CameraAula();
-            camera2 = new CameraVersao2();
+            
             
             //Camera.Initialize(GraphicsDevice);
             
@@ -74,6 +73,8 @@ namespace Game1
             VertexPositionColorTexture[] vertices = terreno.getVertices();
 
             cameraSurfaceFollow = new CameraSurfaceFollow(graphics,vertices,mapaAlturas.Width);
+            camera = new CameraAula(graphics);
+            camera2 = new CameraVersao2();
             effect = new BasicEffect(GraphicsDevice);
             mousePosition = new Vector2(0, 0);
             IsMouseVisible = false;
@@ -103,22 +104,10 @@ namespace Game1
             //Camera.Update(gameTime, GraphicsDevice);
             //input(gameTime);
             
-            MouseState mouseState = Mouse.GetState();
-            ////se a posicao se mantiver(rato parado) centra o rato
-            if (mouseState.X == mousePosition.X && mouseState.Y == mousePosition.Y)
-            {
-                try
-                {
-                   //Mouse.SetPosition(graphics.GraphicsDevice.Viewport.Height / 2, graphics.GraphicsDevice.Viewport.Width / 2);
-                }
-                catch (Exception e)
-                { }
-            }
-            mousePosition.X = mouseState.X;
-            mousePosition.Y = mouseState.Y;
+          
             //camera2.input(gameTime, graphics);
             //camera.input(gameTime,graphics);
-            cameraSurfaceFollow.input(gameTime, graphics);
+            cameraSurfaceFollow.Update(gameTime, graphics);
             base.Update(gameTime);
         }
 
@@ -131,58 +120,14 @@ namespace Game1
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            terreno2.Draw(GraphicsDevice,cameraSurfaceFollow);
+            terreno.Draw(GraphicsDevice,cameraSurfaceFollow.view);
             
 
             base.Draw(gameTime);
         }
 
-        void input(GameTime gameTime)
-        {
-            KeyboardState kb = Keyboard.GetState();
+     
 
-            if (kb.IsKeyDown(Keys.W))
-            {
-                camera.frente(gameTime);
-            }
-            if (kb.IsKeyDown(Keys.S))
-            {
-                camera.moverTras(gameTime);
-            }
-            if (kb.IsKeyDown(Keys.Q))
-            {
-                camera.strafeEsquerda(gameTime, 0.08f);
-            }
-            if (kb.IsKeyDown(Keys.E))
-            {
-                camera.strafeDireita(gameTime, 0.08f);
-            }
-
-            //rato
-            MouseState mouseState = Mouse.GetState();
-            //rotacao em x
-            if (mouseState.X < posicaoRato.X)
-            {
-                camera.rodarDireita(gameTime, 0.01f);
-            }
-            if (mouseState.X > posicaoRato.X)
-            {
-                camera.rodarEsquerda(gameTime, 0.01f);
-
-            }
-            //rotacao em y
-            if (mouseState.Y > posicaoRato.Y)
-            {
-                camera.rodarBaixo(gameTime, 0.01f);
-            }
-            if (mouseState.Y < posicaoRato.Y)
-            {
-                camera.rodarCima(gameTime, 0.01f);
-            }
-            posicaoRato.X = mouseState.X;
-            posicaoRato.Y = mouseState.Y;
-
-
-        }
+        
     }
 }

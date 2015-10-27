@@ -146,10 +146,10 @@ namespace Game1
           
         }
 
-        public void Draw(GraphicsDevice device,/*CameraVersao2 camera*/ CameraSurfaceFollow camera)
+        public void Draw(GraphicsDevice device,Matrix cameraView)
         {
             //plano.Draw(device, camera);
-            effect.View = camera.view;
+            effect.View = cameraView;
             //effect.View = Camera.View;
             //effect.World = Camera.World;
             //effect.Projection = Camera.Projection;
