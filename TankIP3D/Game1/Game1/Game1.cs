@@ -22,6 +22,7 @@ namespace Game1
         float posicaoInicialRatoX, posicaoInicialRatoY;
         Vector2 posicaoRato;
         Plano plano;
+        Terreno2 terreno2;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -69,6 +70,7 @@ namespace Game1
             mapaAlturas = Content.Load<Texture2D>("mapaAlturas");
             textura = Content.Load<Texture2D>("grass50x50");
             terreno = new Terreno(GraphicsDevice, mapaAlturas,mapaAlturas,1f,textura);
+            terreno2 = new Terreno2(GraphicsDevice, mapaAlturas, mapaAlturas, 1f, textura);
             VertexPositionColorTexture[] vertices = terreno.getVertices();
 
             cameraSurfaceFollow = new CameraSurfaceFollow(vertices,mapaAlturas.Width);
@@ -129,7 +131,7 @@ namespace Game1
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            terreno.Draw(GraphicsDevice,cameraSurfaceFollow);
+            terreno2.Draw(GraphicsDevice,cameraSurfaceFollow);
             
 
             base.Draw(gameTime);
