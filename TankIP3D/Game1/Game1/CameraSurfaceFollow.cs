@@ -12,7 +12,8 @@ namespace Game1
     {
         Vector3 posicao, direcao, target;
         float velocidade, time;
-        float grausPorPixel = 20 / 100;
+        float grausPorPixel = 10 / 100;
+        float diferencaX;
         float yaw, pitch, roll,strafe;
         Vector3 vetorBase;
         public Matrix view, projection,worldMatrix;
@@ -26,7 +27,7 @@ namespace Game1
         public CameraSurfaceFollow(VertexPositionColorTexture[] vertices, int alturaMapa)
         {
             this.alturaMapa = alturaMapa;
-            velocidade = 0.009f;
+            velocidade = 0.02f;
             vetorBase = new Vector3(1, -0.5f, 0);
             posicao = new Vector3(50, 10, 50);
             direcao = vetorBase;
@@ -115,7 +116,8 @@ namespace Game1
         public void rodarDireita(GameTime gameTime)
         {
             time = gameTime.ElapsedGameTime.Milliseconds;
-            yaw = yaw + velocidade;//(yaw + velocidade);
+            //yaw = yaw + velocidade;//(yaw + velocidade);
+            yaw += diferencaX * grausPorPixel;
         }
 
         public void rodarEsquerda(GameTime gameTime)
@@ -127,13 +129,13 @@ namespace Game1
         public void rodarCima(GameTime gameTime)
         {
             time = gameTime.ElapsedGameTime.Milliseconds;
-            pitch = pitch + velocidade;
+            pitch = pitch + 0.01f;
         }
 
         public void rodarBaixo(GameTime gameTime)
         {
             time = gameTime.ElapsedGameTime.Milliseconds;
-            pitch = pitch - velocidade;
+            pitch = pitch - 0.01f;
         }
 
         public void strafeEsquerda(GameTime gameTime,float strafe)
@@ -188,7 +190,7 @@ namespace Game1
             //rotacao em x
             if (mouseState.X < posicaoRato.X || kb.IsKeyDown(Keys.Left))
             {
-                
+                diferencaX = mouseState.X - posicaoRato.X;
                 this.rodarDireita(gameTime);
                 updateCamera();
             }
@@ -255,3 +257,9 @@ namespace Game1
 //Ycd=(1-(X-Xc))Yc+(x-Xc)Yd
 //Y=(1-(z-za))Yab+(z-za)Ycd
 //camara nao pode sair do terreno
+
+// para a camara rodar mais suavemente
+//dif x
+//grausporpixel=10graus/100
+//yaw+=difx*grauporpixel
+//createfromyawpitchroll(mathhelper.toradians(yaw)
