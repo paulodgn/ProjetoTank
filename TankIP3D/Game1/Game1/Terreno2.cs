@@ -121,8 +121,8 @@ namespace Game1
             //aplicar textura
 
             //criar indice
-            indice = new short[(texturaMapa.Height * texturaMapa.Width)*2];
-            indicesPrimeiroLado = new short[(texturaMapa.Height * texturaMapa.Width) * 2];
+            indice = new short[(texturaMapa.Height * 2) * (texturaMapa.Height - 1)];
+            indicesPrimeiroLado = new short[(texturaMapa.Height * 2) * (texturaMapa.Height - 1)];
             for (int i = 0; i < indice.Length/2; i++)
             {
                 indice[2 * i] = (short)(i );
@@ -178,7 +178,7 @@ namespace Game1
             for (int i = 0; i < texturaMapa.Width-1; i++)
             {
                 device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleStrip, vertices, i * texturaMapa.Width, texturaMapa.Width * 2 , indice, 0, texturaMapa.Width * 2-2 );
-                device.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleStrip, verticesPrimeiroLado, 0, i * texturaMapa.Width, indicesPrimeiroLado, 0, texturaMapa.Width * 2 - 2);
+               // device.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleStrip, verticesPrimeiroLado, 0, i * texturaMapa.Width, indicesPrimeiroLado, 0, texturaMapa.Width * 2 - 2);
                 //Console.WriteLine(var);
             }
             

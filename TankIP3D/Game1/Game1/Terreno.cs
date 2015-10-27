@@ -107,7 +107,7 @@ namespace Game1
             //aplicar textura
 
             //criar indice
-            indice = new short[(texturaMapa.Height * texturaMapa.Width)*2];
+            indice = new short[(texturaMapa.Height * 2)*(texturaMapa.Height-1)];
             for (int i = 0; i < indice.Length/2; i++)
             {
                 indice[2 * i] = (short)(i );
