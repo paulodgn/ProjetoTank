@@ -73,7 +73,7 @@ namespace Game1
             terreno2 = new Terreno2(GraphicsDevice, mapaAlturas, mapaAlturas, 1f, textura);
             VertexPositionColorTexture[] vertices = terreno.getVertices();
 
-            cameraSurfaceFollow = new CameraSurfaceFollow(vertices,mapaAlturas.Width);
+            cameraSurfaceFollow = new CameraSurfaceFollow(graphics,vertices,mapaAlturas.Width);
             effect = new BasicEffect(GraphicsDevice);
             mousePosition = new Vector2(0, 0);
             IsMouseVisible = false;
@@ -109,7 +109,7 @@ namespace Game1
             {
                 try
                 {
-                   Mouse.SetPosition(graphics.GraphicsDevice.Viewport.Height / 2, graphics.GraphicsDevice.Viewport.Width / 2);
+                   //Mouse.SetPosition(graphics.GraphicsDevice.Viewport.Height / 2, graphics.GraphicsDevice.Viewport.Width / 2);
                 }
                 catch (Exception e)
                 { }

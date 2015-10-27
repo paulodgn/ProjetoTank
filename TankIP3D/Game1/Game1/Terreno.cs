@@ -115,7 +115,8 @@ namespace Game1
                 
             }
             
-            vertexBuffer = new VertexBuffer(device, typeof(VertexPositionColorTexture), vertices.GetLength(0), BufferUsage.WriteOnly);
+            //vertexBuffer = new VertexBuffer(device, typeof(VertexPositionColorTexture), vertices.GetLength(0), BufferUsage.WriteOnly);
+            //indexBuffer = new IndexBuffer(device, typeof(short), indice.Length, BufferUsage.None);
         }
 
         //get vertices
@@ -156,11 +157,13 @@ namespace Game1
              effect.CurrentTechnique.Passes[0].Apply();
 
             device.SetVertexBuffer(vertexBuffer);
+            device.Indices = indexBuffer;
             //int var = 0;
             for (int i = 0; i < texturaMapa.Width-1; i++)
             {
-                device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleStrip, vertices, i * texturaMapa.Width, texturaMapa.Width * 2 , indice, 0, texturaMapa.Width * 2-2 );
-                //Console.WriteLine(var);
+                //device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleStrip, vertices, i * texturaMapa.Width, texturaMapa.Width * 2 , indice, 0, texturaMapa.Width * 2-2 );
+                device.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, i * texturaMapa.Width, 0, texturaMapa.Width * 2, 0, texturaMapa.Width * 2 - 2);
+                
             }
            
         }
