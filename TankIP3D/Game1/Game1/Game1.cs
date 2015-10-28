@@ -16,14 +16,13 @@ namespace Game1
         CameraVersao2 camera2;
         CameraSurfaceFollow cameraSurfaceFollow;
         Terreno terreno;
-        Texture2D mapaAlturas,textura,texturaAgua,mapaFlat;
+        Texture2D mapaAlturas,textura;
         BasicEffect effect;
         Vector2 mousePosition;
         float posicaoInicialRatoX, posicaoInicialRatoY;
         Vector2 posicaoRato;
         Plano plano;
         Terreno2 terreno2;
-        Agua agua;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -69,11 +68,8 @@ namespace Game1
             
             mapaAlturas = Content.Load<Texture2D>("mapaAlturas");
             textura = Content.Load<Texture2D>("grass50x50");
-            texturaAgua = Content.Load<Texture2D>("water");
-            mapaFlat = Content.Load<Texture2D>("white");
             terreno = new Terreno(GraphicsDevice, mapaAlturas,mapaAlturas,1f,textura);
             terreno2 = new Terreno2(GraphicsDevice, mapaAlturas, mapaAlturas, 1f, textura);
-            agua = new Agua(GraphicsDevice, mapaFlat, null, 1f, texturaAgua);
             VertexPositionColorTexture[] vertices = terreno.getVertices();
 
             cameraSurfaceFollow = new CameraSurfaceFollow(graphics,vertices,mapaAlturas.Width);
@@ -110,8 +106,8 @@ namespace Game1
             
           
             //camera2.input(gameTime, graphics);
-            camera.UpdateInput(gameTime,graphics);
-            //cameraSurfaceFollow.UpdateInput(gameTime, graphics);
+            //camera.input(gameTime,graphics);
+            cameraSurfaceFollow.UpdateInput(gameTime, graphics);
             base.Update(gameTime);
         }
 
@@ -124,8 +120,7 @@ namespace Game1
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            terreno.Draw(GraphicsDevice,camera.view);
-            agua.Draw(GraphicsDevice, camera.view);
+            terreno.Draw(GraphicsDevice,cameraSurfaceFollow.view);
             
 
             base.Draw(gameTime);
