@@ -79,7 +79,8 @@ namespace Game1
                         else
                         {
                             //texturaX=0, texturaY=1
-                            vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), Color.White, new Vector2(0, coordenadaTexturaY));// texturaX=0,texturaY=1
+                            vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), 
+                                Color.White, new Vector2(0, coordenadaTexturaY));// texturaX=0,texturaY=1
                             coordenadaTexturaY = 0;
                         }
                     }

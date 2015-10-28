@@ -83,7 +83,8 @@ namespace Game1
                         //criar vertice variando a coordenada de textura y entre 0 e 1.Coordenada de textura x é sempre 0 
                         if (coordenadaTexturaY == 0)
                         {
-                            vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), Color.White,new Vector2(0,coordenadaTexturaY));// texturaX=0,texturaY=0
+                            vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), 
+                                Color.White,new Vector2(0,coordenadaTexturaY));// texturaX=0,texturaY=0
                             coordenadaTexturaY = 1;
                             
                         }
@@ -91,7 +92,8 @@ namespace Game1
                         else
                         {
                             //texturaX=0, texturaY=1
-                            vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), Color.White, new Vector2(0, coordenadaTexturaY));// texturaX=0,texturaY=1
+                            vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), 
+                                Color.White, new Vector2(0, coordenadaTexturaY));// texturaX=0,texturaY=1
                             coordenadaTexturaY = 0;
                         }
                         
@@ -102,13 +104,15 @@ namespace Game1
                         if (coordenadaTexturaY == 0)
                         {
                             //texturaX=1,texturaY=0
-                            vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), Color.White, new Vector2(1, coordenadaTexturaY));
+                            vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), 
+                                Color.White, new Vector2(1, coordenadaTexturaY));
                             coordenadaTexturaY = 1;
                         }
                         else
                         {
                             //texturaX=1, texturaY=1
-                            vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), Color.White, new Vector2(1, coordenadaTexturaY));
+                            vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), 
+                                Color.White, new Vector2(1, coordenadaTexturaY));
                             coordenadaTexturaY = 0;
                         }
                     }
