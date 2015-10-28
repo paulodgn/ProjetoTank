@@ -106,13 +106,13 @@ namespace Game1
             
           
             //camera2.input(gameTime, graphics);
-<<<<<<< HEAD
-            camera.input(gameTime,graphics);
-            cameraSurfaceFollow.Update(gameTime, graphics);
-=======
+
+            //camera.UpdateInput(gameTime,graphics);
+            
+
             //camera.input(gameTime,graphics);
             cameraSurfaceFollow.UpdateInput(gameTime, graphics);
->>>>>>> af5254bb163d112796678ec2da39aac3180cd6e4
+
             base.Update(gameTime);
         }
 
@@ -125,7 +125,7 @@ namespace Game1
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            terreno.Draw(GraphicsDevice,camera.view);
+            terreno.Draw(GraphicsDevice,cameraSurfaceFollow.view);
             
 
             base.Draw(gameTime);
