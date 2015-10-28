@@ -107,7 +107,7 @@ namespace Game1
           
             //camera2.input(gameTime, graphics);
             //camera.input(gameTime,graphics);
-            cameraSurfaceFollow.Update(gameTime, graphics);
+            cameraSurfaceFollow.UpdateInput(gameTime, graphics);
             base.Update(gameTime);
         }
 

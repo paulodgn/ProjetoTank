@@ -55,34 +55,23 @@ namespace Game1
         }
 
         
-        public void rodarEsquerda(GameTime gameTime)
-        {
-            time = gameTime.ElapsedGameTime.Milliseconds;
-            //yaw = yaw + velocidade;//(yaw + velocidade);
-            yaw -= diferencaX *grausPorPixel;
-        }
+      
 
-        public void rodarDireita(GameTime gameTime)
+        public void rodarDireitaEsquerda(GameTime gameTime)
         {
             time = gameTime.ElapsedGameTime.Milliseconds;
             //yaw = yaw - velocidade;//(yaw - velocidade);
-            yaw -= diferencaX * grausPorPixel;
+            yaw += diferencaX * grausPorPixel;
         }
 
-        public void rodarCima(GameTime gameTime)
+        public void rodarCimaBaixo(GameTime gameTime)
         {
             time = gameTime.ElapsedGameTime.Milliseconds;
             //pitch = pitch + 0.01f;
-            pitch -= diferencaY * grausPorPixel;
+            pitch += diferencaY * grausPorPixel;
         }
 
-        public void rodarBaixo(GameTime gameTime)
-        {
-            time = gameTime.ElapsedGameTime.Milliseconds;
-            //pitch = pitch - 0.01f;
-            pitch -= diferencaY * grausPorPixel;
-        }
-
+    
         public void strafeEsquerda(GameTime gameTime,float strafe)
         {
             
@@ -105,54 +94,37 @@ namespace Game1
 
         }
 
-        public void input(GameTime gameTime, GraphicsDeviceManager graphics)
+        public void UpdateInput(GameTime gameTime, GraphicsDeviceManager graphics)
         {
             KeyboardState kb = Keyboard.GetState();
 
             if (kb.IsKeyDown(Keys.W))
             {
                 this.frente();
-                view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
+                
             }
             if (kb.IsKeyDown(Keys.S))
             {
                 this.moverTras(gameTime);
-                view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
+                
             }
             if (kb.IsKeyDown(Keys.Q))
             {
                 this.strafeEsquerda(gameTime, 0.08f);
-                view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
+                
             }
             if (kb.IsKeyDown(Keys.E))
             {
                 this.strafeDireita(gameTime, 0.08f);
-                view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
             }
-
-
+            
             MouseState mouseState = Mouse.GetState();
             if (mouseState != posicaoRatoInicial)
             {
                 diferencaX = mouseState.Position.X - posicaoRatoInicial.Position.X;
                 diferencaY = mouseState.Position.Y - posicaoRatoInicial.Position.Y;
-                if (mouseState.X < posicaoRatoInicial.X)
-                {
-                    this.rodarEsquerda(gameTime);
-                }
-                if (mouseState.X > posicaoRatoInicial.X || kb.IsKeyDown(Keys.Right))
-                {
-                    this.rodarDireita(gameTime);
-                }
-                if (mouseState.Y > posicaoRatoInicial.Y || kb.IsKeyDown(Keys.Down))
-                {
-                    this.rodarBaixo(gameTime);
-
-                }
-                if (mouseState.Y < posicaoRatoInicial.Y || kb.IsKeyDown(Keys.Up))
-                {
-                    this.rodarCima(gameTime);
-                }
+                this.rodarDireitaEsquerda(gameTime);
+                this.rodarCimaBaixo(gameTime);
                 try
                 {
                     Mouse.SetPosition(graphics.GraphicsDevice.Viewport.Height / 2, graphics.GraphicsDevice.Viewport.Width / 2);

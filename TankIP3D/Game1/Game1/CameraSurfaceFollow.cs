@@ -70,25 +70,7 @@ namespace Game1
             yC = vertices[xC * alturaMapa + zC].Position.Y;
             yD = vertices[xD * alturaMapa + zD].Position.Y;
 
-            //foreach (var vertice in vertices)
-            //{
-            //    if(vertice.Position.X==xA && vertice.Position.Z==zA)
-            //    {
-            //        yA = vertice.Position.Y;
-            //    }
-            //    if (vertice.Position.X == xB && vertice.Position.Z == zB)
-            //    {
-            //        yB = vertice.Position.Y;
-            //    }
-            //    if (vertice.Position.X == xC && vertice.Position.Z == zC)
-            //    {
-            //        yC = vertice.Position.Y;
-            //    }
-            //    if (vertice.Position.X == xD && vertice.Position.Z == zD)
-            //    {
-            //        yD = vertice.Position.Y;
-            //    }
-            //}
+     
 
             //calcular nova altura da camara
             float yAB, yCD, cameraY;
@@ -170,7 +152,7 @@ namespace Game1
 
         }
         
-        public void Update(GameTime gameTime, GraphicsDeviceManager graphics)
+        public void UpdateInput(GameTime gameTime, GraphicsDeviceManager graphics)
         {
             KeyboardState kb = Keyboard.GetState();
 
