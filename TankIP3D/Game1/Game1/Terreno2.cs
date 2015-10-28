@@ -57,8 +57,7 @@ namespace Game1
             vertexBuffer2 = new VertexBuffer(device, typeof(VertexPositionColor), verticesPrimeiroLado.Length, BufferUsage.None);
             vertexBuffer2.SetData<VertexPositionColor>(verticesPrimeiroLado);
 
-            indexBuffer2 = new IndexBuffer(device, typeof(short), indicesPrimeiroLado.Length, BufferUsage.None);
-            indexBuffer2.SetData<short>(indicesPrimeiroLado);
+            
 
             this.plano = new Plano(device, texturaPlano, tamanhoPlano);
         }
@@ -67,7 +66,7 @@ namespace Game1
         {
             vertexCount = tamanhoMapa;
             vertices = new VertexPositionColorTexture[vertexCount];
-            verticesPrimeiroLado = new VertexPositionColor[vertexCount];
+            verticesPrimeiroLado = new VertexPositionColor[4];
             float escala = 0.05f;
             //ler imagem
 
@@ -116,28 +115,44 @@ namespace Game1
                             coordenadaTexturaY = 0;
                         }
                     }
-                    verticesPrimeiroLado[x * texturaMapa.Width + z] = new VertexPositionColor(new Vector3(x, -z, 0f), Color.Brown);
+                    
+                    
                 }
+                
+
             }
-            //
+            verticesPrimeiroLado[0] = new VertexPositionColor(new Vector3(0f, 0f, 0f), Color.Brown);
+            verticesPrimeiroLado[1] = new VertexPositionColor(new Vector3(127f, 0f, 0f), Color.Brown);
+            verticesPrimeiroLado[2] = new VertexPositionColor(new Vector3(0, -127f, 0f), Color.Brown);
+            verticesPrimeiroLado[3] = new VertexPositionColor(new Vector3(127f, -127f, 0f), Color.Brown);
+
+            vertexBuffer2 = new VertexBuffer(device, typeof(VertexPositionColor), verticesPrimeiroLado.GetLength(0), BufferUsage.WriteOnly);
+
+            
           
            
             //aplicar textura
 
             //criar indice
             indice = new short[(texturaMapa.Height * 2) * (texturaMapa.Height - 1)];
-            indicesPrimeiroLado = new short[(texturaMapa.Height * 2) * (texturaMapa.Height - 1)];
-            for (int i = 0; i < indice.Length/2; i++)
+            for (int i = 0; i < indice.Length / 2; i++)
             {
-                indice[2 * i] = (short)(i );
+                indice[2 * i] = (short)(i);
                 indice[2 * i + 1] = (short)(i + texturaMapa.Width);
-                
+
             }
-            indicesPrimeiroLado = indice;
+            indicesPrimeiroLado = new short[4];
+
+            indicesPrimeiroLado[0] = 0;
+            indicesPrimeiroLado[1] = 1;
+            indicesPrimeiroLado[2] = 2;
+            indicesPrimeiroLado[3] = 3;
+
+
             
-            vertexBuffer = new VertexBuffer(device, typeof(VertexPositionColorTexture), vertices.GetLength(0), BufferUsage.WriteOnly);
-            vertexBuffer2 = new VertexBuffer(device, typeof(VertexPositionColor), verticesPrimeiroLado.GetLength(0), BufferUsage.WriteOnly);
         }
+        
+       
 
         //get vertices
         public VertexPositionColorTexture[] getVertices()
@@ -166,25 +181,36 @@ namespace Game1
           
         }
 
-        public void Draw(GraphicsDevice device,/*CameraVersao2 camera*/ CameraSurfaceFollow camera)
+        public void Draw(GraphicsDevice device, Matrix cameraView)
         {
             //plano.Draw(device, camera);
-            effect.View = camera.view;
+            effect.View = cameraView;
             //effect.View = Camera.View;
             //effect.World = Camera.World;
             //effect.Projection = Camera.Projection;
             effect.World = worldMatrix;
-             effect.CurrentTechnique.Passes[0].Apply();
+            effect.CurrentTechnique.Passes[0].Apply();
 
             device.SetVertexBuffer(vertexBuffer);
-            device.SetVertexBuffer(vertexBuffer2);
+            device.Indices = indexBuffer;
+            
+            
             //int var = 0;
-            for (int i = 0; i < texturaMapa.Width-1; i++)
+            for (int i = 0; i < texturaMapa.Width - 1; i++)
             {
-                device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleStrip, vertices, i * texturaMapa.Width, texturaMapa.Width * 2 , indice, 0, texturaMapa.Width * 2-2 );
-               // device.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleStrip, verticesPrimeiroLado, 0, i * texturaMapa.Width, indicesPrimeiroLado, 0, texturaMapa.Width * 2 - 2);
-                //Console.WriteLine(var);
+                //device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleStrip, vertices, i * texturaMapa.Width, texturaMapa.Width * 2 , indice, 0, texturaMapa.Width * 2-2 );
+                device.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, i * texturaMapa.Width, 0, texturaMapa.Width * 2, 0, texturaMapa.Width * 2 - 2);
+                
             }
+            effect.View = cameraView;
+            //effect.View = Camera.View;
+            //effect.World = Camera.World;
+            //effect.Projection = Camera.Projection;
+            effect.World = worldMatrix;
+            effect.CurrentTechnique.Passes[0].Apply();
+            
+            effect.VertexColorEnabled = true;
+            device.DrawUserIndexedPrimitives(PrimitiveType.TriangleStrip,verticesPrimeiroLado,0,4,indicesPrimeiroLado,0,2);
             
            
         }

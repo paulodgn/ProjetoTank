@@ -125,7 +125,7 @@ namespace Game1
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            terreno.Draw(GraphicsDevice,cameraSurfaceFollow.view);
+            terreno2.Draw(GraphicsDevice,cameraSurfaceFollow.view);
             
 
             base.Draw(gameTime);
