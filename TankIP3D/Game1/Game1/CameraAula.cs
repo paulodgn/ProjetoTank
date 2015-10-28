@@ -61,14 +61,14 @@ namespace Game1
         {
             time = gameTime.ElapsedGameTime.Milliseconds;
             //yaw = yaw - velocidade;//(yaw - velocidade);
-            yaw += diferencaX * grausPorPixel;
+            yaw -= diferencaX * grausPorPixel;
         }
 
         public void rodarCimaBaixo(GameTime gameTime)
         {
             time = gameTime.ElapsedGameTime.Milliseconds;
             //pitch = pitch + 0.01f;
-            pitch += diferencaY * grausPorPixel;
+            pitch -= diferencaY * grausPorPixel;
         }
 
     
@@ -131,8 +131,9 @@ namespace Game1
                 }
                 catch (Exception e)
                 { }
-                updateCamera();
+                
             }
+            updateCamera();
         }
 
                 public void updateCamera()
