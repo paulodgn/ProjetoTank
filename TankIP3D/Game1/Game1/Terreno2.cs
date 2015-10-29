@@ -54,6 +54,12 @@ namespace Game1
             indexBuffer = new IndexBuffer(device, typeof(short), indice.Length, BufferUsage.None);
             indexBuffer.SetData<short>(indice);
 
+            vertexBuffer2 = new VertexBuffer(device, typeof(VertexPositionColorTexture), verticesPrimeiroLado.Length, BufferUsage.None);
+            vertexBuffer2.SetData<VertexPositionColorTexture>(verticesPrimeiroLado);
+
+            indexBuffer2 = new IndexBuffer(device, typeof(short), indicesPrimeiroLado.Length, BufferUsage.None);
+            indexBuffer2.SetData<short>(indicesPrimeiroLado);
+
             
 
             
@@ -65,7 +71,7 @@ namespace Game1
         {
             vertexCount = tamanhoMapa;
             vertices = new VertexPositionColorTexture[vertexCount];
-            verticesPrimeiroLado = new VertexPositionColorTexture[4];
+            verticesPrimeiroLado = new VertexPositionColorTexture[vertexCount];
             float escala = 0.05f;
             //ler imagem
 
@@ -82,14 +88,16 @@ namespace Game1
                         if (coordenadaTexturaY == 0)
                         {
                             vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), Color.White,new Vector2(0,coordenadaTexturaY));// texturaX=0,texturaY=0
-                            coordenadaTexturaY = 1;
                             
+                            verticesPrimeiroLado[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, -z, alturas[x, z] * escala), Color.White, new Vector2(0, coordenadaTexturaY));
+                            coordenadaTexturaY = 1;
                         }
                         
                         else
                         {
                             //texturaX=0, texturaY=1
                             vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), Color.White, new Vector2(0, coordenadaTexturaY));// texturaX=0,texturaY=1
+                            verticesPrimeiroLado[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, -z, alturas[x, z] * escala), Color.White, new Vector2(0, coordenadaTexturaY));
                             coordenadaTexturaY = 0;
                         }
                         
@@ -101,48 +109,37 @@ namespace Game1
                         {
                             //texturaX=1,texturaY=0
                             vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), Color.White, new Vector2(1, coordenadaTexturaY));
+                            verticesPrimeiroLado[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, -z, alturas[x, z] * escala), Color.White, new Vector2(1, coordenadaTexturaY));
                             coordenadaTexturaY = 1;
+
                         }
                         else
                         {
                             //texturaX=1, texturaY=1
                             vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), Color.White, new Vector2(1, coordenadaTexturaY));
+                            verticesPrimeiroLado[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, -z, alturas[x, z] * escala), Color.White, new Vector2(1, coordenadaTexturaY));
                             coordenadaTexturaY = 0;
                         }
                     }
                     
-                    
                 }
-                
 
             }
-            verticesPrimeiroLado[0] = new VertexPositionColorTexture(new Vector3(0f, 0f, 0f), Color.Brown,new Vector2(0f,0f));
-            verticesPrimeiroLado[1] = new VertexPositionColorTexture(new Vector3(127f, 0f, 0f), Color.Brown, new Vector2(0f, 0f));
-            verticesPrimeiroLado[2] = new VertexPositionColorTexture(new Vector3(0, -127f, 0f), Color.Brown, new Vector2(0f, 0f));
-            verticesPrimeiroLado[3] = new VertexPositionColorTexture(new Vector3(127f, -127f, 0f), Color.Brown, new Vector2(0f, 0f));
-
-            vertexBuffer2 = new VertexBuffer(device, typeof(VertexPositionColor), verticesPrimeiroLado.GetLength(0), BufferUsage.WriteOnly);
-
-            
-          
+    
            
             //aplicar textura
 
             //criar indice
             indice = new short[(texturaMapa.Height * 2) * (texturaMapa.Height - 1)];
+            indicesPrimeiroLado = new short[(texturaMapa.Height * 2) * (texturaMapa.Height - 1)];
             for (int i = 0; i < indice.Length / 2; i++)
             {
                 indice[2 * i] = (short)(i);
                 indice[2 * i + 1] = (short)(i + texturaMapa.Width);
+                indicesPrimeiroLado[2 * i] = (short)(i + texturaMapa.Width);
+                indicesPrimeiroLado[2 * i + 1] = (short)(i);
 
             }
-            indicesPrimeiroLado = new short[4];
-
-            indicesPrimeiroLado[0] = 0;
-            indicesPrimeiroLado[1] = 1;
-            indicesPrimeiroLado[2] = 2;
-            indicesPrimeiroLado[3] = 3;
-
 
             
         }
@@ -197,15 +194,30 @@ namespace Game1
                 device.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, i * texturaMapa.Width, 0, texturaMapa.Width * 2, 0, texturaMapa.Width * 2 - 2);
                 
             }
-            
+
+        }
+        public void Draw2(GraphicsDevice device, Matrix cameraView)
+        {
+            //plano.Draw(device, camera);
+            effect.View = cameraView;
+            //effect.View = Camera.View;
+            //effect.World = Camera.World;
+            //effect.Projection = Camera.Projection;
+            effect.World = worldMatrix;
             effect.CurrentTechnique.Passes[0].Apply();
-            
-            effect.VertexColorEnabled = true;
-            
-            
-            device.DrawUserIndexedPrimitives(PrimitiveType.TriangleStrip,verticesPrimeiroLado,0,4,indicesPrimeiroLado,0,2);
-            
-           
+
+            device.SetVertexBuffer(vertexBuffer2);
+            device.Indices = indexBuffer2;
+
+
+            //int var = 0;
+            for (int i = 0; i < texturaMapa.Width - 1; i++)
+            {
+                //device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleStrip, vertices, i * texturaMapa.Width, texturaMapa.Width * 2 , indice, 0, texturaMapa.Width * 2-2 );
+                device.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, i * texturaMapa.Width, 0, texturaMapa.Width * 2, 0, texturaMapa.Width * 2 - 2);
+
+            }
+
         }
     }
 }
