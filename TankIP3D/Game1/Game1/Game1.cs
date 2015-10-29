@@ -23,6 +23,13 @@ namespace Game1
         Vector2 posicaoRato;
         Plano plano;
         Terreno2 terreno2;
+        
+        enum CameraAtiva
+        {
+            fps,
+            free
+        };
+        CameraAtiva cameraAtiva;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -78,7 +85,7 @@ namespace Game1
             effect = new BasicEffect(GraphicsDevice);
             mousePosition = new Vector2(0, 0);
             IsMouseVisible = false;
-            
+            cameraAtiva = CameraAtiva.fps;
         }
 
         /// <summary>
@@ -115,7 +122,16 @@ namespace Game1
 
 
             //camera.UpdateInput(gameTime,graphics);
-            cameraSurfaceFollow.UpdateInput(gameTime, graphics);
+            //cameraSurfaceFollow.UpdateInput(gameTime, graphics);
+            escolherCamara();
+            if(cameraAtiva==CameraAtiva.fps)
+            {
+                cameraSurfaceFollow.UpdateInput(gameTime, graphics);
+            }
+            else
+            {
+                camera.UpdateInput(gameTime, graphics);
+            }
 
             base.Update(gameTime);
         }
@@ -131,15 +147,35 @@ namespace Game1
             // TODO: Add your drawing code here
 
 
-
-            terreno.Draw(GraphicsDevice,cameraSurfaceFollow.view);
+            if (cameraAtiva == CameraAtiva.fps)
+            {
+                terreno.Draw(GraphicsDevice, cameraSurfaceFollow.view);
+            }
+            else
+            {
+                terreno.Draw(GraphicsDevice, camera.view);
+            }
+            
 
             
 
             base.Draw(gameTime);
         }
 
-     
+        public void escolherCamara()
+        {
+            KeyboardState kb = Keyboard.GetState();
+
+            if (kb.IsKeyDown(Keys.F1))
+            {
+
+                cameraAtiva = CameraAtiva.fps;
+            }
+            if(kb.IsKeyDown(Keys.F2))
+            {
+                cameraAtiva = CameraAtiva.free;
+            }
+        }
 
         
     }
