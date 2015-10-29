@@ -114,8 +114,8 @@ namespace Game1
             //cameraSurfaceFollow.UpdateInput(gameTime, graphics);
 
 
-            camera.UpdateInput(gameTime,graphics);
-            //cameraSurfaceFollow.UpdateInput(gameTime, graphics);
+            //camera.UpdateInput(gameTime,graphics);
+            cameraSurfaceFollow.UpdateInput(gameTime, graphics);
 
             base.Update(gameTime);
         }
@@ -132,7 +132,7 @@ namespace Game1
 
 
 
-            terreno.Draw(GraphicsDevice,camera.view);
+            terreno.Draw(GraphicsDevice,cameraSurfaceFollow.view);
 
             
 
