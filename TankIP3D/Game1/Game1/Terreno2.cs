@@ -13,8 +13,8 @@ namespace Game1
         Matrix worldMatrix;
         VertexBuffer vertexBuffer, vertexBuffer2;
         IndexBuffer indexBuffer, indexBuffer2;
-        VertexPositionColorTexture[] vertices;
-        VertexPositionColor[] verticesPrimeiroLado;
+        VertexPositionColorTexture[] vertices, verticesPrimeiroLado;
+        
 
 
 
@@ -54,8 +54,7 @@ namespace Game1
             indexBuffer = new IndexBuffer(device, typeof(short), indice.Length, BufferUsage.None);
             indexBuffer.SetData<short>(indice);
 
-            vertexBuffer2 = new VertexBuffer(device, typeof(VertexPositionColor), verticesPrimeiroLado.Length, BufferUsage.None);
-            vertexBuffer2.SetData<VertexPositionColor>(verticesPrimeiroLado);
+            
 
             
 
@@ -66,7 +65,7 @@ namespace Game1
         {
             vertexCount = tamanhoMapa;
             vertices = new VertexPositionColorTexture[vertexCount];
-            verticesPrimeiroLado = new VertexPositionColor[4];
+            verticesPrimeiroLado = new VertexPositionColorTexture[4];
             float escala = 0.05f;
             //ler imagem
 
@@ -121,10 +120,10 @@ namespace Game1
                 
 
             }
-            verticesPrimeiroLado[0] = new VertexPositionColor(new Vector3(0f, 0f, 0f), Color.Brown);
-            verticesPrimeiroLado[1] = new VertexPositionColor(new Vector3(127f, 0f, 0f), Color.Brown);
-            verticesPrimeiroLado[2] = new VertexPositionColor(new Vector3(0, -127f, 0f), Color.Brown);
-            verticesPrimeiroLado[3] = new VertexPositionColor(new Vector3(127f, -127f, 0f), Color.Brown);
+            verticesPrimeiroLado[0] = new VertexPositionColorTexture(new Vector3(0f, 0f, 0f), Color.Brown,new Vector2(0f,0f));
+            verticesPrimeiroLado[1] = new VertexPositionColorTexture(new Vector3(127f, 0f, 0f), Color.Brown, new Vector2(0f, 0f));
+            verticesPrimeiroLado[2] = new VertexPositionColorTexture(new Vector3(0, -127f, 0f), Color.Brown, new Vector2(0f, 0f));
+            verticesPrimeiroLado[3] = new VertexPositionColorTexture(new Vector3(127f, -127f, 0f), Color.Brown, new Vector2(0f, 0f));
 
             vertexBuffer2 = new VertexBuffer(device, typeof(VertexPositionColor), verticesPrimeiroLado.GetLength(0), BufferUsage.WriteOnly);
 
@@ -202,14 +201,12 @@ namespace Game1
                 device.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, i * texturaMapa.Width, 0, texturaMapa.Width * 2, 0, texturaMapa.Width * 2 - 2);
                 
             }
-            effect.View = cameraView;
-            //effect.View = Camera.View;
-            //effect.World = Camera.World;
-            //effect.Projection = Camera.Projection;
-            effect.World = worldMatrix;
+            
             effect.CurrentTechnique.Passes[0].Apply();
             
             effect.VertexColorEnabled = true;
+            
+            
             device.DrawUserIndexedPrimitives(PrimitiveType.TriangleStrip,verticesPrimeiroLado,0,4,indicesPrimeiroLado,0,2);
             
            
