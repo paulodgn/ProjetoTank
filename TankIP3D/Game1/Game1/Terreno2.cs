@@ -88,8 +88,17 @@ namespace Game1
                         if (coordenadaTexturaY == 0)
                         {
                             vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), Color.White,new Vector2(0,coordenadaTexturaY));// texturaX=0,texturaY=0
+                            if (z==0)
+                            {
+                                verticesPrimeiroLado[x * texturaMapa.Width + z] = vertices[x * texturaMapa.Width + z];
+                            }
+                            else
+                            {
+                                verticesPrimeiroLado[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, -z, alturas[x, z] * escala), Color.White, new Vector2(0, coordenadaTexturaY));
+
+
+                            }
                             
-                            verticesPrimeiroLado[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, -z, alturas[x, z] * escala), Color.White, new Vector2(0, coordenadaTexturaY));
                             coordenadaTexturaY = 1;
                         }
                         
@@ -97,7 +106,16 @@ namespace Game1
                         {
                             //texturaX=0, texturaY=1
                             vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), Color.White, new Vector2(0, coordenadaTexturaY));// texturaX=0,texturaY=1
-                            verticesPrimeiroLado[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, -z, alturas[x, z] * escala), Color.White, new Vector2(0, coordenadaTexturaY));
+                            if (z==0)
+                            {
+                                verticesPrimeiroLado[x * texturaMapa.Width + z] = vertices[x * texturaMapa.Width + z];
+  
+                            }
+                            else
+                            {
+                                verticesPrimeiroLado[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, -z, alturas[x, z] * escala), Color.White, new Vector2(0, coordenadaTexturaY));
+
+                            }
                             coordenadaTexturaY = 0;
                         }
                         
@@ -109,7 +127,17 @@ namespace Game1
                         {
                             //texturaX=1,texturaY=0
                             vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), Color.White, new Vector2(1, coordenadaTexturaY));
-                            verticesPrimeiroLado[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, -z, alturas[x, z] * escala), Color.White, new Vector2(1, coordenadaTexturaY));
+                            if (z==0)
+                            {
+                                verticesPrimeiroLado[x * texturaMapa.Width + z] = vertices[x * texturaMapa.Width + z];
+                                
+                            }
+                            else
+                            {
+                                verticesPrimeiroLado[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, -z, alturas[x, z] * escala), Color.White, new Vector2(1, coordenadaTexturaY));
+
+
+                            }
                             coordenadaTexturaY = 1;
 
                         }
@@ -117,7 +145,18 @@ namespace Game1
                         {
                             //texturaX=1, texturaY=1
                             vertices[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, alturas[x, z] * escala, z), Color.White, new Vector2(1, coordenadaTexturaY));
-                            verticesPrimeiroLado[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, -z, alturas[x, z] * escala), Color.White, new Vector2(1, coordenadaTexturaY));
+                            if (z==0)
+                            {
+                                verticesPrimeiroLado[x * texturaMapa.Width + z] = vertices[x * texturaMapa.Width + z];
+
+                                
+                            }
+                            else
+                            {
+                                verticesPrimeiroLado[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, -z, alturas[x, z] * escala), Color.White, new Vector2(1, coordenadaTexturaY));
+
+
+                            }
                             coordenadaTexturaY = 0;
                         }
                     }
@@ -136,18 +175,14 @@ namespace Game1
             {
                 indice[2 * i] = (short)(i);
                 indice[2 * i + 1] = (short)(i + texturaMapa.Width);
-                if (indice[i] < 256) 
-                {
-                    indicesPrimeiroLado[2 * i] =  indice[ i];
-                    indicesPrimeiroLado[2 * i + 1] = indice[ i + 1];
 
-                }
-                else 
-                {
+               
                     indicesPrimeiroLado[2 * i] = (short)(i + texturaMapa.Width);
                     indicesPrimeiroLado[2 * i + 1] = (short)(i);
-                }
                 
+
+                
+                    
 
             }
 
