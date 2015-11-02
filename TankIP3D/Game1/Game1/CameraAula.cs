@@ -96,7 +96,7 @@ namespace Game1
 
         public void UpdateInput(GameTime gameTime, GraphicsDeviceManager graphics)
         {
-            verificarLimites();
+            //verificarLimites();
             KeyboardState kb = Keyboard.GetState();
 
             if (kb.IsKeyDown(Keys.W))

@@ -147,20 +147,18 @@ namespace Game1
             // TODO: Add your drawing code here
 
 
-<<<<<<< HEAD
 
-            terreno2.Draw(GraphicsDevice,cameraSurfaceFollow.view);
-=======
             if (cameraAtiva == CameraAtiva.fps)
             {
-                terreno.Draw(GraphicsDevice, cameraSurfaceFollow.view);
+                terreno2.Draw(GraphicsDevice, cameraSurfaceFollow.view);
+                terreno2.Draw2(GraphicsDevice, cameraSurfaceFollow.view);
             }
             else
             {
-                terreno.Draw(GraphicsDevice, camera.view);
+                terreno2.Draw(GraphicsDevice, camera.view);
+                terreno2.Draw2(GraphicsDevice, camera.view);
             }
             
->>>>>>> 6e07d2e6fdb399539bbb2b9c4e6a41be54c80ce4
 
             
 

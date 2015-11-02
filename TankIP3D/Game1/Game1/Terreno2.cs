@@ -138,8 +138,8 @@ namespace Game1
                 indice[2 * i + 1] = (short)(i + texturaMapa.Width);
                 if (indice[i] < 256) 
                 {
-                    indicesPrimeiroLado[2 * i] = (short)(i);
-                    indicesPrimeiroLado[2 * i + 1] = (short)(i + texturaMapa.Width);
+                    indicesPrimeiroLado[2 * i] =  indice[ i];
+                    indicesPrimeiroLado[2 * i + 1] = indice[ i + 1];
 
                 }
                 else 
