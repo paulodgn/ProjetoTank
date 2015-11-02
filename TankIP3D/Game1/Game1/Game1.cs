@@ -132,7 +132,7 @@ namespace Game1
 
 
 
-            terreno.Draw(GraphicsDevice,cameraSurfaceFollow.view);
+            terreno2.Draw(GraphicsDevice,cameraSurfaceFollow.view);
 
             
 
