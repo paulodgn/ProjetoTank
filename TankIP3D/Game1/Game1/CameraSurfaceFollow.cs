@@ -28,8 +28,8 @@ namespace Game1
         public CameraSurfaceFollow(GraphicsDeviceManager graphics,VertexPositionColorTexture[] vertices, int alturaMapa)
         {
             this.alturaMapa = alturaMapa;
-            velocidade = 0.05f;
-            vetorBase = new Vector3(1, -0.5f, 0);
+            velocidade = 0.5f;
+            vetorBase = new Vector3(1, 0, 0);
             this.vertices = vertices;
             posicao = new Vector3(50, findAltura(), 50);
             
@@ -154,6 +154,8 @@ namespace Game1
         
         public void UpdateInput(GameTime gameTime, GraphicsDeviceManager graphics)
         {
+
+            verificarLimites();
             KeyboardState kb = Keyboard.GetState();
 
             if (kb.IsKeyDown(Keys.W))
@@ -221,6 +223,28 @@ namespace Game1
             direcao = Vector3.Transform(vetorBase, rotacao);
             target = posicao + direcao;
             view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
+            
+        }
+
+        public void verificarLimites()
+        {
+            //verificar se esta fora do terreno
+            if (this.posicao.X - 1 < 0)
+            {
+                this.posicao.X += 0.5f;
+            }
+            if (this.posicao.Z - 1 < 0)
+            {
+                this.posicao.Z += 0.5f;
+            }
+            if (this.posicao.X + 1 > 127)
+            {
+                this.posicao.X -= 0.5f;
+            }
+            if (this.posicao.Z + 1 > 127)
+            {
+                this.posicao.Z -= 0.5f;
+            }
         }
     }
 }
