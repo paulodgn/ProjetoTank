@@ -43,6 +43,7 @@
     <Compile Include="CameraSurfaceFollow.cs" />
     <Compile Include="CameraAula.cs" />
     <Compile Include="CameraVersao2.cs" />
+    <Compile Include="DebugShapeRenderer.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Plano.cs" />
     <Compile Include="Program.cs" />

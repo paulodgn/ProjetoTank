@@ -16,14 +16,14 @@ namespace Game1
         CameraVersao2 camera2;
         CameraSurfaceFollow cameraSurfaceFollow;
         Terreno terreno;
-        Texture2D mapaAlturas,textura;
+        Texture2D mapaAlturas, textura;
         BasicEffect effect;
         Vector2 mousePosition;
         float posicaoInicialRatoX, posicaoInicialRatoY;
         Vector2 posicaoRato;
         Plano plano;
         Terreno2 terreno2;
-        
+
         enum CameraAtiva
         {
             fps,
@@ -49,8 +49,8 @@ namespace Game1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            
-            
+
+            DebugShapeRenderer.Initialize(GraphicsDevice);
             base.Initialize();
         }
 
@@ -69,23 +69,27 @@ namespace Game1
             rasterizerState.MultiSampleAntiAlias = true;
             GraphicsDevice.RasterizerState = rasterizerState;
             // TODO: use this.Content to load your game content here
-            
-            
+
+
             //Camera.Initialize(GraphicsDevice);
-            
+
             mapaAlturas = Content.Load<Texture2D>("mapaAlturas");
             textura = Content.Load<Texture2D>("grass50x50");
-            terreno = new Terreno(GraphicsDevice, mapaAlturas,mapaAlturas,1f,textura);
-            terreno2 = new Terreno2(GraphicsDevice, mapaAlturas, mapaAlturas, 1f, textura);
-            VertexPositionColorTexture[] vertices = terreno.getVertices();
+            terreno = new Terreno(GraphicsDevice, mapaAlturas, mapaAlturas, 1f, textura);
+            //terreno2 = new Terreno2(GraphicsDevice, mapaAlturas, mapaAlturas, 1f, textura);
+            VertexPositionNormalTexture[] vertices = terreno.getVertices();
 
-            cameraSurfaceFollow = new CameraSurfaceFollow(graphics,vertices,mapaAlturas.Width);
+            cameraSurfaceFollow = new CameraSurfaceFollow(graphics, vertices, mapaAlturas.Width);
             camera = new CameraAula(graphics);
             camera2 = new CameraVersao2();
             effect = new BasicEffect(GraphicsDevice);
             mousePosition = new Vector2(0, 0);
             IsMouseVisible = false;
             cameraAtiva = CameraAtiva.fps;
+
+            float aspectRatio = (float)GraphicsDevice.Viewport.Width / GraphicsDevice.Viewport.Height;
+
+            effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f), aspectRatio, 0.1f, 1000.0f);
         }
 
         /// <summary>
@@ -110,12 +114,12 @@ namespace Game1
             // TODO: Add your update logic here
             //Camera.Update(gameTime, GraphicsDevice);
             //input(gameTime);
-            
-          
+
+
             //camera2.input(gameTime, graphics);
 
 
-            
+
 
             //camera.input(gameTime,graphics);
             //cameraSurfaceFollow.UpdateInput(gameTime, graphics);
@@ -124,7 +128,7 @@ namespace Game1
             //camera.UpdateInput(gameTime,graphics);
             //cameraSurfaceFollow.UpdateInput(gameTime, graphics);
             escolherCamara();
-            if(cameraAtiva==CameraAtiva.fps)
+            if (cameraAtiva == CameraAtiva.fps)
             {
                 cameraSurfaceFollow.UpdateInput(gameTime, graphics);
             }
@@ -150,17 +154,19 @@ namespace Game1
 
             if (cameraAtiva == CameraAtiva.fps)
             {
-                terreno2.Draw(GraphicsDevice, cameraSurfaceFollow.view);
-                terreno2.Draw2(GraphicsDevice, cameraSurfaceFollow.view);
+                terreno.Draw(GraphicsDevice, cameraSurfaceFollow.view);
+                //terreno2.Draw2(GraphicsDevice, cameraSurfaceFollow.view);
+                DebugShapeRenderer.Draw(gameTime, cameraSurfaceFollow.view, effect.Projection);
             }
             else
             {
-                terreno2.Draw(GraphicsDevice, camera.view);
-                terreno2.Draw2(GraphicsDevice, camera.view);
+                terreno.Draw(GraphicsDevice, camera.view);
+                DebugShapeRenderer.Draw(gameTime, camera.view, effect.Projection);
+                // terreno2.Draw2(GraphicsDevice, camera.view);
             }
-            
 
-            
+
+
 
             base.Draw(gameTime);
         }
@@ -174,12 +180,12 @@ namespace Game1
 
                 cameraAtiva = CameraAtiva.fps;
             }
-            if(kb.IsKeyDown(Keys.F2))
+            if (kb.IsKeyDown(Keys.F2))
             {
                 cameraAtiva = CameraAtiva.free;
             }
         }
 
-        
+
     }
 }

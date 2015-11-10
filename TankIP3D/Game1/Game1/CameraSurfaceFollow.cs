@@ -19,13 +19,13 @@ namespace Game1
         public Matrix view,worldMatrix;
         
         Matrix rotacao;
-        
-        VertexPositionColorTexture[] vertices;
+
+        VertexPositionNormalTexture[] vertices;
         int alturaMapa;
         MouseState posicaoRatoInicial;
         
 
-        public CameraSurfaceFollow(GraphicsDeviceManager graphics,VertexPositionColorTexture[] vertices, int alturaMapa)
+        public CameraSurfaceFollow(GraphicsDeviceManager graphics,VertexPositionNormalTexture[] vertices, int alturaMapa)
         {
             this.alturaMapa = alturaMapa;
             velocidade = 0.5f;
