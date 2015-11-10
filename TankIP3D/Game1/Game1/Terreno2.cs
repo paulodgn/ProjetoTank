@@ -11,15 +11,15 @@ namespace Game1
     {
         BasicEffect effect;
         Matrix worldMatrix;
-        VertexBuffer vertexBuffer, vertexBuffer2;
-        IndexBuffer indexBuffer, indexBuffer2;
-        VertexPositionColorTexture[] vertices, verticesPrimeiroLado;
+        VertexBuffer vertexBuffer, vertexBuffer2,vertexBuffer3;
+        IndexBuffer indexBuffer, indexBuffer2,indexBuffer3;
+        VertexPositionColorTexture[] vertices, verticesPrimeiroLado,verticesSegundoLado;
         
 
 
 
         int vertexCount;
-        short[] indice, indicesPrimeiroLado;
+        short[] indice, indicesPrimeiroLado,indicesSegundoLado;
         float[,] alturas;
          
         Texture2D texturaMapa;
@@ -57,8 +57,14 @@ namespace Game1
             vertexBuffer2 = new VertexBuffer(device, typeof(VertexPositionColorTexture), verticesPrimeiroLado.Length, BufferUsage.None);
             vertexBuffer2.SetData<VertexPositionColorTexture>(verticesPrimeiroLado);
 
-            indexBuffer2 = new IndexBuffer(device, typeof(short), indicesPrimeiroLado.Length, BufferUsage.None);
+            indexBuffer2 = new IndexBuffer(device, typeof(short), indicesSegundoLado.Length, BufferUsage.None);
             indexBuffer2.SetData<short>(indicesPrimeiroLado);
+
+            vertexBuffer3 = new VertexBuffer(device, typeof(VertexPositionColorTexture), verticesSegundoLado.Length, BufferUsage.None);
+            vertexBuffer3.SetData<VertexPositionColorTexture>(verticesSegundoLado);
+
+            indexBuffer3 = new IndexBuffer(device, typeof(short), indicesSegundoLado.Length, BufferUsage.None);
+            indexBuffer3.SetData<short>(indicesSegundoLado);
 
             
 
@@ -72,6 +78,7 @@ namespace Game1
             vertexCount = tamanhoMapa;
             vertices = new VertexPositionColorTexture[vertexCount];
             verticesPrimeiroLado = new VertexPositionColorTexture[vertexCount];
+            verticesSegundoLado = new VertexPositionColorTexture[vertexCount];
             float escala = 0.05f;
             //ler imagem
 
@@ -113,7 +120,7 @@ namespace Game1
                             }
                             else
                             {
-                                verticesPrimeiroLado[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x, -z, alturas[x, z] * escala), Color.White, new Vector2(0, coordenadaTexturaY));
+                                verticesPrimeiroLado[x * texturaMapa.Width + z] = new VertexPositionColorTexture(new Vector3(x , -z, alturas[x, z] * escala), Color.White, new Vector2(0, coordenadaTexturaY));
 
                             }
                             coordenadaTexturaY = 0;
@@ -177,8 +184,8 @@ namespace Game1
                 indice[2 * i + 1] = (short)(i + texturaMapa.Width);
 
                
-                    indicesPrimeiroLado[2 * i] = (short)(i + texturaMapa.Width);
-                    indicesPrimeiroLado[2 * i + 1] = (short)(i);
+                indicesPrimeiroLado[2 * i] = (short)(i + texturaMapa.Width);
+                indicesPrimeiroLado[2 * i + 1] = (short)(i);
                 
 
                 
