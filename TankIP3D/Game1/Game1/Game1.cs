@@ -23,6 +23,7 @@ namespace Game1
         Vector2 posicaoRato;
         Plano plano;
         Terreno2 terreno2;
+        Tank tank;
 
         enum CameraAtiva
         {
@@ -51,6 +52,7 @@ namespace Game1
             // TODO: Add your initialization logic here
 
             DebugShapeRenderer.Initialize(GraphicsDevice);
+
             base.Initialize();
         }
 
@@ -78,18 +80,22 @@ namespace Game1
             terreno = new Terreno(GraphicsDevice, mapaAlturas, mapaAlturas, 1f, textura);
             //terreno2 = new Terreno2(GraphicsDevice, mapaAlturas, mapaAlturas, 1f, textura);
             VertexPositionNormalTexture[] vertices = terreno.getVertices();
-
+            tank = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa);
             cameraSurfaceFollow = new CameraSurfaceFollow(graphics, vertices, mapaAlturas.Width);
             camera = new CameraAula(graphics);
             camera2 = new CameraVersao2();
             effect = new BasicEffect(GraphicsDevice);
             mousePosition = new Vector2(0, 0);
             IsMouseVisible = false;
-            cameraAtiva = CameraAtiva.fps;
+            cameraAtiva = CameraAtiva.free;
 
-            float aspectRatio = (float)GraphicsDevice.Viewport.Width / GraphicsDevice.Viewport.Height;
+            //float aspectRatio = (float)GraphicsDevice.Viewport.Width / GraphicsDevice.Viewport.Height;
 
-            effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f), aspectRatio, 0.1f, 1000.0f);
+            //effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f), aspectRatio, 0.1f, 1000.0f);
+            tank.LoadContent(Content);
+            //tank.world = Matrix.CreateRotationY(MathHelper.ToRadians(90));
+            //tank.world = Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateScale(.001f); 
+            tank.world.Scale = new Vector3(0.01f, 0.01f, 0.01f);
         }
 
         /// <summary>
@@ -131,12 +137,17 @@ namespace Game1
             if (cameraAtiva == CameraAtiva.fps)
             {
                 cameraSurfaceFollow.UpdateInput(gameTime, graphics);
+                //tank.view = cameraSurfaceFollow.view;
+                //tank.projection = cameraSurfaceFollow.projection;
             }
             else
             {
                 camera.UpdateInput(gameTime, graphics);
+                //tank.view = camera.view;
+                //tank.projection = camera.projection;
             }
 
+            tank.Update();
             base.Update(gameTime);
         }
 
@@ -154,14 +165,15 @@ namespace Game1
 
             if (cameraAtiva == CameraAtiva.fps)
             {
-                terreno.Draw(GraphicsDevice, cameraSurfaceFollow.view);
+                terreno.Draw(GraphicsDevice, cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
                 //terreno2.Draw2(GraphicsDevice, cameraSurfaceFollow.view);
-                DebugShapeRenderer.Draw(gameTime, cameraSurfaceFollow.view, effect.Projection);
+                DebugShapeRenderer.Draw(gameTime, cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
             }
             else
             {
-                terreno.Draw(GraphicsDevice, camera.view);
-                DebugShapeRenderer.Draw(gameTime, camera.view, effect.Projection);
+                terreno.Draw(GraphicsDevice, camera.view, camera.projection);
+                DebugShapeRenderer.Draw(gameTime, camera.view, camera.projection);
+                tank.Draw(camera.view, camera.projection);
                 // terreno2.Draw2(GraphicsDevice, camera.view);
             }
 
@@ -185,6 +197,7 @@ namespace Game1
                 cameraAtiva = CameraAtiva.free;
             }
         }
+
 
 
     }

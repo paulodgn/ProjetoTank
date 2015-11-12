@@ -17,16 +17,17 @@ namespace Game1
         int vertexCount;
         short[] indice;
         float[,] alturas;
-
+        public int larguraMapa;
         Texture2D texturaMapa;
         int tamanhoMapa;
         Color[] valoresMapaAlturas;
         Texture2D texturaTerreno;
 
+
         Plano plano;
         public Terreno(GraphicsDevice device, Texture2D imagemMapaAlturas, Texture2D texturaPlano, float tamanhoPlano, Texture2D textura)
         {
-
+            larguraMapa = imagemMapaAlturas.Width;
             texturaTerreno = textura;
             tamanhoMapa = (imagemMapaAlturas.Height * imagemMapaAlturas.Width);
             this.texturaMapa = imagemMapaAlturas;
@@ -43,15 +44,14 @@ namespace Game1
             effect.DirectionalLight0.SpecularColor = new Vector3(0.2f, 0.2f, 0.2f);
             effect.SpecularPower = 100f;
             effect.SpecularColor = new Vector3(1, 1, 1);
-            effect.DirectionalLight0.SpecularColor = new Vector3(0.2f, 0.2f, 0.2f);
             effect.DirectionalLight1.Enabled = false;
             effect.DirectionalLight2.Enabled = false;
-            //effect.DirectionalLight1.Direction = new Vector3(-1, -1, 1);
             //effect.AmbientLightColor = new Vector3(0, 0.1f, 0.1f);
             //effect.VertexColorEnabled = true;
             effect.Texture = texturaTerreno;
             effect.TextureEnabled = true;
             effect.EmissiveColor = new Vector3(0, 0, 1);
+
 
             //effect.LightingEnabled = true;
             //effect.EnableDefaultLighting();
@@ -61,8 +61,6 @@ namespace Game1
             ////effect.VertexColorEnabled = true;
             //effect.Texture = this.textura;
             //effect.TextureEnabled = true;
-
-
 
 
             lerMapaAlturas(imagemMapaAlturas);
@@ -154,12 +152,8 @@ namespace Game1
                 VertexPositionNormalTexture verticeAnterior = vertices[indice[i - 1]];
                 VertexPositionNormalTexture verticeAnterior2 = vertices[indice[i - 2]];
 
-                //Vector3 vector1 = verticeAnterior.Position - vertice.Position;
-                //Vector3 vector2 = verticeAnterior2.Position - vertice.Position;
-                //Vector3 normal = Vector3.Cross(vector1, vector2);
-
-                Vector3 vector1 = vertice.Position - verticeAnterior.Position;
-                Vector3 vector2 = vertice.Position - verticeAnterior2.Position;
+                Vector3 vector1 = verticeAnterior.Position - vertice.Position;
+                Vector3 vector2 = verticeAnterior2.Position - vertice.Position;
                 Vector3 normal = Vector3.Cross(vector1, vector2);
 
                 normal.Normalize();
@@ -168,13 +162,16 @@ namespace Game1
                 //vertices[i - 1].Normal += normal;
                 //vertices[i - 2].Normal += normal;
 
-                vertices[indice[i]].Normal += normal;
-                vertices[indice[i - 1]].Normal += normal;
+                vertices[indice[i]].Normal = normal;
+                vertices[indice[i - 1]].Normal = normal;
                 vertices[indice[i - 2]].Normal = normal;
 
 
 
             }
+
+            //normais segundo round
+
 
 
 
@@ -207,10 +204,11 @@ namespace Game1
 
         }
 
-        public void Draw(GraphicsDevice device, Matrix cameraView)
+        public void Draw(GraphicsDevice device, Matrix cameraView, Matrix cameraProj)
         {
             //plano.Draw(device, camera);
             effect.View = cameraView;
+            effect.Projection = cameraProj;
             //effect.View = Camera.View;
             //effect.World = Camera.World;
             //effect.Projection = Camera.Projection;

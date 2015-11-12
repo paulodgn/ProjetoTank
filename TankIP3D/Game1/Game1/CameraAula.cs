@@ -30,6 +30,8 @@ namespace Game1
             posicao = new Vector3(50, 50, 50);
             direcao = vetorBase;
             worldMatrix = Matrix.Identity;
+            float aspectRatio = (float)graphics.GraphicsDevice.Viewport.Width / graphics.GraphicsDevice.Viewport.Height;
+            projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f), aspectRatio, 0.1f, 1000.0f);
             Mouse.SetPosition(graphics.GraphicsDevice.Viewport.Height / 2, graphics.GraphicsDevice.Viewport.Width / 2);
             posicaoRatoInicial = Mouse.GetState();
             this.frente();

@@ -13,29 +13,30 @@ namespace Game1
         Vector3 posicao, direcao, target;
         float velocidade, time;
         float grausPorPixel = MathHelper.ToRadians(20) / 100;
-        float diferencaX,diferencaY;
-        float yaw, pitch,strafe;
+        float diferencaX, diferencaY;
+        float yaw, pitch, strafe;
         Vector3 vetorBase;
-        public Matrix view,worldMatrix;
-        
+        public Matrix view, worldMatrix, projection;
+
         Matrix rotacao;
 
         VertexPositionNormalTexture[] vertices;
         int alturaMapa;
         MouseState posicaoRatoInicial;
-        
 
-        public CameraSurfaceFollow(GraphicsDeviceManager graphics,VertexPositionNormalTexture[] vertices, int alturaMapa)
+
+        public CameraSurfaceFollow(GraphicsDeviceManager graphics, VertexPositionNormalTexture[] vertices, int alturaMapa)
         {
             this.alturaMapa = alturaMapa;
             velocidade = 0.5f;
             vetorBase = new Vector3(1, 0, 0);
             this.vertices = vertices;
             posicao = new Vector3(50, findAltura(), 50);
-            
+
             direcao = vetorBase;
             worldMatrix = Matrix.Identity;
-            
+            float aspectRatio = (float)graphics.GraphicsDevice.Viewport.Width / graphics.GraphicsDevice.Viewport.Height;
+            projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f), aspectRatio, 0.1f, 1000.0f);
             Mouse.SetPosition(graphics.GraphicsDevice.Viewport.Height / 2, graphics.GraphicsDevice.Viewport.Width / 2);
             posicaoRatoInicial = Mouse.GetState();
             this.frente();
@@ -70,7 +71,7 @@ namespace Game1
             yC = vertices[xC * alturaMapa + zC].Position.Y;
             yD = vertices[xD * alturaMapa + zD].Position.Y;
 
-     
+
 
             //calcular nova altura da camara
             float yAB, yCD, cameraY;
@@ -78,7 +79,7 @@ namespace Game1
             yAB = (1 - (this.posicao.X - xA)) * yA + (this.posicao.X - xA) * yB;
             yCD = (1 - (this.posicao.X - xC)) * yC + (this.posicao.X - xC) * yD;
             cameraY = (1 - (this.posicao.Z - zA)) * yAB + (this.posicao.Z - zA) * yCD;
-            return (cameraY+1);
+            return (cameraY + 1);
         }
 
         //surface follow end
@@ -89,7 +90,7 @@ namespace Game1
             posicao.Y = findAltura();
             //time = gameTime.ElapsedGameTime.Milliseconds;
             posicao = posicao + velocidade * direcao;
-            target = posicao+direcao;//posicao + direcao;
+            target = posicao + direcao;//posicao + direcao;
 
         }
 
@@ -101,12 +102,12 @@ namespace Game1
             target = posicao + direcao;//posicao + direcao;
         }
 
-        
+
         public void rodarEsquerda(GameTime gameTime)
         {
             time = gameTime.ElapsedGameTime.Milliseconds;
             //yaw = yaw + velocidade;//(yaw + velocidade);
-            yaw -= diferencaX *grausPorPixel;
+            yaw -= diferencaX * grausPorPixel;
         }
 
         public void rodarDireita(GameTime gameTime)
@@ -130,13 +131,13 @@ namespace Game1
             pitch -= diferencaY * grausPorPixel;
         }
 
-        public void strafeEsquerda(GameTime gameTime,float strafe)
+        public void strafeEsquerda(GameTime gameTime, float strafe)
         {
             posicao.Y = findAltura();
             time = gameTime.ElapsedGameTime.Milliseconds;
             this.strafe = strafe + velocidade * time;
             posicao = posicao - velocidade * Vector3.Cross(direcao, Vector3.Up);
-            
+
             target = posicao + direcao;
 
         }
@@ -151,7 +152,7 @@ namespace Game1
             target = posicao + direcao;
 
         }
-        
+
         public void UpdateInput(GameTime gameTime, GraphicsDeviceManager graphics)
         {
 
@@ -179,9 +180,9 @@ namespace Game1
                 view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
             }
 
-         
+
             MouseState mouseState = Mouse.GetState();
-            if(mouseState!=posicaoRatoInicial)
+            if (mouseState != posicaoRatoInicial)
             {
                 diferencaX = mouseState.Position.X - posicaoRatoInicial.Position.X;
                 diferencaY = mouseState.Position.Y - posicaoRatoInicial.Position.Y;
@@ -190,13 +191,13 @@ namespace Game1
                     this.rodarEsquerda(gameTime);
                 }
                 if (mouseState.X > posicaoRatoInicial.X || kb.IsKeyDown(Keys.Right))
-                {                    
+                {
                     this.rodarDireita(gameTime);
                 }
                 if (mouseState.Y > posicaoRatoInicial.Y || kb.IsKeyDown(Keys.Down))
                 {
                     this.rodarBaixo(gameTime);
-                    
+
                 }
                 if (mouseState.Y < posicaoRatoInicial.Y || kb.IsKeyDown(Keys.Up))
                 {
@@ -209,21 +210,21 @@ namespace Game1
                 catch (Exception e)
                 { }
                 updateCamera();
-                
+
             }
-            
-            
+
+
         }
 
         public void updateCamera()
         {
-            
+
             rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, pitch);
             worldMatrix = rotacao;
             direcao = Vector3.Transform(vetorBase, rotacao);
             target = posicao + direcao;
             view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
-            
+
         }
 
         public void verificarLimites()
