@@ -33,7 +33,7 @@ namespace Game1
             this.vertices = vertices;
             posicao = new Vector3(1, findAltura(), 1);
             //posicao = posicaoTank;
-
+            this.posicao = posicaoTank + new Vector3(0, 10, -20);
             direcao = vetorBase;
             worldMatrix = Matrix.Identity;
             float aspectRatio = (float)graphics.GraphicsDevice.Viewport.Width / graphics.GraphicsDevice.Viewport.Height;
@@ -223,22 +223,41 @@ namespace Game1
 
             //rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, pitch);
             KeyboardState kb = Keyboard.GetState();
-            if (kb.IsKeyDown(Keys.D) || kb.IsKeyDown(Keys.A) || kb.IsKeyDown(Keys.S) || kb.IsKeyDown(Keys.W))
+            if (kb.IsKeyDown(Keys.D) )
             {
-                this.posicao = posicaoTank + new Vector3(0,20,-20) ;
+                //rotacao += Matrix.CreateRotationY(MathHelper.ToRadians( tank.rotacaoY));
                 //this.posicao.Z -= 2;
                 //this.posicao.Y += 5;
             }
+            if (kb.IsKeyDown(Keys.A))
+            {
+                //rotacao -= Matrix.CreateRotationY(MathHelper.ToRadians(-tank.rotacaoY));
+                //this.posicao.Z -= 2;
+                //this.posicao.Y += 5;
+            }
+            if(  kb.IsKeyDown(Keys.S) || kb.IsKeyDown(Keys.W))
+            {
+
+            }
             //worldMatrix = rotacao;
-            direcao = Vector3.Transform(vetorBase, worldTank);
-            target = posicao + posicaoTank;
-            //Matrix rotate = Matrix.CreateRotationY(tank.rotacaoY);
-            //posicao = Vector3.Transform(posicaoTank, rotate);
-            view = Matrix.CreateLookAt(posicao, posicaoTank, Vector3.Up);
+            
+            //direcao = Vector3.Transform(vetorBase, rotacao);
+            //target = posicao + direcao;
+            //Matrix rotate = Matrix.CreateRotationY(MathHelper.ToRadians(tank.rotacaoY));
+            //posicao = Vector3.Transform(posicao, rotate);
+            ////this.posicao = posicaoTank + new Vector3(0, 10, -20);
+            //worldMatrix = worldTank;
+            //view = Matrix.CreateLookAt(posicao, posicaoTank, Vector3.Up);
             
             //this.posicao.Y = posicaoTank.Y;
+            Vector3 offset = new Vector3(0,20,-20);
+            rotacao = Matrix.CreateRotationY(MathHelper.ToRadians(tank.rotacaoY));
+            Vector3 transformOffset = Vector3.Transform(offset, rotacao);
+            posicao = transformOffset + posicaoTank;
             
-            
+            view = Matrix.CreateLookAt(posicao, posicaoTank,Vector3.Up);
+
+           
         }
 
         public void verificarLimites()
@@ -300,3 +319,6 @@ namespace Game1
 //grausporpixel=10graus/100
 //yaw+=difx*grauporpixel
 //createfromyawpitchroll(mathhelper.toradians(yaw)
+
+
+
