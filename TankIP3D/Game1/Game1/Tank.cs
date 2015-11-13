@@ -39,7 +39,8 @@ namespace Game1
         public int larguraMapa;
         public Vector3 newNormal;
         public float newAltura;
-        float yaw, pitch, roll, rotacaoY, velocidade;
+        float yaw, pitch, roll,  velocidade;
+        public float rotacaoY;
         Vector3 positionCamera;
         Matrix rotacao;
         // Shortcut references to the bones that we are going to animate.
@@ -206,7 +207,7 @@ namespace Game1
             //position = world.Translation;
             //view = cameraView;
             //projection = cameraProjection;
-            HandleTankInput(0.5f);
+            HandleTankInput(0.02f);
             //UpdateInput();
         }
 
@@ -324,7 +325,7 @@ namespace Game1
             KeyboardState currentKeyboardState = Keyboard.GetState();
 
             //  Roda as rodas to tanque
-            this.WheelRotation = time * 5;
+            
 
             //  Move torre (só até 90 graus)
             if (currentKeyboardState.IsKeyDown(Keys.Left))
@@ -363,14 +364,27 @@ namespace Game1
 
             if (currentKeyboardState.IsKeyDown(Keys.A))
             {
-                this.world *= Matrix.CreateTranslation(new Vector3(0.0f, 0.0f, -0.1f));
+                //this.world *= Matrix.CreateTranslation(new Vector3(0.0f, 0.0f, -0.1f));
+                rotacaoY += 0.5f;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.D))
             {
 
-                position += direcao * velocidade;
+                rotacaoY -= 0.5f;
                 
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.W))
+            {
+                this.WheelRotation += time * 5;
+                position += direcao * velocidade;
+
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.S))
+            {
+                this.WheelRotation -= time * 5;
+                position -= direcao * velocidade;
+
             }
             position.Y = newAltura;
             rotacao = Matrix.CreateRotationY(MathHelper.ToRadians(-90)) * Matrix.CreateRotationY(MathHelper.ToRadians(rotacaoY));

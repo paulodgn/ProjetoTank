@@ -93,7 +93,7 @@ namespace Game1
             cameraAtiva = CameraAtiva.free;
 
             //float aspectRatio = (float)GraphicsDevice.Viewport.Width / GraphicsDevice.Viewport.Height;
-
+            
             //effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f), aspectRatio, 0.1f, 1000.0f);
             tank.LoadContent(Content);
             //tank.world = Matrix.CreateRotationY(MathHelper.ToRadians(90));
@@ -154,7 +154,7 @@ namespace Game1
                 
                 //cameraSurfaceFollow.updateCamera();
                 //cameraTank.UpdateInput(gameTime, graphics,tank.getPosition());
-                cameraTank.updateCamera(tank.getPosition(), tank.getWorldMAtrix(),tank.view);
+                cameraTank.updateCamera(tank.getPosition(), tank.getWorldMAtrix(),tank.view,tank);
             }
 
             tank.Update();

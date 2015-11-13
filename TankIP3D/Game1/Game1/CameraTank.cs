@@ -41,7 +41,7 @@ namespace Game1
             Mouse.SetPosition(graphics.GraphicsDevice.Viewport.Height / 2, graphics.GraphicsDevice.Viewport.Width / 2);
             posicaoRatoInicial = Mouse.GetState();
             this.frente();
-            updateCamera(posicaoTank,worldTank,tankView);
+            //updateCamera(posicaoTank,worldTank,tankView);
         }
 
         //surface follow
@@ -218,20 +218,22 @@ namespace Game1
 
         }
 
-        public void updateCamera( Vector3 posicaoTank, Matrix worldTank, Matrix viewTank)
+        public void updateCamera( Vector3 posicaoTank, Matrix worldTank, Matrix viewTank, Tank tank)
         {
 
             //rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, pitch);
             KeyboardState kb = Keyboard.GetState();
-            if (kb.IsKeyDown(Keys.D))
+            if (kb.IsKeyDown(Keys.D) || kb.IsKeyDown(Keys.A) || kb.IsKeyDown(Keys.S) || kb.IsKeyDown(Keys.W))
             {
-                this.posicao = posicaoTank ;
-                this.posicao.Z -= 20;
-                this.posicao.Y += 20;
+                this.posicao = posicaoTank + new Vector3(0,20,-20) ;
+                //this.posicao.Z -= 2;
+                //this.posicao.Y += 5;
             }
             //worldMatrix = rotacao;
-            //direcao = posicaoTank; //Vector3.Transform(vetorBase, worldTank);
-            //target = posicao + direcao;
+            direcao = Vector3.Transform(vetorBase, worldTank);
+            target = posicao + posicaoTank;
+            //Matrix rotate = Matrix.CreateRotationY(tank.rotacaoY);
+            //posicao = Vector3.Transform(posicaoTank, rotate);
             view = Matrix.CreateLookAt(posicao, posicaoTank, Vector3.Up);
             
             //this.posicao.Y = posicaoTank.Y;
