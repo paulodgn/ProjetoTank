@@ -23,16 +23,16 @@ namespace Game1
         VertexPositionNormalTexture[] vertices;
         int alturaMapa;
         MouseState posicaoRatoInicial;
+        
 
-
-        public CameraTank(GraphicsDeviceManager graphics, VertexPositionNormalTexture[] vertices, int alturaMapa, Vector3 posicaoTank)
+        public CameraTank(GraphicsDeviceManager graphics, VertexPositionNormalTexture[] vertices, int alturaMapa, Vector3 posicaoTank, Matrix worldTank,Matrix tankView)
         {
             this.alturaMapa = alturaMapa;
             velocidade = 0.5f;
             vetorBase = new Vector3(1, 0, 0);
             this.vertices = vertices;
-            //posicao = new Vector3(50, findAltura(), 50);
-            posicao = posicaoTank;
+            posicao = new Vector3(1, findAltura(), 1);
+            //posicao = posicaoTank;
 
             direcao = vetorBase;
             worldMatrix = Matrix.Identity;
@@ -41,7 +41,7 @@ namespace Game1
             Mouse.SetPosition(graphics.GraphicsDevice.Viewport.Height / 2, graphics.GraphicsDevice.Viewport.Width / 2);
             posicaoRatoInicial = Mouse.GetState();
             this.frente();
-            updateCamera(posicaoTank);
+            updateCamera(posicaoTank,worldTank,tankView);
         }
 
         //surface follow
@@ -154,7 +154,7 @@ namespace Game1
 
         }
 
-        public void UpdateInput(GameTime gameTime, GraphicsDeviceManager graphics, Vector3 posicaoTank)
+        public void UpdateInput(GameTime gameTime, GraphicsDeviceManager graphics, Vector3 posicaoTank, Matrix worldTank)
         {
 
             verificarLimites();
@@ -210,7 +210,7 @@ namespace Game1
                 }
                 catch (Exception e)
                 { }
-                updateCamera(posicaoTank);
+                //updateCamera(posicaoTank, worldTank);
                 
                 
             }
@@ -218,15 +218,24 @@ namespace Game1
 
         }
 
-        public void updateCamera( Vector3 posicaoTank)
+        public void updateCamera( Vector3 posicaoTank, Matrix worldTank, Matrix viewTank)
         {
 
-            rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, pitch);
-            worldMatrix = rotacao;
-            direcao = Vector3.Transform(vetorBase, rotacao);
-            target = posicao + direcao;
-            view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
-            this.posicao = posicaoTank + Vector3.Forward * 20;
+            //rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, pitch);
+            KeyboardState kb = Keyboard.GetState();
+            if (kb.IsKeyDown(Keys.D))
+            {
+                this.posicao = posicaoTank ;
+                this.posicao.Z -= 20;
+                this.posicao.Y += 20;
+            }
+            //worldMatrix = rotacao;
+            //direcao = posicaoTank; //Vector3.Transform(vetorBase, worldTank);
+            //target = posicao + direcao;
+            view = Matrix.CreateLookAt(posicao, posicaoTank, Vector3.Up);
+            
+            //this.posicao.Y = posicaoTank.Y;
+            
             
         }
 

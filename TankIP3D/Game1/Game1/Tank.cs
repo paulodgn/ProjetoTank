@@ -40,6 +40,7 @@ namespace Game1
         public Vector3 newNormal;
         public float newAltura;
         float yaw, pitch, roll, rotacaoY, velocidade;
+        Vector3 positionCamera;
         Matrix rotacao;
         // Shortcut references to the bones that we are going to animate.
         // We could just look these up inside the Draw method, but it is more
@@ -145,6 +146,7 @@ namespace Game1
             velocidade = 0.1f;
             device = graphicsDevice;
             position = new Vector3(10, 12, 10);
+            positionCamera = position;
             vertices = vert;
             this.larguraMapa = larguraMapa;
             vetorBase = new Vector3(1, 0, 0);
@@ -152,7 +154,7 @@ namespace Game1
             target = position + direcao;
             //world = Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateScale(.01f) * Matrix.CreateTranslation(position);
             world =  Matrix.CreateScale(0.01f) * Matrix.CreateTranslation(position);
-            
+            view = Matrix.CreateLookAt(new Vector3(0, 10, 10), Vector3.Zero, Vector3.Up);
         }
 
         /// <summary>
@@ -411,7 +413,11 @@ namespace Game1
 
         public Vector3 getPosition()
         {
-            return (position - vetorBase + new Vector3(0,10,0));
+            return (position);
+        }
+        public Matrix getWorldMAtrix()
+        {
+            return (world);
         }
 
         //rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, pitch);

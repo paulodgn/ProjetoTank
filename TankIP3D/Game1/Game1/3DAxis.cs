@@ -38,21 +38,21 @@ namespace Game1
             static public void Draw(GraphicsDevice graphics, BasicEffect efeito)
             {
                 //World, View, Projection
-                efeito.World = Camera.World;
-                efeito.View = Camera.View;
-                efeito.Projection = Camera.Projection;
-                //Iluminação
-                efeito.VertexColorEnabled = true;
-                //Fog
-                efeito.FogEnabled = true;
-                efeito.FogColor = Vector3.Zero;
-                efeito.FogStart = Camera.nearPlane;
-                efeito.FogEnd = Camera.farPlaneLong;
-                foreach (EffectPass pass in efeito.CurrentTechnique.Passes)
-                {
-                    pass.Apply();
-                    graphics.DrawUserPrimitives(PrimitiveType.LineList, vertexList, 0, 3);
-                }
+                //efeito.World = Camera.World;
+                //efeito.View = Camera.View;
+                //efeito.Projection = Camera.Projection;
+                ////Iluminação
+                //efeito.VertexColorEnabled = true;
+                ////Fog
+                //efeito.FogEnabled = true;
+                //efeito.FogColor = Vector3.Zero;
+                //efeito.FogStart = Camera.nearPlane;
+                //efeito.FogEnd = Camera.farPlaneLong;
+                //foreach (EffectPass pass in efeito.CurrentTechnique.Passes)
+                //{
+                //    pass.Apply();
+                //    graphics.DrawUserPrimitives(PrimitiveType.LineList, vertexList, 0, 3);
+                //}
             }
         }
     }

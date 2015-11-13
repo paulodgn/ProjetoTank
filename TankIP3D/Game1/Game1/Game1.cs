@@ -85,7 +85,7 @@ namespace Game1
             tank = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa);
             cameraSurfaceFollow = new CameraSurfaceFollow(graphics, vertices, mapaAlturas.Width);
             camera = new CameraAula(graphics);
-            cameraTank = new CameraTank(graphics, vertices, mapaAlturas.Width, tank.getPosition());
+            cameraTank = new CameraTank(graphics, vertices, mapaAlturas.Width, tank.getPosition(), tank.getWorldMAtrix(),tank.view);
             camera2 = new CameraVersao2();
             effect = new BasicEffect(GraphicsDevice);
             mousePosition = new Vector2(0, 0);
@@ -151,7 +151,10 @@ namespace Game1
             }
             else
             {
-                cameraTank.UpdateInput(gameTime, graphics,tank.getPosition());
+                
+                //cameraSurfaceFollow.updateCamera();
+                //cameraTank.UpdateInput(gameTime, graphics,tank.getPosition());
+                cameraTank.updateCamera(tank.getPosition(), tank.getWorldMAtrix(),tank.view);
             }
 
             tank.Update();
