@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Game1
 {
-    class CameraSurfaceFollow
+    class CameraTank
     {
         Vector3 posicao, direcao, target;
         float velocidade, time;
@@ -25,14 +25,14 @@ namespace Game1
         MouseState posicaoRatoInicial;
 
 
-        public CameraSurfaceFollow(GraphicsDeviceManager graphics, VertexPositionNormalTexture[] vertices, int alturaMapa/*, Vector3 posicaoTank*/)
+        public CameraTank(GraphicsDeviceManager graphics, VertexPositionNormalTexture[] vertices, int alturaMapa, Vector3 posicaoTank)
         {
             this.alturaMapa = alturaMapa;
             velocidade = 0.5f;
             vetorBase = new Vector3(1, 0, 0);
             this.vertices = vertices;
-            posicao = new Vector3(50, findAltura(), 50);
-            //posicao = posicaoTank;
+            //posicao = new Vector3(50, findAltura(), 50);
+            posicao = posicaoTank;
 
             direcao = vetorBase;
             worldMatrix = Matrix.Identity;
@@ -41,7 +41,7 @@ namespace Game1
             Mouse.SetPosition(graphics.GraphicsDevice.Viewport.Height / 2, graphics.GraphicsDevice.Viewport.Width / 2);
             posicaoRatoInicial = Mouse.GetState();
             this.frente();
-            updateCamera();
+            updateCamera(posicaoTank);
         }
 
         //surface follow
@@ -80,7 +80,7 @@ namespace Game1
             yAB = (1 - (this.posicao.X - xA)) * yA + (this.posicao.X - xA) * yB;
             yCD = (1 - (this.posicao.X - xC)) * yC + (this.posicao.X - xC) * yD;
             cameraY = (1 - (this.posicao.Z - zA)) * yAB + (this.posicao.Z - zA) * yCD;
-            return (cameraY + 1);
+            return (cameraY + 4);
         }
 
         //surface follow end
@@ -154,7 +154,7 @@ namespace Game1
 
         }
 
-        public void UpdateInput(GameTime gameTime, GraphicsDeviceManager graphics/*, Vector3 posicaoTank*/)
+        public void UpdateInput(GameTime gameTime, GraphicsDeviceManager graphics, Vector3 posicaoTank)
         {
 
             verificarLimites();
@@ -210,15 +210,15 @@ namespace Game1
                 }
                 catch (Exception e)
                 { }
-                updateCamera();
-
-                //this.posicao = posicaoTank;
+                updateCamera(posicaoTank);
+                
+                
             }
 
 
         }
 
-        public void updateCamera()
+        public void updateCamera( Vector3 posicaoTank)
         {
 
             rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, pitch);
@@ -226,7 +226,7 @@ namespace Game1
             direcao = Vector3.Transform(vetorBase, rotacao);
             target = posicao + direcao;
             view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
-
+            this.posicao = posicaoTank + Vector3.Forward * 20;
             
         }
 

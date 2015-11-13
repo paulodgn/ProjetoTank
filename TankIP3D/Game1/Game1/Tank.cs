@@ -409,6 +409,11 @@ namespace Game1
 
         }
 
+        public Vector3 getPosition()
+        {
+            return (position - vetorBase + new Vector3(0,10,0));
+        }
+
         //rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, pitch);
         //        worldMatrix = rotacao;
         //        direcao = Vector3.Transform(vetorBase, rotacao);

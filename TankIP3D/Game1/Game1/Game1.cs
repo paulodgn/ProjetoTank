@@ -15,6 +15,7 @@ namespace Game1
         CameraAula camera;
         CameraVersao2 camera2;
         CameraSurfaceFollow cameraSurfaceFollow;
+        CameraTank cameraTank;
         Terreno terreno;
         Texture2D mapaAlturas, textura;
         BasicEffect effect;
@@ -28,7 +29,8 @@ namespace Game1
         enum CameraAtiva
         {
             fps,
-            free
+            free,
+            cameraTank
         };
         CameraAtiva cameraAtiva;
         public Game1()
@@ -83,6 +85,7 @@ namespace Game1
             tank = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa);
             cameraSurfaceFollow = new CameraSurfaceFollow(graphics, vertices, mapaAlturas.Width);
             camera = new CameraAula(graphics);
+            cameraTank = new CameraTank(graphics, vertices, mapaAlturas.Width, tank.getPosition());
             camera2 = new CameraVersao2();
             effect = new BasicEffect(GraphicsDevice);
             mousePosition = new Vector2(0, 0);
@@ -140,11 +143,15 @@ namespace Game1
                 //tank.view = cameraSurfaceFollow.view;
                 //tank.projection = cameraSurfaceFollow.projection;
             }
-            else
+            else if(cameraAtiva==CameraAtiva.free)
             {
                 camera.UpdateInput(gameTime, graphics);
                 //tank.view = camera.view;
                 //tank.projection = camera.projection;
+            }
+            else
+            {
+                cameraTank.UpdateInput(gameTime, graphics,tank.getPosition());
             }
 
             tank.Update();
@@ -166,15 +173,22 @@ namespace Game1
             if (cameraAtiva == CameraAtiva.fps)
             {
                 terreno.Draw(GraphicsDevice, cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
+                tank.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
                 //terreno2.Draw2(GraphicsDevice, cameraSurfaceFollow.view);
                 DebugShapeRenderer.Draw(gameTime, cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
             }
-            else
+            else if(cameraAtiva == CameraAtiva.free)
             {
                 terreno.Draw(GraphicsDevice, camera.view, camera.projection);
                 DebugShapeRenderer.Draw(gameTime, camera.view, camera.projection);
                 tank.Draw(camera.view, camera.projection);
                 // terreno2.Draw2(GraphicsDevice, camera.view);
+            }
+            else
+            {
+                terreno.Draw(GraphicsDevice, cameraTank.view, cameraTank.projection);
+                DebugShapeRenderer.Draw(gameTime, cameraTank.view, cameraTank.projection);
+                tank.Draw(cameraTank.view, cameraTank.projection);
             }
 
 
@@ -195,6 +209,10 @@ namespace Game1
             if (kb.IsKeyDown(Keys.F2))
             {
                 cameraAtiva = CameraAtiva.free;
+            }
+            if (kb.IsKeyDown(Keys.F3))
+            {
+                cameraAtiva = CameraAtiva.cameraTank;
             }
         }
 
