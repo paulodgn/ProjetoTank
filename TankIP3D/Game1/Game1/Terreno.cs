@@ -151,9 +151,15 @@ namespace Game1
                 VertexPositionNormalTexture vertice = vertices[indice[i]];
                 VertexPositionNormalTexture verticeAnterior = vertices[indice[i - 1]];
                 VertexPositionNormalTexture verticeAnterior2 = vertices[indice[i - 2]];
+                //VertexPositionNormalTexture verticeEsquerda = vertices[indice[i - 1]];
+                //VertexPositionNormalTexture verticeDireita=vertices[indice[i *texturaMapa.Width]];
+                //VertexPositionNormalTexture verticeCima = vertices[indice[i - 2]];
+                //VertexPositionNormalTexture verticeBaixo=vertices[indice[i + 2]];
 
                 Vector3 vector1 = verticeAnterior.Position - vertice.Position;
                 Vector3 vector2 = verticeAnterior2.Position - vertice.Position;
+                //Vector3 vector3;
+                //Vector3 vector4;
                 Vector3 normal = Vector3.Cross(vector1, vector2);
 
                 normal.Normalize();
