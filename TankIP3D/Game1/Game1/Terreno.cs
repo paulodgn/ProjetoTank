@@ -145,32 +145,238 @@ namespace Game1
 
             //normais
 
-            for (int i = 2; i < indice.Length; i++)
+            for (int x = 1; x < larguraMapa-1; x++)
             {
+                for (int z = 1; z < larguraMapa-1; z++)
+                {
+                    VertexPositionNormalTexture vertice = vertices[x*larguraMapa+z];
 
-                VertexPositionNormalTexture vertice = vertices[indice[i]];
-                VertexPositionNormalTexture verticeAnterior = vertices[indice[i - 1]];
-                VertexPositionNormalTexture verticeAnterior2 = vertices[indice[i - 2]];
-                //VertexPositionNormalTexture verticeEsquerda = vertices[indice[i - 1]];
-                //VertexPositionNormalTexture verticeDireita=vertices[indice[i *texturaMapa.Width]];
-                //VertexPositionNormalTexture verticeCima = vertices[indice[i - 2]];
-                //VertexPositionNormalTexture verticeBaixo=vertices[indice[i + 2]];
+                    VertexPositionNormalTexture verticeEsquerda = vertices[(x * larguraMapa + z)-larguraMapa];
+                    VertexPositionNormalTexture verticeDireita = vertices[(x * larguraMapa + z) + larguraMapa];
+                    VertexPositionNormalTexture verticeCima = vertices[(x * larguraMapa + z) - 1];
+                    VertexPositionNormalTexture verticeBaixo = vertices[(x * larguraMapa + z) +1];
 
-                Vector3 vector1 = verticeAnterior.Position - vertice.Position;
-                Vector3 vector2 = verticeAnterior2.Position - vertice.Position;
-                //Vector3 vector3;
-                //Vector3 vector4;
-                Vector3 normal = Vector3.Cross(vector1, vector2);
+                    Vector3 vectorCima = verticeCima.Position - vertice.Position;
+                    Vector3 vectorEsquerda = verticeEsquerda.Position - vertice.Position;
+                    Vector3 vectorBaixo = verticeBaixo.Position - vertice.Position;
+                    Vector3 vectorDireita = verticeDireita.Position - vertice.Position;
 
-                normal.Normalize();
+                    Vector3 normal1 = Vector3.Cross(vectorCima, vectorEsquerda);
+                    Vector3 normal2 = Vector3.Cross(vectorEsquerda, vectorBaixo);
+                    Vector3 normal3 = Vector3.Cross(vectorBaixo,vectorDireita);
+                    Vector3 normal4 = Vector3.Cross(vectorDireita,vectorCima);
 
-                //vertices[i].Normal += normal;
-                //vertices[i - 1].Normal += normal;
-                //vertices[i - 2].Normal += normal;
 
-                vertices[indice[i]].Normal = normal;
-                vertices[indice[i - 1]].Normal = normal;
-                vertices[indice[i - 2]].Normal = normal;
+                    Vector3 Normal = (Vector3.Normalize(normal1) + Vector3.Normalize(normal2) + Vector3.Normalize(normal3) + Vector3.Normalize(normal4))/4;
+
+                    vertices[x * larguraMapa + z].Normal = Normal;
+                    
+                }
+                
+
+                ////VertexPositionNormalTexture vertice = vertices[indice[i]];
+                
+                //// vertices dentro dos limites
+                //if (vertices[i].Position.X > 0 && vertices[i].Position.X < larguraMapa-1 &&
+                //    vertices[i].Position.Z > 0 && vertices[i].Position.Z < larguraMapa-1)
+                //{
+                //    VertexPositionNormalTexture verticeEsquerda = vertices[indice[i - 1]];
+                //    VertexPositionNormalTexture verticeDireita = vertices[indice[i + larguraMapa]];
+                //    VertexPositionNormalTexture verticeCima = vertices[indice[i - 2]];
+                //    VertexPositionNormalTexture verticeBaixo = vertices[indice[i + 2]];
+
+                //    Vector3 vector1 = verticeEsquerda.Position - vertice.Position;
+                //    Vector3 vector2 = verticeDireita.Position - vertice.Position;
+                //    Vector3 vector3 = verticeCima.Position - vertice.Position;
+                //    Vector3 vector4 = verticeBaixo.Position - vertice.Position;
+
+                //    Vector3 normal = Vector3.Cross(vector1, vector2);
+                //    Vector3 normal2 = Vector3.Cross(vector3, vector4);
+                //    Vector3 normal3 = normal + normal2;
+
+                //    normal3.Normalize();
+
+                //    vertices[i].Normal += normal3;
+
+                //}
+                //    // vertices nos limites laterais
+                //    // x ou z igual a zero!
+                //    // x ou zigual à largura do mapa
+
+                //else if (vertices[i].Position.X == 0.0f || vertices[i].Position.X == larguraMapa ||
+                //   vertices[i].Position.Z == 0.0f || vertices[i].Position.Z == larguraMapa)
+                //{
+                //    // verificar quatro condições
+                //    // lado superior
+                //    if (vertices[i].Position.X==0.0f && (vertices[i].Position.Z >0.0f && vertices[i].Position.Z< larguraMapa))
+                //    {
+                //        VertexPositionNormalTexture verticeEsquerda = vertices[indice[i - 1]];
+                //        VertexPositionNormalTexture verticeBaixo = vertices[indice[i + 2]];
+                //        VertexPositionNormalTexture verticeDireita = vertices[indice[i * larguraMapa]];
+
+                //        Vector3 vector1 = verticeEsquerda.Position - vertice.Position;
+                //        Vector3 vector2 = verticeBaixo.Position - vertice.Position;
+                //        Vector3 vector3 = verticeDireita.Position - vertice.Position;
+
+                //        Vector3 normal = Vector3.Cross(vector1, vector2);
+                //        Vector3 normal2 = Vector3.Cross(normal, vector3);
+
+                //        normal2.Normalize();
+
+                //        vertices[i].Normal += normal2;
+                        
+                //    }
+                //    //lado esquerdo
+                //    if ((vertices[i].Position.X > 0 && vertices[i].Position.X < larguraMapa) && vertices[i].Position.Z == 0)
+                //    {
+                //        VertexPositionNormalTexture verticeCima = vertices[indice[i - 2]];
+                //        VertexPositionNormalTexture verticeDireita = vertices[indice[i + larguraMapa]];
+                //        VertexPositionNormalTexture verticeBaixo = vertices[indice[i + 2]];
+
+                //        Vector3 vector1 = verticeCima.Position - vertice.Position;
+                //        Vector3 vector2 = verticeDireita.Position - vertice.Position;
+                //        Vector3 vector3 = verticeBaixo.Position - vertice.Position;
+
+                //        Vector3 normal = Vector3.Cross(vector1, vector2);
+                //        Vector3 normal2 = Vector3.Cross(normal, vector3);
+
+                //        normal2.Normalize();
+
+                //        vertices[i].Normal += normal2;
+                        
+                //    }
+                //    //lado direito
+                //    if (vertices[i].Position.X == larguraMapa && (vertices[i].Position.Z > 0 && vertices[i].Position.Z < larguraMapa))
+                //    {
+                //        VertexPositionNormalTexture verticeCima = vertices[indice[i - 2]];
+                //        VertexPositionNormalTexture verticeEsquerda = vertices[indice[i - 1]];
+                //        VertexPositionNormalTexture verticeBaixo = vertices[indice[i + 2]];
+
+                //        Vector3 vector1 = verticeCima.Position - vertice.Position;
+                //        Vector3 vector2 = verticeEsquerda.Position - vertice.Position;
+                //        Vector3 vector3 = verticeBaixo.Position - vertice.Position;
+
+                //        Vector3 normal = Vector3.Cross(vector1, vector2);
+                //        Vector3 normal2 = Vector3.Cross(normal, vector3);
+
+                //        normal2.Normalize();
+
+                //        vertices[i].Normal += normal2;
+                        
+                //    }
+                //    // lado inferior
+                //    if (vertices[i].Position.X !=0 || vertices[i].Position.Z != larguraMapa && vertices[i].Position.Z == larguraMapa)
+                //    {
+                //        VertexPositionNormalTexture verticeEsquerda = vertices[indice[i - 1]];
+                //        VertexPositionNormalTexture verticeCima = vertices[indice[i - 2]];
+                //        VertexPositionNormalTexture verticeDireita = vertices[indice[i + larguraMapa]];
+
+                //        Vector3 vector1 = verticeEsquerda.Position - vertice.Position;
+                //        Vector3 vector2 = verticeCima.Position - vertice.Position;
+                //        Vector3 vector3 = verticeDireita.Position - vertice.Position;
+
+                //        Vector3 normal = Vector3.Cross(vector1, vector2);
+                //        Vector3 normal2 = Vector3.Cross(normal, vector3);
+
+                //        normal2.Normalize();
+
+                //        vertices[i].Normal += normal2;
+                        
+                //    }
+                    
+
+
+                //}
+                //else if (vertices[i].Position.X==0 || vertices[i].Position.X==larguraMapa ||
+                //    vertices[i].Position.Z==0 || vertices[i].Position.Z==larguraMapa)
+                //{
+                //    //canto superior esquerdo
+                //    if (vertices[i].Position.X==0&&vertices[i].Position.Z==0)
+                //    {
+                //        VertexPositionNormalTexture verticeDireita = vertices[indice[i * larguraMapa]];
+                //        VertexPositionNormalTexture verticeBaixo = vertices[indice[i + 2]];
+
+                //        Vector3 vector1 = verticeDireita.Position - vertice.Position;
+                //        Vector3 vector2 = verticeBaixo.Position - vertice.Position;
+
+                //        Vector3 normal = Vector3.Cross(vector1, vector2);
+
+                //        normal.Normalize();
+
+                //        vertices[i].Normal += normal;
+                        
+                //    }
+                //    //canto superior direito
+                //    if (vertices[i].Position.X==0 && vertices[i].Position.Z==larguraMapa)
+                //    {
+                //        VertexPositionNormalTexture verticeEsquerda = vertices[indice[i - 1]];
+                //        VertexPositionNormalTexture verticeBaixo = vertices[indice[i + 2]];
+
+                //        Vector3 vector1 = verticeEsquerda.Position - vertice.Position;
+                //        Vector3 vector2 = verticeBaixo.Position - vertice.Position;
+
+                //        Vector3 normal = Vector3.Cross(vector1, vector2);
+
+                //        normal.Normalize();
+
+                //        vertices[i].Normal += normal;
+
+                //    }
+                //    //canto inferior esquerdo
+                //    if (vertices[i].Position.X==larguraMapa && vertices[i].Position.Z==0)
+                //    {
+                //        VertexPositionNormalTexture verticeCima = vertices[indice[i - 2]];
+                //        VertexPositionNormalTexture verticeDireita = vertices[indice[i * larguraMapa]];
+
+                //        Vector3 vector1=verticeCima.Position - vertice.Position;
+                //        Vector3 vector2 = verticeDireita.Position - vertice.Position;
+
+                //        Vector3 normal = Vector3.Cross(vector1, vector2);
+
+                //        normal.Normalize();
+
+                //        vertices[i].Normal += normal;
+                        
+                //    }
+                //    // canto inferior direito
+                //    if (vertices[i].Position.X==larguraMapa && vertices[i].Position.Z==larguraMapa)
+                //    {
+                //        VertexPositionNormalTexture verticeCima = vertices[indice[i - 2]];
+                //        VertexPositionNormalTexture verticeEsquerda = vertices[indice[i - 1]];
+
+                //        Vector3 vector1 = verticeCima.Position - vertice.Position;
+                //        Vector3 vector2 = verticeEsquerda.Position - vertice.Position;
+
+                //        Vector3 normal = Vector3.Cross(vector1, vector2);
+
+                //        normal.Normalize();
+
+                //        vertices[i].Normal += normal;
+                        
+                //    }
+                   
+                    
+                //}
+                ////// vertices nos cantos
+                
+                // codigo lindo a funcionar
+                // versão 1.1
+
+                ////Vector3 vector1 = verticeAnterior.Position - vertice.Position;
+                ////Vector3 vector2 = verticeAnterior2.Position - vertice.Position;
+                //////Vector3 vector3;
+                //////Vector3 vector4;
+                ////Vector3 normal = Vector3.Cross(vector1, vector2);
+
+                ////normal.Normalize();
+
+                //////vertices[i].Normal += normal;
+                //////vertices[i - 1].Normal += normal;
+                //////vertices[i - 2].Normal += normal;
+
+                ////vertices[indice[i]].Normal = normal;
+                ////vertices[indice[i - 1]].Normal = normal;
+                ////vertices[indice[i - 2]].Normal = normal;
 
 
 

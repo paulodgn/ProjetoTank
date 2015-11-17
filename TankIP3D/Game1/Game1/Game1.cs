@@ -98,7 +98,7 @@ namespace Game1
             tank.LoadContent(Content);
             //tank.world = Matrix.CreateRotationY(MathHelper.ToRadians(90));
             //tank.world = Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateScale(.001f); 
-            tank.world.Scale = new Vector3(0.01f, 0.01f, 0.01f);
+            //tank.world.Scale = new Vector3(0.01f, 0.01f, 0.01f);
         }
 
         /// <summary>
