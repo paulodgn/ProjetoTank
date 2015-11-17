@@ -145,33 +145,40 @@ namespace Game1
 
             //normais
 
-            for (int x = 1; x < larguraMapa-1; x++)
+            for (int x = 0; x < larguraMapa-1; x++)
             {
-                for (int z = 1; z < larguraMapa-1; z++)
+                for (int z = 0; z < larguraMapa-1; z++)
                 {
-                    VertexPositionNormalTexture vertice = vertices[x*larguraMapa+z];
-
-                    VertexPositionNormalTexture verticeEsquerda = vertices[(x * larguraMapa + z)-larguraMapa];
-                    VertexPositionNormalTexture verticeDireita = vertices[(x * larguraMapa + z) + larguraMapa];
-                    VertexPositionNormalTexture verticeCima = vertices[(x * larguraMapa + z) - 1];
-                    VertexPositionNormalTexture verticeBaixo = vertices[(x * larguraMapa + z) +1];
-
-                    Vector3 vectorCima = verticeCima.Position - vertice.Position;
-                    Vector3 vectorEsquerda = verticeEsquerda.Position - vertice.Position;
-                    Vector3 vectorBaixo = verticeBaixo.Position - vertice.Position;
-                    Vector3 vectorDireita = verticeDireita.Position - vertice.Position;
-
-                    Vector3 normal1 = Vector3.Cross(vectorCima, vectorEsquerda);
-                    Vector3 normal2 = Vector3.Cross(vectorEsquerda, vectorBaixo);
-                    Vector3 normal3 = Vector3.Cross(vectorBaixo,vectorDireita);
-                    Vector3 normal4 = Vector3.Cross(vectorDireita,vectorCima);
+                    if (x>0 && z>0)
+                    {
 
 
-                    Vector3 Normal = (Vector3.Normalize(normal1) + Vector3.Normalize(normal2) + Vector3.Normalize(normal3) + Vector3.Normalize(normal4))/4;
+                        VertexPositionNormalTexture vertice = vertices[x * larguraMapa + z];
 
-                    vertices[x * larguraMapa + z].Normal = Normal;
+                        VertexPositionNormalTexture verticeEsquerda = vertices[(x * larguraMapa + z) - larguraMapa];
+                        VertexPositionNormalTexture verticeDireita = vertices[(x * larguraMapa + z) + larguraMapa];
+                        VertexPositionNormalTexture verticeCima = vertices[(x * larguraMapa + z) - 1];
+                        VertexPositionNormalTexture verticeBaixo = vertices[(x * larguraMapa + z) + 1];
+
+                        Vector3 vectorCima = verticeCima.Position - vertice.Position;
+                        Vector3 vectorEsquerda = verticeEsquerda.Position - vertice.Position;
+                        Vector3 vectorBaixo = verticeBaixo.Position - vertice.Position;
+                        Vector3 vectorDireita = verticeDireita.Position - vertice.Position;
+
+                        Vector3 normal1 = Vector3.Cross(vectorCima, vectorEsquerda);
+                        Vector3 normal2 = Vector3.Cross(vectorEsquerda, vectorBaixo);
+                        Vector3 normal3 = Vector3.Cross(vectorBaixo, vectorDireita);
+                        Vector3 normal4 = Vector3.Cross(vectorDireita, vectorCima);
+
+
+                        Vector3 Normal = (Vector3.Normalize(normal1) + Vector3.Normalize(normal2) + Vector3.Normalize(normal3) + Vector3.Normalize(normal4)) / 4;
+
+                        vertices[x * larguraMapa + z].Normal = Normal;
+                    }
                     
                 }
+
+
                 
 
                 ////VertexPositionNormalTexture vertice = vertices[indice[i]];
