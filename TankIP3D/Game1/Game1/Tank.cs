@@ -425,17 +425,16 @@ namespace Game1
         {
             
             Vector3 direcaoPlayer = playerPosition - position;
-            if ((position.Z - playerPosition.Z)>10 )
-            {
-                //direcao = Vector3.Lerp(direcao, direcaoPlayer,0.05f);
-                direcao = direcaoPlayer;
-                position += Vector3.Normalize(direcao) * 0.07f;
-                world = Matrix.CreateScale(0.01f) * rotacao * Matrix.CreateTranslation(position);
-                Vector3 newRigth = Vector3.Cross(newNormal, direcao);
-                Matrix rotacaoUp = Matrix.CreateWorld(position, Vector3.Cross(newNormal, newRigth), newNormal);
-                world = Matrix.CreateScale(0.01f) * rotacaoUp;
-            }
+            
+            //direcao = Vector3.Lerp(direcao, direcaoPlayer,0.05f);
+            direcao = direcaoPlayer;
             position += Vector3.Normalize(direcao) * 0.07f;
+            world = Matrix.CreateScale(0.01f) * rotacao * Matrix.CreateTranslation(position);
+            Vector3 newRigth = Vector3.Cross(newNormal, direcao);
+            Matrix rotacaoUp = Matrix.CreateWorld(position, Vector3.Cross(newNormal, newRigth), newNormal);
+            world = Matrix.CreateScale(0.01f) * rotacaoUp;
+            
+            
         }
 
 
