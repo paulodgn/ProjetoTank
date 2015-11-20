@@ -250,7 +250,7 @@ namespace Game1
             //view = Matrix.CreateLookAt(posicao, posicaoTank, Vector3.Up);
             
             //this.posicao.Y = posicaoTank.Y;
-            Vector3 offset = new Vector3(0,20,-20);
+            Vector3 offset = new Vector3(0,20,-40);
             rotacao = Matrix.CreateRotationY(MathHelper.ToRadians(tank.rotacaoY));
             Vector3 transformOffset = Vector3.Transform(offset, rotacao);
             posicao = transformOffset + posicaoTank;

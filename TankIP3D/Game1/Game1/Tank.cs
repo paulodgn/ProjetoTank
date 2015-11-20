@@ -43,6 +43,8 @@ namespace Game1
         public float rotacaoY;
         Vector3 positionCamera;
         Matrix rotacao;
+        bool playerControl;
+        bool firstUpdate;
         // Shortcut references to the bones that we are going to animate.
         // We could just look these up inside the Draw method, but it is more
         // efficient to do the lookups while loading and cache the results.
@@ -141,21 +143,24 @@ namespace Game1
 
         #endregion
 
-        public Tank(GraphicsDevice graphicsDevice, VertexPositionNormalTexture[] vert, int larguraMapa)
+        public Tank(GraphicsDevice graphicsDevice, VertexPositionNormalTexture[] vert, int larguraMapa, Vector3 position, bool playerControl)
         {
             //world = Matrix.CreateScale(0.01f);
+            this.playerControl = playerControl;
             velocidade = 0.1f;
             device = graphicsDevice;
-            position = new Vector3(10, 12, 10);
+            this.position = position;
             positionCamera = position;
             vertices = vert;
             this.larguraMapa = larguraMapa;
             vetorBase = new Vector3(1, 0, 0);
             direcao = vetorBase;
             target = position + direcao;
-            //world = Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateScale(.01f) * Matrix.CreateTranslation(position);
+
             world =  Matrix.CreateScale(0.01f) * Matrix.CreateTranslation(position);
             view = Matrix.CreateLookAt(new Vector3(0, 10, 10), Vector3.Zero, Vector3.Up);
+            firstUpdate = true;
+            
         }
 
         /// <summary>
@@ -200,16 +205,24 @@ namespace Game1
             projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,aspectRatio,1,100);
 
             
+            
         }
 
-        public void Update()
+        public void Update(Tank playerTank)
         {
-            //position = world.Translation;
-            //view = cameraView;
-            //projection = cameraProjection;
-            HandleTankInput(0.02f);
-            //UpdateInput();
+            UpdateTankRotation();
+            if(playerControl)
+            {
+                HandleTankInput(0.02f);
+            }
+            else
+            {
+                IAControl(playerTank.position);
+            }
+       
         }
+
+      
 
 
         /// <summary>
@@ -366,12 +379,14 @@ namespace Game1
             {
                 //this.world *= Matrix.CreateTranslation(new Vector3(0.0f, 0.0f, -0.1f));
                 rotacaoY += 0.5f;
+                steerRotationValue = 0.6f;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.D))
             {
 
                 rotacaoY -= 0.5f;
+                steerRotationValue = -0.6f;
                 
             }
             if (currentKeyboardState.IsKeyDown(Keys.W))
@@ -386,44 +401,43 @@ namespace Game1
                 position -= direcao * velocidade;
 
             }
+            if (!currentKeyboardState.IsKeyDown(Keys.D) && !currentKeyboardState.IsKeyDown(Keys.A))
+            {
+                steerRotationValue = 0f;
+            }
+
+            UpdateTankRotation();
+            
+        }
+
+        private void UpdateTankRotation()
+        {
             position.Y = newAltura;
             rotacao = Matrix.CreateRotationY(MathHelper.ToRadians(-90)) * Matrix.CreateRotationY(MathHelper.ToRadians(rotacaoY));
             direcao = Vector3.Transform(vetorBase, rotacao);
             world = Matrix.CreateScale(0.01f) * rotacao * Matrix.CreateTranslation(position);
             Vector3 newRigth = Vector3.Cross(newNormal, direcao);
-            Matrix rotacaoUp = Matrix.CreateWorld(position, Vector3.Cross(newNormal,newRigth), newNormal);
+            Matrix rotacaoUp = Matrix.CreateWorld(position, Vector3.Cross(newNormal, newRigth), newNormal);
             world = Matrix.CreateScale(0.01f) * rotacaoUp;
         }
 
-        public void UpdateInput()
+        private void IAControl(Vector3 playerPosition)
         {
-
-            KeyboardState keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyDown(Keys.Right))
+            
+            Vector3 direcaoPlayer = playerPosition - position;
+            if ((position.Z - playerPosition.Z)>10 )
             {
-                rotacaoY -= 1f;
-
+                //direcao = Vector3.Lerp(direcao, direcaoPlayer,0.05f);
+                direcao = direcaoPlayer;
+                position += Vector3.Normalize(direcao) * 0.07f;
+                world = Matrix.CreateScale(0.01f) * rotacao * Matrix.CreateTranslation(position);
+                Vector3 newRigth = Vector3.Cross(newNormal, direcao);
+                Matrix rotacaoUp = Matrix.CreateWorld(position, Vector3.Cross(newNormal, newRigth), newNormal);
+                world = Matrix.CreateScale(0.01f) * rotacaoUp;
             }
-            if (keyboardState.IsKeyDown(Keys.Left))
-            {
-                rotacaoY += 1f;
-
-            }
-            if (keyboardState.IsKeyDown(Keys.Up))
-            {
-                position = position + direcao * velocidade;
-            }
-            if (keyboardState.IsKeyDown(Keys.Down))
-            {
-                position = position - direcao * velocidade;
-            }
-            position.Y = newAltura;
-            rotacao = Matrix.CreateRotationY(MathHelper.ToRadians(rotacaoY));
-            direcao = Vector3.Transform(vetorBase, rotacao);
-            world = rotacao * Matrix.CreateTranslation(position) * Matrix.CreateScale(0.01f);
-
-
+            position += Vector3.Normalize(direcao) * 0.07f;
         }
+
 
         public Vector3 getPosition()
         {

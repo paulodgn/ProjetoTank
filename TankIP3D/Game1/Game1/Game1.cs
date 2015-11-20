@@ -25,6 +25,7 @@ namespace Game1
         Plano plano;
         Terreno2 terreno2;
         Tank tank;
+        Tank tankEnimigo;
 
         enum CameraAtiva
         {
@@ -82,7 +83,8 @@ namespace Game1
             terreno = new Terreno(GraphicsDevice, mapaAlturas, mapaAlturas, 1f, textura);
             //terreno2 = new Terreno2(GraphicsDevice, mapaAlturas, mapaAlturas, 1f, textura);
             VertexPositionNormalTexture[] vertices = terreno.getVertices();
-            tank = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa);
+            tank = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa,new Vector3(10,20,10), true);
+            tankEnimigo = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa,new Vector3(40,20,40) ,false);
             cameraSurfaceFollow = new CameraSurfaceFollow(graphics, vertices, mapaAlturas.Width);
             camera = new CameraAula(graphics);
             cameraTank = new CameraTank(graphics, vertices, mapaAlturas.Width, tank.getPosition(), tank.getWorldMAtrix(),tank.view);
@@ -96,6 +98,7 @@ namespace Game1
             
             //effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f), aspectRatio, 0.1f, 1000.0f);
             tank.LoadContent(Content);
+            tankEnimigo.LoadContent(Content);
             //tank.world = Matrix.CreateRotationY(MathHelper.ToRadians(90));
             //tank.world = Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateScale(.001f); 
             //tank.world.Scale = new Vector3(0.01f, 0.01f, 0.01f);
@@ -156,8 +159,8 @@ namespace Game1
                 //cameraTank.UpdateInput(gameTime, graphics,tank.getPosition());
                 cameraTank.updateCamera(tank.getPosition(), tank.getWorldMAtrix(),tank.view,tank);
             }
-
-            tank.Update();
+            tankEnimigo.Update(tank);
+            tank.Update(tank);
             base.Update(gameTime);
         }
 
@@ -177,6 +180,7 @@ namespace Game1
             {
                 terreno.Draw(GraphicsDevice, cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
                 tank.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
+                tankEnimigo.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
                 //terreno2.Draw2(GraphicsDevice, cameraSurfaceFollow.view);
                 DebugShapeRenderer.Draw(gameTime, cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
             }
@@ -185,6 +189,7 @@ namespace Game1
                 terreno.Draw(GraphicsDevice, camera.view, camera.projection);
                 DebugShapeRenderer.Draw(gameTime, camera.view, camera.projection);
                 tank.Draw(camera.view, camera.projection);
+                tankEnimigo.Draw(camera.view, camera.projection);
                 // terreno2.Draw2(GraphicsDevice, camera.view);
             }
             else
@@ -192,6 +197,7 @@ namespace Game1
                 terreno.Draw(GraphicsDevice, cameraTank.view, cameraTank.projection);
                 DebugShapeRenderer.Draw(gameTime, cameraTank.view, cameraTank.projection);
                 tank.Draw(cameraTank.view, cameraTank.projection);
+                tankEnimigo.Draw(cameraTank.view, cameraTank.projection);
             }
 
 
