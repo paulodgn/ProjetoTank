@@ -29,6 +29,7 @@ namespace Game1
         Tank tankEnimigo;
         ColisionManager colisionManager;
         List<Tank> listaTanques;
+        Bullet bala;
         enum CameraAtiva
         {
             fps,
@@ -107,9 +108,13 @@ namespace Game1
             //effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f), aspectRatio, 0.1f, 1000.0f);
             tank.LoadContent(Content);
             tankEnimigo.LoadContent(Content);
+            
             //tank.world = Matrix.CreateRotationY(MathHelper.ToRadians(90));
             //tank.world = Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateScale(.001f); 
             //tank.world.Scale = new Vector3(0.01f, 0.01f, 0.01f);
+
+            bala = new Bullet(new Vector3(1, 1, 1));
+            bala.LoadContent(Content);
         }
 
         /// <summary>
@@ -193,6 +198,7 @@ namespace Game1
                 tankEnimigo.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
                 //terreno2.Draw2(GraphicsDevice, cameraSurfaceFollow.view);
                 DebugShapeRenderer.Draw(gameTime, cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
+                bala.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
             }
             else if(cameraAtiva == CameraAtiva.free)
             {
@@ -202,6 +208,7 @@ namespace Game1
                 DebugShapeRenderer.Draw(gameTime, camera.view, camera.projection);
                 tank.Draw(camera.view, camera.projection);
                 tankEnimigo.Draw(camera.view, camera.projection);
+                bala.Draw(camera.view, camera.projection);
                 // terreno2.Draw2(GraphicsDevice, camera.view);
             }
             else
@@ -210,10 +217,11 @@ namespace Game1
                 DebugShapeRenderer.Draw(gameTime, cameraTank.view, cameraTank.projection);
                 tank.Draw(cameraTank.view, cameraTank.projection);
                 tankEnimigo.Draw(cameraTank.view, cameraTank.projection);
+                bala.Draw(cameraTank.view, cameraTank.projection);
             }
 
 
-
+            
 
             base.Draw(gameTime);
         }
