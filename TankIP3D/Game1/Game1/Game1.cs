@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace Game1
 {
@@ -26,7 +27,8 @@ namespace Game1
         Terreno2 terreno2;
         Tank tank;
         Tank tankEnimigo;
-
+        ColisionManager colisionManager;
+        List<Tank> listaTanques;
         enum CameraAtiva
         {
             fps,
@@ -55,7 +57,7 @@ namespace Game1
             // TODO: Add your initialization logic here
 
             DebugShapeRenderer.Initialize(GraphicsDevice);
-
+            listaTanques = new List<Tank>();
             base.Initialize();
         }
 
@@ -85,6 +87,12 @@ namespace Game1
             VertexPositionNormalTexture[] vertices = terreno.getVertices();
             tank = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa,new Vector3(10,20,10), true);
             tankEnimigo = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa,new Vector3(40,20,40) ,false);
+
+            listaTanques.Add(tankEnimigo);
+
+            colisionManager = new ColisionManager(listaTanques);
+
+
             cameraSurfaceFollow = new CameraSurfaceFollow(graphics, vertices, mapaAlturas.Width);
             camera = new CameraAula(graphics);
             cameraTank = new CameraTank(graphics, vertices, mapaAlturas.Width, tank.getPosition(), tank.getWorldMAtrix(),tank.view);
@@ -161,6 +169,8 @@ namespace Game1
             }
             tankEnimigo.Update(tank);
             tank.Update(tank);
+
+            colisionManager.UpdateColisions(tank);
             base.Update(gameTime);
         }
 
@@ -187,6 +197,8 @@ namespace Game1
             else if(cameraAtiva == CameraAtiva.free)
             {
                 terreno.Draw(GraphicsDevice, camera.view, camera.projection);
+                DebugShapeRenderer.AddBoundingSphere(tank.boundingSphere, Color.Orange);
+                DebugShapeRenderer.AddBoundingSphere(tankEnimigo.boundingSphere, Color.Orange);
                 DebugShapeRenderer.Draw(gameTime, camera.view, camera.projection);
                 tank.Draw(camera.view, camera.projection);
                 tankEnimigo.Draw(camera.view, camera.projection);

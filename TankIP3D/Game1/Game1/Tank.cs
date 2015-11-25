@@ -39,12 +39,14 @@ namespace Game1
         public int larguraMapa;
         public Vector3 newNormal;
         public float newAltura;
-        float yaw, pitch, roll,  velocidade;
+        float yaw, pitch, roll;
+        public float velocidade;
         public float rotacaoY;
         Vector3 positionCamera;
         Matrix rotacao;
         bool playerControl;
         bool firstUpdate;
+        public BoundingSphere boundingSphere;
         // Shortcut references to the bones that we are going to animate.
         // We could just look these up inside the Draw method, but it is more
         // efficient to do the lookups while loading and cache the results.
@@ -147,7 +149,14 @@ namespace Game1
         {
             //world = Matrix.CreateScale(0.01f);
             this.playerControl = playerControl;
-            velocidade = 0.1f;
+            if (playerControl)
+            {
+                velocidade = 0.1f;
+            }
+            else
+            {
+                velocidade = 0.07f;
+            }
             device = graphicsDevice;
             this.position = position;
             positionCamera = position;
@@ -160,7 +169,8 @@ namespace Game1
             world =  Matrix.CreateScale(0.01f) * Matrix.CreateTranslation(position);
             view = Matrix.CreateLookAt(new Vector3(0, 10, 10), Vector3.Zero, Vector3.Up);
             firstUpdate = true;
-            
+            boundingSphere = new BoundingSphere();
+            boundingSphere.Radius = 5f;
         }
 
         /// <summary>
@@ -210,6 +220,7 @@ namespace Game1
 
         public void Update(Tank playerTank)
         {
+            boundingSphere.Center = this.position;
             UpdateTankRotation();
             if(playerControl)
             {
@@ -428,7 +439,7 @@ namespace Game1
             
             //direcao = Vector3.Lerp(direcao, direcaoPlayer,0.05f);
             direcao = direcaoPlayer;
-            position += Vector3.Normalize(direcao) * 0.07f;
+            position += Vector3.Normalize(direcao) * velocidade;
             world = Matrix.CreateScale(0.01f) * rotacao * Matrix.CreateTranslation(position);
             Vector3 newRigth = Vector3.Cross(newNormal, direcao);
             Matrix rotacaoUp = Matrix.CreateWorld(position, Vector3.Cross(newNormal, newRigth), newNormal);
