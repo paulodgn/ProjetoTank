@@ -434,7 +434,8 @@ namespace Game1
             Matrix rotacaoUp = Matrix.CreateWorld(position, Vector3.Cross(newNormal, newRigth), newNormal);
             world = Matrix.CreateScale(0.01f) * rotacaoUp;
             
-            
+            //transformar vetor direcao para o alvo para world do tank
+            //Vector3 direcaoTorre = Math.Acos(Vector3.Dot(direcao, direcaoPlayer));
         }
 
 
