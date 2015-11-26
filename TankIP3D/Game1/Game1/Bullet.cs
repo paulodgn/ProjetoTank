@@ -14,6 +14,8 @@ namespace Game1
         Model bulletModel;
         Matrix world,view,projection;
         Vector3 position,direcao;
+        float velocidade;
+        float time;
         public Bullet(Vector3 posicao)
         {
             this.position = posicao;
@@ -23,13 +25,23 @@ namespace Game1
 
         public void LoadContent(ContentManager content)
         {
+            velocidade = 0.5f;
             bulletModel = content.Load<Model>("Sphere");
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            time+=(float)gameTime.ElapsedGameTime.TotalMilliseconds/4096f;
+            position += (direcao * velocidade);
+            position.Y -= 0.98f * (time * time);
+            world = Matrix.CreateScale(1f) * Matrix.CreateTranslation(position);
+            Console.WriteLine(position);
         }
 
         public void Draw(Matrix cameraView, Matrix cameraProjection)
         {
             bulletModel.Root.Transform = world;
-
+            
             view = cameraView;
             projection = cameraProjection;
 

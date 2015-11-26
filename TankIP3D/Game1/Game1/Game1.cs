@@ -174,7 +174,7 @@ namespace Game1
             }
             tankEnimigo.Update(tank);
             tank.Update(tank);
-
+            bala.Update(gameTime);
             colisionManager.UpdateColisions(tank);
             base.Update(gameTime);
         }
@@ -214,6 +214,8 @@ namespace Game1
             else
             {
                 terreno.Draw(GraphicsDevice, cameraTank.view, cameraTank.projection);
+                DebugShapeRenderer.AddBoundingSphere(tank.boundingSphere, Color.Orange);
+                DebugShapeRenderer.AddBoundingSphere(tankEnimigo.boundingSphere, Color.Orange);
                 DebugShapeRenderer.Draw(gameTime, cameraTank.view, cameraTank.projection);
                 tank.Draw(cameraTank.view, cameraTank.projection);
                 tankEnimigo.Draw(cameraTank.view, cameraTank.projection);
