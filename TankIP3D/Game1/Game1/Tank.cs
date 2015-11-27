@@ -33,7 +33,8 @@ namespace Game1
         public Matrix projection;
         // device onde será desenhado o tanque
         private GraphicsDevice device;
-        private Vector3 direcao,vetorBase,target;
+        private Vector3 vetorBase,target;
+        public Vector3 direcao;
         public Vector3 position;
         public VertexPositionNormalTexture[] vertices;
         public int larguraMapa;
@@ -43,10 +44,14 @@ namespace Game1
         public float velocidade;
         public float rotacaoY;
         Vector3 positionCamera;
-        Matrix rotacao;
+        public Matrix rotacao;
         bool playerControl;
         bool firstUpdate;
         public BoundingSphere boundingSphere;
+        public Matrix rotacaoFinal;
+        public Vector3 newRigth;
+        Bullet bala;
+        ContentManager content;
         // Shortcut references to the bones that we are going to animate.
         // We could just look these up inside the Draw method, but it is more
         // efficient to do the lookups while loading and cache the results.
@@ -68,8 +73,8 @@ namespace Game1
         Matrix rightFrontWheelTransform;
         Matrix leftSteerTransform;
         Matrix rightSteerTransform;
-        Matrix turretTransform;
-        Matrix cannonTransform;
+        public Matrix turretTransform;
+        public Matrix cannonTransform;
         Matrix hatchTransform;
 
         
@@ -145,8 +150,9 @@ namespace Game1
 
         #endregion
 
-        public Tank(GraphicsDevice graphicsDevice, VertexPositionNormalTexture[] vert, int larguraMapa, Vector3 position, bool playerControl)
+        public Tank(GraphicsDevice graphicsDevice, VertexPositionNormalTexture[] vert, int larguraMapa, Vector3 position, bool playerControl, ContentManager content)
         {
+            this.content = content;
             //world = Matrix.CreateScale(0.01f);
             this.playerControl = playerControl;
             if (playerControl)
@@ -218,7 +224,7 @@ namespace Game1
             
         }
 
-        public void Update(Tank playerTank)
+        public void Update(GameTime gameTime, Tank playerTank)
         {
             boundingSphere.Center = this.position;
             UpdateTankRotation();
@@ -230,7 +236,8 @@ namespace Game1
             {
                 IAControl(playerTank.position);
             }
-       
+            if (bala != null)
+                bala.Update(gameTime, this);
         }
 
       
@@ -271,6 +278,9 @@ namespace Game1
 
             view = cameraView;
             projection = cameraProjection;
+
+            if (bala != null)
+                bala.Draw(cameraView, cameraProjection);
 
             // Draw the model.
             foreach (ModelMesh mesh in tankModel.Meshes)
@@ -355,25 +365,25 @@ namespace Game1
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
                 if (this.TurretRotation < 1.6f)
-                    this.TurretRotation += 0.1f;
+                    this.TurretRotation += 0.01f;
             }
             if (currentKeyboardState.IsKeyDown(Keys.Right))
             {
                 if (this.TurretRotation > -1.6f)
-                    this.TurretRotation -= 0.1f;
+                    this.TurretRotation -= 0.01f;
             }
 
             //  Move canhão (sem atirar 90 graus nem no próprio tanque)
             if (currentKeyboardState.IsKeyDown(Keys.Up))
             {
                 if (this.CannonRotation > -0.8f)
-                    this.CannonRotation -= 0.1f;
+                    this.CannonRotation -= 0.01f;
 
             }
             if (currentKeyboardState.IsKeyDown(Keys.Down))
             {
                 if (this.CannonRotation < 0.2f)
-                    this.CannonRotation += 0.1f;
+                    this.CannonRotation += 0.01f;
             }
 
             //  Abre e fecha porta
@@ -416,7 +426,19 @@ namespace Game1
             {
                 steerRotationValue = 0f;
             }
-
+            //disparar bala
+            if (currentKeyboardState.IsKeyDown(Keys.B))
+            {
+                //multiplicar position pelo mesmo valor do scale do tank
+                Vector3 offset = (position * 0.01f) + new Vector3(0, 4, 4);
+                Matrix rot = Matrix.CreateRotationY(TurretRotation);
+                Vector3 transformOffset = Vector3.Transform(offset, rot);
+                Matrix rot2 = Matrix.CreateRotationX(CannonRotation);
+                Vector3 transformOffset2 = Vector3.Transform(transformOffset, rot2);
+                Vector3 finalTrasnf = Vector3.Transform(transformOffset2, rotacaoFinal);
+                bala = new Bullet(finalTrasnf, this,content);
+                
+            }
             UpdateTankRotation();
             
         }
@@ -424,12 +446,12 @@ namespace Game1
         private void UpdateTankRotation()
         {
             position.Y = newAltura;
-            rotacao = Matrix.CreateRotationY(MathHelper.ToRadians(-90)) * Matrix.CreateRotationY(MathHelper.ToRadians(rotacaoY));
+            rotacao =  Matrix.CreateRotationY(MathHelper.ToRadians(-90)) * Matrix.CreateRotationY(MathHelper.ToRadians(rotacaoY));
             direcao = Vector3.Transform(vetorBase, rotacao);
             world = Matrix.CreateScale(0.01f) * rotacao * Matrix.CreateTranslation(position);
-            Vector3 newRigth = Vector3.Cross(newNormal, direcao);
-            Matrix rotacaoUp = Matrix.CreateWorld(position, Vector3.Cross(newNormal, newRigth), newNormal);
-            world = Matrix.CreateScale(0.01f) * rotacaoUp;
+            newRigth = Vector3.Cross(newNormal, direcao);
+            rotacaoFinal = Matrix.CreateWorld(position, Vector3.Cross(newNormal, newRigth), newNormal);
+            world = Matrix.CreateScale(0.01f) * rotacaoFinal;
         }
 
         private void IAControl(Vector3 playerPosition)

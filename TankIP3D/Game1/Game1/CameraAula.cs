@@ -101,22 +101,22 @@ namespace Game1
             //verificarLimites();
             KeyboardState kb = Keyboard.GetState();
 
-            if (kb.IsKeyDown(Keys.Up))
+            if (kb.IsKeyDown(Keys.NumPad8))
             {
                 this.frente();
                 
             }
-            if (kb.IsKeyDown(Keys.Down))
+            if (kb.IsKeyDown(Keys.NumPad5))
             {
                 this.moverTras(gameTime);
                 
             }
-            if (kb.IsKeyDown(Keys.Left))
+            if (kb.IsKeyDown(Keys.NumPad4))
             {
                 this.strafeEsquerda(gameTime, 0.08f);
                 
             }
-            if (kb.IsKeyDown(Keys.Right))
+            if (kb.IsKeyDown(Keys.NumPad6))
             {
                 this.strafeDireita(gameTime, 0.08f);
             }
