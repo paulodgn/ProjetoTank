@@ -74,18 +74,18 @@ namespace Game1
 
         public void UpdateBalas(GameTime gameTime)
         {
-            copiaBalasAtivas = balasAtivas.ToList();
+            //copiaBalasAtivas = balasAtivas.ToList();
             foreach (Bullet bala in copiaBalasAtivas)
             {
                 bala.Update(gameTime, this.tank);
-                if (bala.position.Y < -50f)
-                {
+                //if (bala.position.Y < -50f)
+                //{
 
-                    removerBala(bala);
-                }
+                //    removerBala(bala);
+                //}
                 
             }
-            
+            balasAtivas.RemoveAll(b => b.position.Y < -50f);
         }
         public void DrawBalas(Matrix view, Matrix projection)
         {
