@@ -17,6 +17,7 @@ namespace Game1
         Tank tank;
         ContentManager content;
         Bullet balaTemp;
+        Vector3 posicaoBala, direcaoBala;
 
         public BulletManager(Tank tank, ContentManager content)
         {
@@ -36,30 +37,26 @@ namespace Game1
             }
         }
 
-        public Vector3 direcaoBala()
+        public void PosicaoDirecaoBala()
         {
             //obter direcao rodando o vetor direcao verdadeiro do tank com o valor da rotacao da turret
-            Matrix rotacaoParaDirecao = Matrix.CreateRotationY(tank.TurretRotation);
-            Vector3 direcaoTurret = Vector3.Transform(Vector3.Cross(tank.newRigth, tank.newNormal), rotacaoParaDirecao);
-
-            Vector3 novoDireita = Vector3.Cross(tank.newNormal, direcaoTurret);
-            novoDireita.Normalize();
-            novoDireita = Vector3.Transform(novoDireita, tank.rotacaoFinal);
-            Matrix rotacaoCanon = Matrix.CreateFromAxisAngle(novoDireita, tank.CannonRotation) ;
-
-            Vector3 direcao = Vector3.Transform(direcaoTurret, rotacaoCanon);
-            
+           
             
 
+            Vector3 offset = new Vector3(0, 3, 3);
+            Matrix rotacao = Matrix.CreateRotationX(tank.CannonRotation) * Matrix.CreateRotationY(tank.TurretRotation) * Matrix.CreateFromQuaternion(tank.rotacaoFinal.Rotation);
 
-            return direcao;
+            offset = Vector3.Transform(offset, rotacao);
+            direcaoBala = Vector3.Transform(new Vector3(0,0,1), rotacao);
+            posicaoBala = tank.position + offset;
         }
 
         public void disparaBala()
         {
+            PosicaoDirecaoBala();
             balaTemp = balasNaoAtivas.First();
-            //balaTemp.position = tank.posicaoBala;
-            //balaTemp.direcao = tank.direcaoBala;
+            balaTemp.position = posicaoBala;
+            balaTemp.direcao = direcaoBala;
             balasAtivas.Add(balaTemp);
             balasNaoAtivas.Remove(balaTemp);
             
@@ -81,11 +78,11 @@ namespace Game1
             foreach (Bullet bala in copiaBalasAtivas)
             {
                 bala.Update(gameTime, this.tank);
-                //if(bala.position.Y < -50f)
-                //{
-                   
-                //    removerBala(bala);
-                //}
+                if (bala.position.Y < -50f)
+                {
+
+                    removerBala(bala);
+                }
                 
             }
             

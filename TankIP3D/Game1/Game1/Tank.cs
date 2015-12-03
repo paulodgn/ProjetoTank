@@ -184,8 +184,8 @@ namespace Game1
             boundingSphere = new BoundingSphere();
             boundingSphere.Radius = 5f;
             //lista de balas
-            //bulletManager = new BulletManager(this, content);
-            //bulletManager.Initialize();
+            bulletManager = new BulletManager(this, content);
+            bulletManager.Initialize();
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace Game1
             }
 
             //posicaoBala = CalculoPosicaoBala();
-            //bulletManager.UpdateBalas(gameTime);
+            bulletManager.UpdateBalas(gameTime);
             //DebugShapeRenderer.AddLine(posicaoBala(), posicaoBala() + new Vector3(0, 0, 1),Color.Red);
             if (bala != null)
                 bala.Update(gameTime, this);
@@ -292,7 +292,7 @@ namespace Game1
 
             view = cameraView;
             projection = cameraProjection;
-            //bulletManager.DrawBalas(view, projection);
+            bulletManager.DrawBalas(view, projection);
 
             if (bala != null)
                 bala.Draw(view, projection);
@@ -446,14 +446,14 @@ namespace Game1
             if (currentKeyboardState.IsKeyDown(Keys.B))
             {
 
-                //gTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                //if (gTime - timePassed > 1f)
-                //{
-                //    bulletManager.disparaBala();
-                //    timePassed = gTime;
-                //    Console.WriteLine(CannonRotation);
-                //}
-                bala = new Bullet(this,content);
+                gTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (gTime - timePassed > 1f)
+                {
+                    bulletManager.disparaBala();
+                    timePassed = gTime;
+                    Console.WriteLine(CannonRotation);
+                }
+                //bala = new Bullet(this,content);
                 
             }
             UpdateTankRotation();
