@@ -441,12 +441,12 @@ namespace Game1
                 //device.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, 0, 0, vertexBuffer.VertexCount, 0, indexBuffer.IndexCount/3);
             }
 
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                DebugShapeRenderer.AddLine(vertices[i].Position,
-                vertices[i].Position + vertices[i].Normal,
-                Color.Red);
-            }
+            //for (int i = 0; i < vertices.Length; i++)
+            //{
+            //    DebugShapeRenderer.AddLine(vertices[i].Position,
+            //    vertices[i].Position + vertices[i].Normal,
+            //    Color.Red);
+            //}
 
 
 

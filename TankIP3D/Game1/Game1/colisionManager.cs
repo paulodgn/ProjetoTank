@@ -15,18 +15,17 @@ namespace Game1
             this.listaTanques = LTanques;
             
         }
-
+        //adiionar tanque á lista
         public void Add(Tank tank)
         {
             listaTanques.Add(tank);
         }
 
 
-
+        //detetar colisoes dos inimigos com tanque do player
         private void colisionDetection(Tank tank)
         {
-            //foreach (var tank in listaTanques)
-            //{
+           
             
                 foreach (var segundoTank in listaTanques)
                 {
@@ -41,9 +40,12 @@ namespace Game1
                         segundoTank.velocidade = 0.07f;
                     }
                 }
-            //}
+           
         }
+        //colisoes de balas com inimigos
 
+
+        //update de colisoes
         public void UpdateColisions(Tank tank)
         {
             
