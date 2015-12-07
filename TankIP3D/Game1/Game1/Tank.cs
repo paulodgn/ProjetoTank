@@ -477,7 +477,7 @@ namespace Game1
             Vector3 direcaoPlayer = playerPosition - position;
             
             //direcao = Vector3.Lerp(direcao, direcaoPlayer,0.05f);
-            //direcao = direcaoPlayer;
+            direcao = direcaoPlayer;
             position += Vector3.Normalize(direcao) * velocidade;
             world = Matrix.CreateScale(0.01f) * rotacao * Matrix.CreateTranslation(position);
             Vector3 newRigth = Vector3.Cross(newNormal, direcao);
