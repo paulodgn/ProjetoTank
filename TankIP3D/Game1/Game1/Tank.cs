@@ -163,7 +163,7 @@ namespace Game1
             this.playerControl = playerControl;
             if (playerControl)
             {
-                velocidade = 0.1f;
+                velocidade = 0.5f;
             }
             else
             {
@@ -178,11 +178,11 @@ namespace Game1
             direcao = vetorBase;
             target = position + direcao;
 
-            world =  Matrix.CreateScale(0.01f) * Matrix.CreateTranslation(position);
+            world =  Matrix.CreateScale(0.005f) * Matrix.CreateTranslation(position);
             view = Matrix.CreateLookAt(new Vector3(0, 10, 10), Vector3.Zero, Vector3.Up);
             firstUpdate = true;
             boundingSphere = new BoundingSphere();
-            boundingSphere.Radius = 5f;
+            boundingSphere.Radius = 3f;
             //lista de balas
             bulletManager = new BulletManager(this, content);
             bulletManager.Initialize();
@@ -237,10 +237,11 @@ namespace Game1
         {
             findNormal();
             boundingSphere.Center = this.position;
-            UpdateTankRotation();
+            
             if(playerControl)
             {
                 HandleTankInput(0.02f,gameTime);
+                UpdateTankRotation();
             }
             else
             {
@@ -296,7 +297,7 @@ namespace Game1
 
             if (bala != null)
                 bala.Draw(view, projection);
-            DebugShapeRenderer.AddLine(this.position, posicaoBala, Color.Red);
+            
 
             // Draw the model.
             foreach (ModelMesh mesh in tankModel.Meshes)
@@ -465,25 +466,32 @@ namespace Game1
             position.Y = newAltura;
             rotacao =  Matrix.CreateRotationY(MathHelper.ToRadians(-90)) * Matrix.CreateRotationY(MathHelper.ToRadians(rotacaoY));
             direcao = Vector3.Transform(vetorBase, rotacao);
-            world = Matrix.CreateScale(0.01f) * rotacao * Matrix.CreateTranslation(position);
+            world = Matrix.CreateScale(0.005f) * rotacao * Matrix.CreateTranslation(position);
             newRigth = Vector3.Cross(newNormal, direcao);
             rotacaoFinal = Matrix.CreateWorld(position, Vector3.Cross(newNormal, newRigth), newNormal);
-            world = Matrix.CreateScale(0.01f) * rotacaoFinal;
+            
+            world = Matrix.CreateScale(0.005f) * rotacaoFinal;
+            
+            
         }
 
         private void IAControl(Vector3 playerPosition)
         {
-            
+
             Vector3 direcaoPlayer = playerPosition - position;
-            
-            //direcao = Vector3.Lerp(direcao, direcaoPlayer,0.05f);
-            direcao = direcaoPlayer;
+            direcaoPlayer=direcaoPlayer*velocidade;
+            Vector3 acelaracao = (direcaoPlayer - direcao)*0.005f;
+            direcao = direcao + acelaracao ;
+
+            DebugShapeRenderer.AddLine(this.position, this.position + direcaoPlayer,Color.Blue);
             position += Vector3.Normalize(direcao) * velocidade;
-            world = Matrix.CreateScale(0.01f) * rotacao * Matrix.CreateTranslation(position);
+
+            position.Y = newAltura;
+            world = Matrix.CreateScale(0.005f) * Matrix.CreateTranslation(position);
             Vector3 newRigth = Vector3.Cross(newNormal, direcao);
             Matrix rotacaoUp = Matrix.CreateWorld(position, Vector3.Cross(newNormal, newRigth), newNormal);
-            world = Matrix.CreateScale(0.01f) * rotacaoUp;
-            
+            world = Matrix.CreateScale(0.005f) * rotacaoUp;
+            DebugShapeRenderer.AddLine(this.position + new Vector3(0,1,0), (this.position+new Vector3(0,1,0) )+ this.direcao*4, Color.Red);
             //transformar vetor direcao para o alvo para world do tank
             //Vector3 direcaoTorre = Math.Acos(Vector3.Dot(direcao, direcaoPlayer));
         }
@@ -496,6 +504,18 @@ namespace Game1
         public Matrix getWorldMAtrix()
         {
             return (world);
+        }
+
+        public void IAperseguirPlayer(Vector3 posicaoPlayer)
+        {
+            float maxSpeed = 0.1f;
+            Vector3 velocidadeTarget = posicaoPlayer * 0.01f - this.position;
+            velocidadeTarget.Normalize();
+            velocidadeTarget *= maxSpeed;
+            Vector3 acelaracao =  velocidadeTarget - direcao ;
+            acelaracao.Normalize();
+            direcao += acelaracao;
+
         }
 
         public Vector3 CalculoPosicaoBala()
