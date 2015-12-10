@@ -58,6 +58,7 @@ namespace Game1
         float gTime,timePassed;
         public Vector3 posicaoBala;
         public Vector3 direcaoBala;
+        float velocidadeMaxima;
         // Shortcut references to the bones that we are going to animate.
         // We could just look these up inside the Draw method, but it is more
         // efficient to do the lookups while loading and cache the results.
@@ -186,6 +187,7 @@ namespace Game1
             //lista de balas
             bulletManager = new BulletManager(this, content);
             bulletManager.Initialize();
+            velocidadeMaxima = 0.3f;
         }
 
         /// <summary>
@@ -245,7 +247,7 @@ namespace Game1
             }
             else
             {
-                IAControl(playerTank.position);
+                IAControl(playerTank.position,gameTime);
             }
 
             //posicaoBala = CalculoPosicaoBala();
@@ -475,13 +477,14 @@ namespace Game1
             
         }
 
-        private void IAControl(Vector3 playerPosition)
+        private void IAControl(Vector3 playerPosition, GameTime gametime)
         {
-
+            float time = (float)gametime.ElapsedGameTime.TotalSeconds;
             Vector3 direcaoPlayer = playerPosition - position;
+            direcaoPlayer.Normalize();
             direcaoPlayer=direcaoPlayer*velocidade;
-            Vector3 acelaracao = (direcaoPlayer - direcao)*0.005f;
-            direcao = direcao + acelaracao ;
+            Vector3 acelaracao = (direcaoPlayer - direcao) * velocidadeMaxima;
+            direcao = direcao + acelaracao * time;
 
             DebugShapeRenderer.AddLine(this.position, this.position + direcaoPlayer,Color.Blue);
             position += Vector3.Normalize(direcao) * velocidade;
