@@ -58,8 +58,11 @@ namespace Game1
         float gTime,timePassed;
         public Vector3 posicaoBala;
         public Vector3 direcaoBala;
+<<<<<<< HEAD
         float velocidadeMaxima;
         SistemaParticulas sistemaParticulas;
+=======
+>>>>>>> 73e435c7e05a58aec0716c8b44cea44fae445549
         // Shortcut references to the bones that we are going to animate.
         // We could just look these up inside the Draw method, but it is more
         // efficient to do the lookups while loading and cache the results.
@@ -188,10 +191,13 @@ namespace Game1
             //lista de balas
             bulletManager = new BulletManager(this, content);
             bulletManager.Initialize();
+<<<<<<< HEAD
             velocidadeMaxima = 0.3f;
 
             //particulas
             sistemaParticulas = new SistemaParticulas(device,this.position, 2f, 0.5f);
+=======
+>>>>>>> 73e435c7e05a58aec0716c8b44cea44fae445549
         }
 
         /// <summary>
@@ -253,7 +259,7 @@ namespace Game1
             }
             else
             {
-                IAControl(playerTank.position,gameTime);
+                IAControl(playerTank.position);
             }
 
             //posicaoBala = CalculoPosicaoBala();
@@ -499,14 +505,13 @@ namespace Game1
             
         }
 
-        private void IAControl(Vector3 playerPosition, GameTime gametime)
+        private void IAControl(Vector3 playerPosition)
         {
-            float time = (float)gametime.ElapsedGameTime.TotalSeconds;
+
             Vector3 direcaoPlayer = playerPosition - position;
-            direcaoPlayer.Normalize();
             direcaoPlayer=direcaoPlayer*velocidade;
-            Vector3 acelaracao = (direcaoPlayer - direcao) * velocidadeMaxima;
-            direcao = direcao + acelaracao * time;
+            Vector3 acelaracao = (direcaoPlayer - direcao)*0.005f;
+            direcao = direcao + acelaracao ;
 
             DebugShapeRenderer.AddLine(this.position, this.position + direcaoPlayer,Color.Blue);
             position += Vector3.Normalize(direcao) * velocidade;
