@@ -59,6 +59,7 @@ namespace Game1
 
             DebugShapeRenderer.Initialize(GraphicsDevice);
             listaTanques = new List<Tank>();
+            Create3DAxis.Initialize(GraphicsDevice);
             base.Initialize();
         }
 
@@ -200,6 +201,7 @@ namespace Game1
                 //terreno2.Draw2(GraphicsDevice, cameraSurfaceFollow.view);
                 DebugShapeRenderer.Draw(gameTime, cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
                 //bala.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
+               
             }
             else if(cameraAtiva == CameraAtiva.free)
             {
@@ -211,6 +213,7 @@ namespace Game1
                 tankEnimigo.Draw(camera.view, camera.projection);
                 //bala.Draw(camera.view, camera.projection);
                 // terreno2.Draw2(GraphicsDevice, camera.view);
+                
             }
             else
             {
@@ -221,11 +224,12 @@ namespace Game1
                 tank.Draw(cameraTank.view, cameraTank.projection);
                 tankEnimigo.Draw(cameraTank.view, cameraTank.projection);
                 //bala.Draw(cameraTank.view, cameraTank.projection);
+                
             }
 
 
             
-
+            
             base.Draw(gameTime);
         }
 

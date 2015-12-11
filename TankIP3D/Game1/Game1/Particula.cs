@@ -25,7 +25,7 @@ namespace Game1
         float time, TotalTime;
         Vector3 novaVelocidade;
         float larguraRetangulo, alturaRetangulo;
-        public Particula(GraphicsDevice device, float largura,float altura ,Vector3 centro)
+        public Particula(GraphicsDevice device, float largura,float altura ,Vector3 centro, Matrix sistemaWorld)
         {
             this.centro = centro;
             this.larguraRetangulo = largura;
@@ -35,12 +35,13 @@ namespace Game1
             vertices = new VertexPositionColor[2];
             
             effect = new BasicEffect(device);
-            worldMatrix = Matrix.Identity;
+
+            worldMatrix = sistemaWorld;
             // direcaoDeEsguelha define o limite de inclinaçao que a direcao da particula pode obter.
             direcaoDeEsguelha = 0.2f;
             //define a velocidade a que a particula se desloca na vertical.
             velocidadeQueda = 0.05f;
-
+            effect.VertexColorEnabled = true;
             
         }
 
@@ -97,7 +98,7 @@ namespace Game1
             //p=p0+v*t
         }
 
-        public void Draw(Matrix Cview, Matrix Cproj)
+        public void Draw(Matrix Cview, Matrix Cproj, Matrix sistemaWorld, GraphicsDevice device)
         {
             
             effect.TextureEnabled = false;
@@ -105,11 +106,12 @@ namespace Game1
             this.effect.View = Cview;
             this.effect.Projection = Cproj;
 
-            effect.World = worldMatrix;
+            effect.World = sistemaWorld;
 
             effect.CurrentTechnique.Passes[0].Apply();
             //cada instancia da partcula desenha os seus dois vertices
             device.DrawUserPrimitives(PrimitiveType.LineList, vertices, 0, 1);
+
             
         }
 

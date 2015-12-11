@@ -23,6 +23,7 @@ namespace Game1
         Matrix view, projection;
         float alturaRetangulo, larguraRetangulo;
         Tank tank;
+
         public SistemaParticulas(GraphicsDevice device , Vector3 centro, float largura, float altura)
         {
             
@@ -55,7 +56,7 @@ namespace Game1
         {
             for (int i = 0; i < quantidadeParticulas; i++)
             {
-                listaParticulas.Add(new Particula(device,larguraRetangulo,alturaRetangulo, posicaoCentro));
+                listaParticulas.Add(new Particula(device,larguraRetangulo,alturaRetangulo, posicaoCentro, this.worldMatrix));
             }
         }
 
@@ -101,9 +102,9 @@ namespace Game1
             //cada particula na lista ativa é desenhada.
             foreach (Particula p in listaParticulasAtiva)
             {
-                p.Draw(view,proj);
+                p.Draw(view, proj, worldMatrix, device);
             }
-            
+            Create3DAxis.Draw(device, this.effect, this.view, this.projection, this.worldMatrix);
         }
             
 

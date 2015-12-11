@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Game1
 {
-        static class Create3DAxis
+        public static class Create3DAxis
         {
             /// <summary>
             /// Array para guardar os vértices e respetivas cores
@@ -35,24 +35,24 @@ namespace Game1
             /// Desenha a geometria
             /// </summary>
             /// <param name="graphics">Instância de graphicsDevice</param>
-            static public void Draw(GraphicsDevice graphics, BasicEffect efeito)
+            static public void Draw(GraphicsDevice graphics, BasicEffect efeito, Matrix view, Matrix projection, Matrix world)
             {
                 //World, View, Projection
-                //efeito.World = Camera.World;
-                //efeito.View = Camera.View;
-                //efeito.Projection = Camera.Projection;
-                ////Iluminação
-                //efeito.VertexColorEnabled = true;
-                ////Fog
-                //efeito.FogEnabled = true;
-                //efeito.FogColor = Vector3.Zero;
+                efeito.World = world;
+                efeito.View = view;
+                efeito.Projection = projection;
+                //Iluminação
+                efeito.VertexColorEnabled = true;
+                //Fog
+               // efeito.FogEnabled = true;
+               // efeito.FogColor = Vector3.Zero;
                 //efeito.FogStart = Camera.nearPlane;
                 //efeito.FogEnd = Camera.farPlaneLong;
-                //foreach (EffectPass pass in efeito.CurrentTechnique.Passes)
-                //{
-                //    pass.Apply();
-                //    graphics.DrawUserPrimitives(PrimitiveType.LineList, vertexList, 0, 3);
-                //}
+                foreach (EffectPass pass in efeito.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    graphics.DrawUserPrimitives(PrimitiveType.LineList, vertexList, 0, 3);
+                }
             }
         }
     }
