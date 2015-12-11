@@ -30,6 +30,7 @@ namespace Game1
         ColisionManager colisionManager;
         List<Tank> listaTanques;
         Bullet bala;
+        Camera gestorCamara;
         enum CameraAtiva
         {
             fps,
@@ -59,6 +60,8 @@ namespace Game1
 
             DebugShapeRenderer.Initialize(GraphicsDevice);
             listaTanques = new List<Tank>();
+            
+            
             base.Initialize();
         }
 
@@ -94,20 +97,26 @@ namespace Game1
             colisionManager = new ColisionManager(listaTanques);
 
 
-            cameraSurfaceFollow = new CameraSurfaceFollow(graphics, vertices, mapaAlturas.Width);
-            camera = new CameraAula(graphics);
+            //cameraSurfaceFollow = new CameraSurfaceFollow(graphics, vertices, mapaAlturas.Width);
+            //camera = new CameraAula(graphics);
             cameraTank = new CameraTank(graphics, vertices, mapaAlturas.Width, tank.getPosition(), tank.getWorldMAtrix(),tank.view);
             camera2 = new CameraVersao2();
             effect = new BasicEffect(GraphicsDevice);
             mousePosition = new Vector2(0, 0);
             IsMouseVisible = false;
-            cameraAtiva = CameraAtiva.free;
+            //cameraAtiva = CameraAtiva.free;
+            
 
             //float aspectRatio = (float)GraphicsDevice.Viewport.Width / GraphicsDevice.Viewport.Height;
             
             //effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f), aspectRatio, 0.1f, 1000.0f);
             tank.LoadContent(Content);
             tankEnimigo.LoadContent(Content);
+
+            gestorCamara = new Camera();
+
+
+            gestorCamara.Initialize(graphics, vertices, mapaAlturas.Width, tank.getPosition(), tank.getWorldMAtrix(), tank.view,tank);
             
             //tank.world = Matrix.CreateRotationY(MathHelper.ToRadians(90));
             //tank.world = Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateScale(.001f); 
@@ -135,6 +144,7 @@ namespace Game1
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            
 
             // TODO: Add your update logic here
             //Camera.Update(gameTime, GraphicsDevice);
@@ -152,31 +162,32 @@ namespace Game1
 
             //camera.UpdateInput(gameTime,graphics);
             //cameraSurfaceFollow.UpdateInput(gameTime, graphics);
-            escolherCamara();
-            if (cameraAtiva == CameraAtiva.fps)
-            {
-                cameraSurfaceFollow.UpdateInput(gameTime, graphics);
-                //tank.view = cameraSurfaceFollow.view;
-                //tank.projection = cameraSurfaceFollow.projection;
-            }
-            else if(cameraAtiva==CameraAtiva.free)
-            {
-                camera.UpdateInput(gameTime, graphics);
-                //tank.view = camera.view;
-                //tank.projection = camera.projection;
-            }
-            else
-            {
+            //escolherCamara();
+            //if (cameraAtiva == CameraAtiva.fps)
+            //{
+            //    cameraSurfaceFollow.UpdateInput(gameTime, graphics);
+            //    //tank.view = cameraSurfaceFollow.view;
+            //    //tank.projection = cameraSurfaceFollow.projection;
+            //}
+            //else if(cameraAtiva==CameraAtiva.free)
+            //{
+            //    camera.UpdateInput(gameTime, graphics);
+            //    //tank.view = camera.view;
+            //    //tank.projection = camera.projection;
+            //}
+            //else
+            //{
                 
-                //cameraSurfaceFollow.updateCamera();
-                //cameraTank.UpdateInput(gameTime, graphics,tank.getPosition());
-                cameraTank.updateCamera(tank.getPosition(), tank.getWorldMAtrix(),tank.view,tank);
-            }
+            //    //cameraSurfaceFollow.updateCamera();
+            //    //cameraTank.UpdateInput(gameTime, graphics,tank.getPosition());
+            //    cameraTank.updateCamera(tank.getPosition(), tank.getWorldMAtrix(),tank.view,tank);
+            //}
             tank.Update(gameTime, tank);
             tankEnimigo.Update(gameTime,tank);
             
             //bala.Update(gameTime,tank);
             colisionManager.UpdateColisions(tank);
+            gestorCamara.Update(gameTime, graphics);
             base.Update(gameTime);
         }
 
@@ -192,36 +203,36 @@ namespace Game1
 
 
 
-            if (cameraAtiva == CameraAtiva.fps)
-            {
-                terreno.Draw(GraphicsDevice, cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
-                tank.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
-                tankEnimigo.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
+            //if (cameraAtiva == CameraAtiva.fps)
+            //{
+            terreno.Draw(GraphicsDevice, gestorCamara.view, gestorCamara.projection);
+            tank.Draw(gestorCamara.view, gestorCamara.projection);
+            tankEnimigo.Draw(gestorCamara.view, gestorCamara.projection);
                 //terreno2.Draw2(GraphicsDevice, cameraSurfaceFollow.view);
-                DebugShapeRenderer.Draw(gameTime, cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
+            DebugShapeRenderer.Draw(gameTime, gestorCamara.view, gestorCamara.projection);
                 //bala.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
-            }
-            else if(cameraAtiva == CameraAtiva.free)
-            {
-                terreno.Draw(GraphicsDevice, camera.view, camera.projection);
-                DebugShapeRenderer.AddBoundingSphere(tank.boundingSphere, Color.Orange);
-                DebugShapeRenderer.AddBoundingSphere(tankEnimigo.boundingSphere, Color.Orange);
-                DebugShapeRenderer.Draw(gameTime, camera.view, camera.projection);
-                tank.Draw(camera.view, camera.projection);
-                tankEnimigo.Draw(camera.view, camera.projection);
-                //bala.Draw(camera.view, camera.projection);
-                // terreno2.Draw2(GraphicsDevice, camera.view);
-            }
-            else
-            {
-                terreno.Draw(GraphicsDevice, cameraTank.view, cameraTank.projection);
-                DebugShapeRenderer.AddBoundingSphere(tank.boundingSphere, Color.Orange);
-                DebugShapeRenderer.AddBoundingSphere(tankEnimigo.boundingSphere, Color.Orange);
-                DebugShapeRenderer.Draw(gameTime, cameraTank.view, cameraTank.projection);
-                tank.Draw(cameraTank.view, cameraTank.projection);
-                tankEnimigo.Draw(cameraTank.view, cameraTank.projection);
-                //bala.Draw(cameraTank.view, cameraTank.projection);
-            }
+            //}
+            //else if(cameraAtiva == CameraAtiva.free)
+            //{
+            //    terreno.Draw(GraphicsDevice, camera.view, camera.projection);
+            //    DebugShapeRenderer.AddBoundingSphere(tank.boundingSphere, Color.Orange);
+            //    DebugShapeRenderer.AddBoundingSphere(tankEnimigo.boundingSphere, Color.Orange);
+            //    DebugShapeRenderer.Draw(gameTime, camera.view, camera.projection);
+            //    tank.Draw(camera.view, camera.projection);
+            //    tankEnimigo.Draw(camera.view, camera.projection);
+            //    //bala.Draw(camera.view, camera.projection);
+            //    // terreno2.Draw2(GraphicsDevice, camera.view);
+            //}
+            //else
+            //{
+            //    terreno.Draw(GraphicsDevice, cameraTank.view, cameraTank.projection);
+            //    DebugShapeRenderer.AddBoundingSphere(tank.boundingSphere, Color.Orange);
+            //    DebugShapeRenderer.AddBoundingSphere(tankEnimigo.boundingSphere, Color.Orange);
+            //    DebugShapeRenderer.Draw(gameTime, cameraTank.view, cameraTank.projection);
+            //    tank.Draw(cameraTank.view, cameraTank.projection);
+            //    tankEnimigo.Draw(cameraTank.view, cameraTank.projection);
+            //    //bala.Draw(cameraTank.view, cameraTank.projection);
+            //}
 
 
             
@@ -229,24 +240,24 @@ namespace Game1
             base.Draw(gameTime);
         }
 
-        public void escolherCamara()
-        {
-            KeyboardState kb = Keyboard.GetState();
+        //public void escolherCamara()
+        //{
+        //    KeyboardState kb = Keyboard.GetState();
 
-            if (kb.IsKeyDown(Keys.F1))
-            {
+        //    if (kb.IsKeyDown(Keys.F1))
+        //    {
 
-                cameraAtiva = CameraAtiva.fps;
-            }
-            if (kb.IsKeyDown(Keys.F2))
-            {
-                cameraAtiva = CameraAtiva.free;
-            }
-            if (kb.IsKeyDown(Keys.F3))
-            {
-                cameraAtiva = CameraAtiva.cameraTank;
-            }
-        }
+        //        cameraAtiva = CameraAtiva.fps;
+        //    }
+        //    if (kb.IsKeyDown(Keys.F2))
+        //    {
+        //        cameraAtiva = CameraAtiva.free;
+        //    }
+        //    if (kb.IsKeyDown(Keys.F3))
+        //    {
+        //        cameraAtiva = CameraAtiva.cameraTank;
+        //    }
+        //}
 
 
 
