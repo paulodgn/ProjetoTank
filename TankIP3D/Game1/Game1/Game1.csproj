@@ -49,9 +49,12 @@
     <Compile Include="ColisionManager.cs" />
     <Compile Include="DebugShapeRenderer.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Particula.cs" />
     <Compile Include="Plano.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomGenerator.cs" />
+    <Compile Include="SistemaParticulas.cs" />
     <Compile Include="Tank.cs" />
     <Compile Include="Terreno2.cs" />
     <Compile Include="Terreno.cs" />

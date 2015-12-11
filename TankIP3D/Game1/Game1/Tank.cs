@@ -59,6 +59,7 @@ namespace Game1
         public Vector3 posicaoBala;
         public Vector3 direcaoBala;
         float velocidadeMaxima;
+        SistemaParticulas sistemaParticulas;
         // Shortcut references to the bones that we are going to animate.
         // We could just look these up inside the Draw method, but it is more
         // efficient to do the lookups while loading and cache the results.
@@ -188,6 +189,9 @@ namespace Game1
             bulletManager = new BulletManager(this, content);
             bulletManager.Initialize();
             velocidadeMaxima = 0.3f;
+
+            //particulas
+            sistemaParticulas = new SistemaParticulas(device,this.position, 2f, 0.5f);
         }
 
         /// <summary>
@@ -237,6 +241,7 @@ namespace Game1
 
         public void Update(GameTime gameTime, Tank playerTank)
         {
+
             findNormal();
             boundingSphere.Center = this.position;
             
@@ -244,6 +249,7 @@ namespace Game1
             {
                 HandleTankInput(0.02f,gameTime);
                 UpdateTankRotation();
+                //sistemaParticulas.Update(gameTime, posicaoSistemaParticulas());
             }
             else
             {
@@ -255,8 +261,22 @@ namespace Game1
             //DebugShapeRenderer.AddLine(posicaoBala(), posicaoBala() + new Vector3(0, 0, 1),Color.Red);
             if (bala != null)
                 bala.Update(gameTime, this);
-        }
 
+            //particulas
+            posicaoSistemaParticulas();
+            sistemaParticulas.Update(gameTime, position , Vector3.Cross(newNormal, newRigth), this);
+        }
+        public void posicaoSistemaParticulas()
+        {
+            Vector3 sistemaParticulasOffset = new Vector3(1, 0, 2);
+            
+            Matrix rotacaoparticula =  Matrix.CreateFromQuaternion(rotacaoFinal.Rotation) * Matrix.CreateTranslation(sistemaParticulasOffset);
+            //sistemaParticulasOffset = Vector3.Transform(sistemaParticulasOffset, rotacaoparticula);
+            sistemaParticulas.worldMatrix = rotacaoparticula;
+            //Vector3 posicaoParticulas =this.position - sistemaParticulasOffset;
+
+            //return posicaoParticulas;
+        }
       
 
 
@@ -300,6 +320,8 @@ namespace Game1
             if (bala != null)
                 bala.Draw(view, projection);
             
+            //particulas
+            sistemaParticulas.Draw(view,projection);
 
             // Draw the model.
             foreach (ModelMesh mesh in tankModel.Meshes)
@@ -459,7 +481,7 @@ namespace Game1
                 //bala = new Bullet(this,content);
                 
             }
-            UpdateTankRotation();
+            //UpdateTankRotation();
             
         }
 
@@ -495,8 +517,7 @@ namespace Game1
             Matrix rotacaoUp = Matrix.CreateWorld(position, Vector3.Cross(newNormal, newRigth), newNormal);
             world = Matrix.CreateScale(0.005f) * rotacaoUp;
             DebugShapeRenderer.AddLine(this.position + new Vector3(0,1,0), (this.position+new Vector3(0,1,0) )+ this.direcao*4, Color.Red);
-            //transformar vetor direcao para o alvo para world do tank
-            //Vector3 direcaoTorre = Math.Acos(Vector3.Dot(direcao, direcaoPlayer));
+            
         }
 
 
@@ -520,6 +541,8 @@ namespace Game1
             direcao += acelaracao;
 
         }
+
+      
 
         public Vector3 CalculoPosicaoBala()
         {
@@ -551,15 +574,7 @@ namespace Game1
             return (finalTrasnf);
         }
 
-        //rotacao = Matrix.CreateFromYawPitchRoll(yaw, 0, pitch);
-        //        worldMatrix = rotacao;
-        //        direcao = Vector3.Transform(vetorBase, rotacao);
-        //        target = posicao + direcao;
-        //        view = Matrix.CreateLookAt(posicao, target, Vector3.Up);
-
-         //rotacao = Matrix.CreateRotationY(MathHelper.ToRadians(rotacaoY));
-         //   direcao = Vector3.Transform(vetorBase, rotacao);
-         //   worldMatrix = rotacao * Matrix.CreateTranslation(posicao);
+        
 
     }
 }
