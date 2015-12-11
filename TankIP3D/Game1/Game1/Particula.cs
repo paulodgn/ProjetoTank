@@ -77,7 +77,7 @@ namespace Game1
             //direcaoEsguelhaZ = RandomGenerator.getRandomNextDouble() * (2 * direcaoDeEsguelha - direcaoDeEsguelha);
             //novaVelocidade = new Vector3(direcaoEsguelhaX,-1f,direcaoEsguelhaX);
             Vector3 direcao = RandomGenerator.getRandomNextDouble() * novaDirecao  /*+ new Vector3(RandomGenerator.getRandomNextDouble(),2,-2)*/;
-            velocidade = direcao;
+            velocidade =  direcao;
             
         }
 

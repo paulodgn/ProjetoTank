@@ -43,7 +43,7 @@ namespace Game1
            
             
 
-            Vector3 offset = new Vector3(0, 3, 3);
+            Vector3 offset = new Vector3(0, 2, 3);
             Matrix rotacao = Matrix.CreateRotationX(tank.CannonRotation) * Matrix.CreateRotationY(tank.TurretRotation) * Matrix.CreateFromQuaternion(tank.rotacaoFinal.Rotation);
 
             offset = Vector3.Transform(offset, rotacao);
@@ -55,8 +55,10 @@ namespace Game1
         {
             PosicaoDirecaoBala();
             balaTemp = balasNaoAtivas.First();
+            
             balaTemp.position = posicaoBala;
             balaTemp.direcao = direcaoBala;
+            
             balasAtivas.Add(balaTemp);
             balasNaoAtivas.Remove(balaTemp);
             
@@ -94,6 +96,11 @@ namespace Game1
                 
                 bala.Draw(view, projection);
             }
+        }
+
+        public List<Bullet> getListaBalasAtivas()
+        {
+            return balasAtivas;
         }
 
     }

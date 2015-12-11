@@ -18,17 +18,17 @@ namespace Game1
         float time;
         Vector3 vetorBase;
         Tank playerTank;
-        BoundingSphere boundingSphere;
+        public BoundingSphere boundingSphere;
         public Bullet(Tank tank,ContentManager content)
         {
             playerTank = tank;
             vetorBase = new Vector3(0, 0, 1);
             
-            //direcao = position - (tank.position + tank.newNormal);
-            world = Matrix.CreateScale(0.5f) * Matrix.CreateTranslation(position);
+           
+            world = Matrix.CreateScale(0.3f) * Matrix.CreateTranslation(position);
             LoadContent(content);
 
-            Vector3 offset = new Vector3(0, 3, 3);
+            Vector3 offset = new Vector3(0, 2, 3);
             Matrix rotacao = Matrix.CreateRotationX(tank.CannonRotation) * Matrix.CreateRotationY(tank.TurretRotation) * Matrix.CreateFromQuaternion(tank.rotacaoFinal.Rotation);
             
             offset = Vector3.Transform(offset, rotacao);
@@ -72,7 +72,7 @@ namespace Game1
 
             position += (Vector3.Normalize(direcao) * velocidade);
             position.Y -= 0.098f * (time * time);
-            world = Matrix.CreateScale(0.8f) * Matrix.CreateTranslation(position);
+            world = Matrix.CreateScale(0.3f) * Matrix.CreateTranslation(position);
 
             
         }
@@ -92,8 +92,9 @@ namespace Game1
                     effect.World = bulletModel.Root.Transform;
                     effect.View = view;
                     effect.Projection = projection;
-
+                    
                     effect.EnableDefaultLighting();
+                    
                 }
                 mesh.Draw();
             }

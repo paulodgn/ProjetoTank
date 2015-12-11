@@ -64,7 +64,7 @@ namespace Game1
 
         public void Update(GameTime gametime, Vector3 posicao, Vector3 novaDirecao, Tank tank)
         {
-            rotacao(tank);
+            moverParaTraseiraTank(tank);
             
             //this.posicaoCentro = posicao;
             //para cada Update retiram-se 3 particulas da lista nao ativa e colocam-se as mesmas na lista de particulas ativas.
@@ -112,7 +112,7 @@ namespace Game1
             Create3DAxis.Draw(device, this.effect, view, proj, this.worldMatrix);
         }
             
-        private void rotacao(Tank tank)
+        private void moverParaTraseiraTank(Tank tank)
         {
             Vector3 offset = new Vector3(-0.6f, 0.2f, -1f);
             Matrix rotacao = /*Matrix.CreateRotationY(MathHelper.ToRadians(tank.rotacaoY)) **/ Matrix.CreateTranslation(offset) * Matrix.CreateFromQuaternion(tank.rotacaoFinal.Rotation);

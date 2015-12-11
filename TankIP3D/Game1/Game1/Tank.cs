@@ -54,7 +54,7 @@ namespace Game1
         Bullet bala;
         public Vector3 finalTrasnf;//posicao da bala
         ContentManager content;
-        BulletManager bulletManager;
+        public BulletManager bulletManager;
         float gTime,timePassed;
         public Vector3 posicaoBala;
         public Vector3 direcaoBala;

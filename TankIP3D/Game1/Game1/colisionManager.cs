@@ -9,11 +9,12 @@ namespace Game1
     class ColisionManager
     {
         List<Tank> listaTanques;
+        List<Bullet> listaBalas;
         Vector3 lastPosition;
         public ColisionManager(List<Tank> LTanques)
         {
             this.listaTanques = LTanques;
-            
+            listaBalas = new List<Bullet>();
         }
         //adiionar tanque á lista
         public void Add(Tank tank)
@@ -23,24 +24,38 @@ namespace Game1
 
 
         //detetar colisoes dos inimigos com tanque do player
-        private void colisionDetection(Tank tank)
+        private void colisionDetection(Tank tank, BulletManager bulletManager)
         {
            
-            
-                foreach (var segundoTank in listaTanques)
+                //colisao de tanques inimigos com tanque do player
+                foreach (var TankInimigo in listaTanques)
                 {
-                    
-                    if(tank.boundingSphere.Intersects(segundoTank.boundingSphere))
+
+                    if (tank.boundingSphere.Intersects(TankInimigo.boundingSphere))
                     {
                         //tank.velocidade = 0;
-                        segundoTank.velocidade = 0;
+                        TankInimigo.velocidade = 0;
                     }
                     else
                     {
-                        segundoTank.velocidade = 0.07f;
+                        TankInimigo.velocidade = 0.07f;
                     }
                 }
-           
+                //colisao das balas com tanques inimigos
+                //obter lista de balas ativas
+                listaBalas = tank.bulletManager.getListaBalasAtivas();
+                foreach (Bullet bala in listaBalas)
+                {
+                    foreach (var TankInimigo in listaTanques)
+	                {
+		                if(bala.boundingSphere.Intersects(TankInimigo.boundingSphere))
+                        {
+                            //tankinimigo destruido
+                        }
+	                }
+                    
+                }
+
         }
         //colisoes de balas com inimigos
 
