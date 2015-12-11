@@ -16,7 +16,7 @@ namespace Game1
         VertexPositionNormalTexture[] vertices;
         int vertexCount;
         short[] indice;
-        float[,] alturas;
+        public float[,] alturas;
         public int larguraMapa;
         Texture2D texturaMapa;
         int tamanhoMapa;
