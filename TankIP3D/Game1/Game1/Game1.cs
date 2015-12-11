@@ -87,7 +87,7 @@ namespace Game1
             //terreno2 = new Terreno2(GraphicsDevice, mapaAlturas, mapaAlturas, 1f, textura);
             VertexPositionNormalTexture[] vertices = terreno.getVertices();
             tank = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa,new Vector3(10,20,10), true,Content);
-            tankEnimigo = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa,new Vector3(40,20,40) ,false,Content);
+            tankEnimigo = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa,new Vector3(80,20,80) ,false,Content);
 
             listaTanques.Add(tankEnimigo);
 
@@ -172,8 +172,9 @@ namespace Game1
                 //cameraTank.UpdateInput(gameTime, graphics,tank.getPosition());
                 cameraTank.updateCamera(tank.getPosition(), tank.getWorldMAtrix(),tank.view,tank);
             }
+            tank.Update(gameTime, tank);
             tankEnimigo.Update(gameTime,tank);
-            tank.Update(gameTime,tank);
+            
             //bala.Update(gameTime,tank);
             colisionManager.UpdateColisions(tank);
             base.Update(gameTime);
