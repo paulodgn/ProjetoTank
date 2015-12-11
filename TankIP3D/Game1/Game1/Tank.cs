@@ -46,7 +46,7 @@ namespace Game1
         public float rotacaoY;
         Vector3 positionCamera;
         public Matrix rotacao;
-        bool playerControl;
+        public bool playerControl;
         bool firstUpdate;
         public BoundingSphere boundingSphere;
         public Matrix rotacaoFinal;
@@ -60,8 +60,9 @@ namespace Game1
         public Vector3 direcaoBala;
 
         float velocidadeMaxima;
-        SistemaParticulas sistemaParticulas;
-
+        SistemaParticulas sistemaParticulasTraseira;
+        bool sistemaParticulasTraseiraEnabled;
+        BasicEffect Teffect;
         // Shortcut references to the bones that we are going to animate.
         // We could just look these up inside the Draw method, but it is more
         // efficient to do the lookups while loading and cache the results.
@@ -162,18 +163,21 @@ namespace Game1
 
         public Tank(GraphicsDevice graphicsDevice, VertexPositionNormalTexture[] vert, int larguraMapa, Vector3 position, bool playerControl, ContentManager content)
         {
+            
             this.content = content;
             //world = Matrix.CreateScale(0.01f);
             this.playerControl = playerControl;
             if (playerControl)
             {
-                velocidade = 0.5f;
+                velocidade = 0.2f;
             }
             else
             {
                 velocidade = 0.07f;
             }
             device = graphicsDevice;
+            Teffect = new BasicEffect(device);
+            Teffect.VertexColorEnabled = true;
             this.position = position;
             positionCamera = position;
             vertices = vert;
@@ -194,8 +198,8 @@ namespace Game1
             velocidadeMaxima = 0.3f;
 
             //particulas
-            sistemaParticulas = new SistemaParticulas(device,this.position, 2f, 0.5f);
-
+            sistemaParticulasTraseira = new SistemaParticulas(device,this.position, 2.8f, 0.5f, this.world);
+            sistemaParticulasTraseiraEnabled = false;
         }
 
         /// <summary>
@@ -267,20 +271,12 @@ namespace Game1
                 bala.Update(gameTime, this);
 
             //particulas
-            posicaoSistemaParticulas();
-            sistemaParticulas.Update(gameTime, position , Vector3.Cross(newNormal, newRigth), this);
-        }
-        public void posicaoSistemaParticulas()
-        {
-            Vector3 sistemaParticulasOffset = new Vector3(1, 0, 2);
             
-            Matrix rotacaoparticula =  Matrix.CreateFromQuaternion(rotacaoFinal.Rotation) * Matrix.CreateTranslation(sistemaParticulasOffset);
-            //sistemaParticulasOffset = Vector3.Transform(sistemaParticulasOffset, rotacaoparticula);
-            sistemaParticulas.worldMatrix = rotacaoparticula;
-            //Vector3 posicaoParticulas =this.position - sistemaParticulasOffset;
-
-            //return posicaoParticulas;
+            sistemaParticulasTraseira.Update(gameTime, position , Vector3.Cross(newNormal, newRigth), this);
+            
+            
         }
+
       
 
 
@@ -325,8 +321,9 @@ namespace Game1
                 bala.Draw(view, projection);
             
             //particulas
-            sistemaParticulas.Draw(view,projection);
-
+            
+            sistemaParticulasTraseira.Draw(view,projection);
+            
             // Draw the model.
             foreach (ModelMesh mesh in tankModel.Meshes)
             {
@@ -459,7 +456,11 @@ namespace Game1
             {
                 this.WheelRotation += time * 5;
                 position += direcao * velocidade;
-
+                sistemaParticulasTraseira.criarParticulas=true;
+            }
+            else
+            {
+                sistemaParticulasTraseira.criarParticulas = false;
             }
             if (currentKeyboardState.IsKeyDown(Keys.S))
             {

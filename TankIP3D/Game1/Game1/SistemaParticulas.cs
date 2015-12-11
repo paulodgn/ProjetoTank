@@ -23,8 +23,8 @@ namespace Game1
         Matrix view, projection;
         float alturaRetangulo, larguraRetangulo;
         Tank tank;
-
-        public SistemaParticulas(GraphicsDevice device , Vector3 centro, float largura, float altura)
+        public bool criarParticulas;
+        public SistemaParticulas(GraphicsDevice device , Vector3 centro, float largura, float altura, Matrix worldTank)
         {
             
             quantidadeParticulas = 3000;
@@ -50,6 +50,8 @@ namespace Game1
             this.larguraRetangulo = largura;
             this.alturaRetangulo = altura;
             CriarParticulas(quantidadeParticulas);
+
+            criarParticulas = true;
         }
         //a lista de particulas nao ativa é preenchida com a quantidade de particulas desejada
         public void CriarParticulas(int quantidadeParticulas)
@@ -62,16 +64,19 @@ namespace Game1
 
         public void Update(GameTime gametime, Vector3 posicao, Vector3 novaDirecao, Tank tank)
         {
-            this.posicaoCentro = posicao;
+            rotacao(tank);
+            
+            //this.posicaoCentro = posicao;
             //para cada Update retiram-se 3 particulas da lista nao ativa e colocam-se as mesmas na lista de particulas ativas.
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 5; i++)
             {
-                if (listaParticulasAtiva.Count < 2000)
+                if (listaParticulasAtiva.Count < quantidadeParticulas-1000)
                 {
                     //particula temporaria recebe a primeira particula da lista de nao ativas.
                     particulaTemp = listaParticulas.First();
                     //calcula posicao e direcao.
-                    particulaTemp.CreateParticle(gametime, posicaoCentro, larguraRetangulo, alturaRetangulo, novaDirecao, tank);
+                    if(criarParticulas && tank.playerControl)
+                        particulaTemp.CreateParticle(gametime, posicaoCentro, larguraRetangulo, alturaRetangulo, novaDirecao, tank);
                     //adiciona particula a lista ativa.
                     listaParticulasAtiva.Add(particulaTemp);
                     //remove da lista nao ativa.
@@ -104,10 +109,19 @@ namespace Game1
             {
                 p.Draw(view, proj, worldMatrix, device);
             }
-            Create3DAxis.Draw(device, this.effect, this.view, this.projection, this.worldMatrix);
+            Create3DAxis.Draw(device, this.effect, view, proj, this.worldMatrix);
         }
             
-
+        private void rotacao(Tank tank)
+        {
+            Vector3 offset = new Vector3(-0.6f, 0.2f, -1f);
+            Matrix rotacao = /*Matrix.CreateRotationY(MathHelper.ToRadians(tank.rotacaoY)) **/ Matrix.CreateTranslation(offset) * Matrix.CreateFromQuaternion(tank.rotacaoFinal.Rotation);
+            Vector3 transformOffset = Vector3.Transform(offset, rotacao);
+            this.posicaoCentro = transformOffset + tank.position;
+            
+            this.worldMatrix =  rotacao;
+            this.worldMatrix.Translation = transformOffset + tank.position;
+        }
         public BasicEffect getEffect()
         {
             return effect;
