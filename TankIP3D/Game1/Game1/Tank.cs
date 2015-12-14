@@ -54,7 +54,7 @@ namespace Game1
         Bullet bala;
         public Vector3 finalTrasnf;//posicao da bala
         ContentManager content;
-        public BulletManager bulletManager;
+        
         float gTime,timePassed;
         public Vector3 posicaoBala;
         public Vector3 direcaoBala;
@@ -63,6 +63,8 @@ namespace Game1
         SistemaParticulas sistemaParticulasTraseira;
         bool sistemaParticulasTraseiraEnabled;
         BasicEffect Teffect;
+        public bool tankDestroyed;
+        float scale;
         // Shortcut references to the bones that we are going to animate.
         // We could just look these up inside the Draw method, but it is more
         // efficient to do the lookups while loading and cache the results.
@@ -163,7 +165,7 @@ namespace Game1
 
         public Tank(GraphicsDevice graphicsDevice, VertexPositionNormalTexture[] vert, int larguraMapa, Vector3 position, bool playerControl, ContentManager content)
         {
-            
+            scale = 0.005f;
             this.content = content;
             //world = Matrix.CreateScale(0.01f);
             this.playerControl = playerControl;
@@ -192,14 +194,15 @@ namespace Game1
             boundingSphere = new BoundingSphere();
             boundingSphere.Radius = 3f;
             //lista de balas
-            bulletManager = new BulletManager(this, content);
-            bulletManager.Initialize();
+            
 
             velocidadeMaxima = 0.3f;
 
             //particulas
             sistemaParticulasTraseira = new SistemaParticulas(device,this.position, 2.8f, 0.5f, this.world);
             sistemaParticulasTraseiraEnabled = false;
+
+            tankDestroyed = false;
         }
 
         /// <summary>
@@ -249,27 +252,31 @@ namespace Game1
 
         public void Update(GameTime gameTime, Tank playerTank)
         {
+            if (!tankDestroyed)
+            {
 
-            findNormal();
-            boundingSphere.Center = this.position;
+                findNormal();
+                boundingSphere.Center = this.position;
             
-            if(playerControl)
-            {
-                HandleTankInput(0.02f,gameTime);
-                UpdateTankRotation();
-                //sistemaParticulas.Update(gameTime, posicaoSistemaParticulas());
-            }
-            else
-            {
-                IAControl(playerTank.position);
-            }
+                if(playerControl)
+                {
+                    HandleTankInput(0.02f,gameTime);
+                    UpdateTankRotation();
+                    //sistemaParticulas.Update(gameTime, posicaoSistemaParticulas());
+                }
+                else
+                {
+                    IAControl(playerTank.position);
+                              
+                }
 
-            //posicaoBala = CalculoPosicaoBala();
-            bulletManager.UpdateBalas(gameTime);
-            //DebugShapeRenderer.AddLine(posicaoBala(), posicaoBala() + new Vector3(0, 0, 1),Color.Red);
-            if (bala != null)
-                bala.Update(gameTime, this);
-
+            
+                if (bala != null)
+                    bala.Update(gameTime, this);
+                       
+                            
+            }
+            
             //particulas
             
             sistemaParticulasTraseira.Update(gameTime, position , Vector3.Cross(newNormal, newRigth), this);
@@ -315,7 +322,7 @@ namespace Game1
 
             view = cameraView;
             projection = cameraProjection;
-            bulletManager.DrawBalas(view, projection);
+            //bulletManager.DrawBalas(view, projection);
 
             if (bala != null)
                 bala.Draw(view, projection);
@@ -475,31 +482,32 @@ namespace Game1
             //disparar bala
             if (currentKeyboardState.IsKeyDown(Keys.B))
             {
-
+                
                 gTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (gTime - timePassed > 1f)
                 {
-                    bulletManager.disparaBala();
+                    BulletManager.disparaBala();
                     timePassed = gTime;
                     Console.WriteLine(CannonRotation);
                 }
-                //bala = new Bullet(this,content);
+               
                 
             }
-            //UpdateTankRotation();
+            
             
         }
 
         private void UpdateTankRotation()
         {
+            
             position.Y = newAltura;
             rotacao =  Matrix.CreateRotationY(MathHelper.ToRadians(-90)) * Matrix.CreateRotationY(MathHelper.ToRadians(rotacaoY));
             direcao = Vector3.Transform(vetorBase, rotacao);
-            world = Matrix.CreateScale(0.005f) * rotacao * Matrix.CreateTranslation(position);
+            world = Matrix.CreateScale(scale) * rotacao * Matrix.CreateTranslation(position);
             newRigth = Vector3.Cross(newNormal, direcao);
             rotacaoFinal = Matrix.CreateWorld(position, Vector3.Cross(newNormal, newRigth), newNormal);
-            
-            world = Matrix.CreateScale(0.005f) * rotacaoFinal;
+
+            world = Matrix.CreateScale(scale) * rotacaoFinal;
             
             
         }
@@ -516,11 +524,11 @@ namespace Game1
             position += Vector3.Normalize(direcao) * velocidade;
 
             position.Y = newAltura;
-            world = Matrix.CreateScale(0.005f) * Matrix.CreateTranslation(position);
+            world = Matrix.CreateScale(scale) * Matrix.CreateTranslation(position);
             Vector3 newRigth = Vector3.Cross(newNormal, direcao);
             Matrix rotacaoUp = Matrix.CreateWorld(position, Vector3.Cross(newNormal, newRigth), newNormal);
-            world = Matrix.CreateScale(0.005f) * rotacaoUp;
-            DebugShapeRenderer.AddLine(this.position + new Vector3(0,1,0), (this.position+new Vector3(0,1,0) )+ this.direcao*4, Color.Red);
+            world = Matrix.CreateScale(scale) * rotacaoUp;
+            DebugShapeRenderer.AddLine(this.position + new Vector3(0, 1, 0), (this.position + new Vector3(0, 1, 0)) + this.direcao * 4, Color.Red);
             
         }
 
@@ -534,51 +542,7 @@ namespace Game1
             return (world);
         }
 
-        public void IAperseguirPlayer(Vector3 posicaoPlayer)
-        {
-            float maxSpeed = 0.1f;
-            Vector3 velocidadeTarget = posicaoPlayer * 0.01f - this.position;
-            velocidadeTarget.Normalize();
-            velocidadeTarget *= maxSpeed;
-            Vector3 acelaracao =  velocidadeTarget - direcao ;
-            acelaracao.Normalize();
-            direcao += acelaracao;
 
-        }
-
-      
-
-        public Vector3 CalculoPosicaoBala()
-        {
-            //isto ta certo
-            Vector3 offset = (position * 0.01f) /*+ new Vector3(0, 3.5f, 4)*/;
-            Matrix rot = Matrix.CreateRotationY(TurretRotation);
-            Vector3 transformOffset = Vector3.Transform(offset, rot);
-            Vector3 novoDireita = Vector3.Cross(newNormal, transformOffset);
-            novoDireita.Normalize();
-            Matrix rot2 = Matrix.CreateFromAxisAngle(novoDireita, CannonRotation );
-            Vector3 transformOffset2 = Vector3.Transform(transformOffset, rot2);
-            finalTrasnf = Vector3.Transform(transformOffset2, rotacaoFinal);
-
-            //Vector3 offset = (position *0.01f) /*+ new Vector3(0, 3.5f, 4)*/;
-            
-            //Matrix rot = (Matrix.CreateRotationY(TurretRotation)/ Matrix.CreateRotationX(TurretRotation)) * rotacaoFinal;
-            //Vector3 transformOffset = Vector3.Transform(offset, rot);
-
-
-
-
-            direcaoBala = Vector3.Transform(vetorBase, rot2);
-            
-            ////finalTrasnf = Vector3.Transform(transformOffset, rotacaoFinal);
-            //posicaoBala = position /*+ offset*/;
-
-
-
-            return (finalTrasnf);
-        }
-
-        
 
     }
 }

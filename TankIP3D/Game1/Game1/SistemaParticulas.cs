@@ -13,16 +13,16 @@ namespace Game1
         List<Particula> listaParticulasAtiva;
         List<Particula> listaSemGestao;
         GraphicsDevice device;
-        float raioDisco;
+        
         Particula particulaTemp;
-        float direcaoDeEsguelhaOffset;
+        
         public Vector3 posicaoCentro;
         public BasicEffect effect;
         public Matrix worldMatrix;
         int quantidadeParticulas;
-        Matrix view, projection;
+        
         float alturaRetangulo, larguraRetangulo;
-        Tank tank;
+        
         public bool criarParticulas;
         public SistemaParticulas(GraphicsDevice device , Vector3 centro, float largura, float altura, Matrix worldTank)
         {
@@ -37,7 +37,7 @@ namespace Game1
             
             
             
-            direcaoDeEsguelhaOffset = 0.3f;
+            
 
             effect = new BasicEffect(device);
             worldMatrix = Matrix.Identity;

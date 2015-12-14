@@ -19,23 +19,24 @@ namespace Game1
         Vector3 vetorBase;
         Tank playerTank;
         public BoundingSphere boundingSphere;
+        public bool balaDestruida;
         public Bullet(Tank tank,ContentManager content)
         {
             playerTank = tank;
             vetorBase = new Vector3(0, 0, 1);
-            
+            balaDestruida = false;
            
             world = Matrix.CreateScale(0.3f) * Matrix.CreateTranslation(position);
             LoadContent(content);
-
+            //poicao e direcao da bala. cria se um offset para a bala começar na ponta do canhao, aplica-se todas as rotaçoes existentes no canhaoe calcula a direcao
+            //transformando o vetor direcao ( cross da normal do tanque com o vetor rigth da turret) com a rotacao.
             Vector3 offset = new Vector3(0, 2, 3);
             Matrix rotacao = Matrix.CreateRotationX(tank.CannonRotation) * Matrix.CreateRotationY(tank.TurretRotation) * Matrix.CreateFromQuaternion(tank.rotacaoFinal.Rotation);
-            
             offset = Vector3.Transform(offset, rotacao);
             direcao = Vector3.Transform(Vector3.Cross(tank.newRigth, tank.newNormal), rotacao);
             position = tank.position + offset;
             boundingSphere = new BoundingSphere();
-            boundingSphere.Radius = 0.7f;
+            boundingSphere.Radius = 0.3f;
         }
 
         public void LoadContent(ContentManager content)
@@ -46,24 +47,7 @@ namespace Game1
 
         }
 
-        public void direcaoBala( Tank tank)
-        {
-           
-            //obter direcao rodando o vetor direcao verdadeiro do tank com o valor da rotacao da turret
-            Matrix rotacaoParaDirecao = Matrix.CreateRotationY(tank.TurretRotation);
-            Vector3 direcaoTurret = Vector3.Transform(Vector3.Cross(tank.newRigth, tank.newNormal), rotacaoParaDirecao);
-
-            Vector3 novoDireita = Vector3.Cross(tank.newNormal, direcaoTurret);
-            novoDireita.Normalize();
-
-            Matrix rotacaoCanon = Matrix.CreateFromAxisAngle(novoDireita, tank.CannonRotation);
-
-            direcao = Vector3.Transform(direcaoTurret, rotacaoCanon);
-
-
-
-         
-        }
+   
 
         public void Update(GameTime gameTime,Tank tank)
         {

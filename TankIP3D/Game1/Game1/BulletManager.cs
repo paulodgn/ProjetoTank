@@ -7,42 +7,37 @@ using System.Text;
 
 namespace Game1
 {
-    class BulletManager
+    static class BulletManager
     {
 
-        List<Bullet> balasAtivas;
-        List<Bullet> balasNaoAtivas;
-        List<Bullet> copiaBalasAtivas;
-        int numeroDeBalas;
-        Tank tank;
-        ContentManager content;
-        Bullet balaTemp;
-        Vector3 posicaoBala, direcaoBala;
-
-        public BulletManager(Tank tank, ContentManager content)
+        static List<Bullet> balasAtivas;
+        static List<Bullet> balasNaoAtivas;
+        static List<Bullet> copiaBalasAtivas;
+        static int numeroDeBalas;
+        static Tank tank;
+        static ContentManager content;
+        static Bullet balaTemp;
+        static Vector3 posicaoBala, direcaoBala;
+        
+        
+        static public void Initialize(Tank tankQueDispara, ContentManager cont)
         {
             balasAtivas = new List<Bullet>(500);
             balasNaoAtivas = new List<Bullet>(500);
-            this.tank = tank;
-            this.content = content;
+            tank = tankQueDispara;
+            content = cont;
             numeroDeBalas = 500;
             copiaBalasAtivas = balasAtivas;
-        }
-
-        public void Initialize()
-        {
+            
             for (int i = 0; i < numeroDeBalas; i++)
             {
                 balasNaoAtivas.Add(new Bullet(tank, content));
             }
         }
 
-        public void PosicaoDirecaoBala()
+        static public void PosicaoDirecaoBala()
         {
-            //obter direcao rodando o vetor direcao verdadeiro do tank com o valor da rotacao da turret
-           
             
-
             Vector3 offset = new Vector3(0, 2, 3);
             Matrix rotacao = Matrix.CreateRotationX(tank.CannonRotation) * Matrix.CreateRotationY(tank.TurretRotation) * Matrix.CreateFromQuaternion(tank.rotacaoFinal.Rotation);
 
@@ -51,7 +46,7 @@ namespace Game1
             posicaoBala = tank.position + offset;
         }
 
-        public void disparaBala()
+        static public void disparaBala()
         {
             PosicaoDirecaoBala();
             balaTemp = balasNaoAtivas.First();
@@ -64,7 +59,7 @@ namespace Game1
             
         }
 
-        public void removerBala(Bullet bala)
+        static public void removerBala(Bullet bala)
         {
             
             balasAtivas.Remove(bala);
@@ -74,22 +69,18 @@ namespace Game1
 
        
 
-        public void UpdateBalas(GameTime gameTime)
+        static public void UpdateBalas(GameTime gameTime)
         {
             //copiaBalasAtivas = balasAtivas.ToList();
-            foreach (Bullet bala in copiaBalasAtivas)
+            foreach (Bullet bala in balasAtivas)
             {
-                bala.Update(gameTime, this.tank);
-                //if (bala.position.Y < -50f)
-                //{
-
-                //    removerBala(bala);
-                //}
-                
+                bala.Update(gameTime, tank);
+                             
             }
             balasAtivas.RemoveAll(b => b.position.Y < -50f);
+            balasAtivas.RemoveAll(b => b.balaDestruida == true);
         }
-        public void DrawBalas(Matrix view, Matrix projection)
+        static public void DrawBalas(Matrix view, Matrix projection)
         {
             foreach (Bullet bala in balasAtivas)
             {
@@ -98,7 +89,7 @@ namespace Game1
             }
         }
 
-        public List<Bullet> getListaBalasAtivas()
+        static public List<Bullet> getListaBalasAtivas()
         {
             return balasAtivas;
         }

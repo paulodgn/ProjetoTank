@@ -24,11 +24,11 @@ namespace Game1
 
 
         //detetar colisoes dos inimigos com tanque do player
-        private void colisionDetection(Tank tank, BulletManager bulletManager)
+        private void colisionDetection(Tank tank)
         {
            
                 //colisao de tanques inimigos com tanque do player
-                foreach (var TankInimigo in listaTanques)
+                foreach (Tank TankInimigo in listaTanques)
                 {
 
                     if (tank.boundingSphere.Intersects(TankInimigo.boundingSphere))
@@ -43,18 +43,21 @@ namespace Game1
                 }
                 //colisao das balas com tanques inimigos
                 //obter lista de balas ativas
-                listaBalas = tank.bulletManager.getListaBalasAtivas();
+                listaBalas = BulletManager.getListaBalasAtivas();
                 foreach (Bullet bala in listaBalas)
                 {
-                    foreach (var TankInimigo in listaTanques)
-	                {
-		                if(bala.boundingSphere.Intersects(TankInimigo.boundingSphere))
+                    foreach (Tank TankInimigo in listaTanques)
+                    {
+                        if (bala.boundingSphere.Intersects(TankInimigo.boundingSphere))
                         {
-                            //tankinimigo destruido
+                            TankInimigo.tankDestroyed = true;
+                            bala.balaDestruida = true;
                         }
-	                }
+                    }
                     
+
                 }
+                
 
         }
         //colisoes de balas com inimigos

@@ -21,15 +21,14 @@ namespace Game1
         Texture2D mapaAlturas, textura;
         BasicEffect effect;
         Vector2 mousePosition;
-        float posicaoInicialRatoX, posicaoInicialRatoY;
-        Vector2 posicaoRato;
-        Plano plano;
-        Terreno2 terreno2;
+        
         Tank tank;
         Tank tankEnimigo;
-        ColisionManager colisionManager;
+        Tank tankEnimigo2;
+            
         List<Tank> listaTanques;
         Bullet bala;
+        ColisionManager colisionManager;
         enum CameraAtiva
         {
             fps,
@@ -89,9 +88,9 @@ namespace Game1
             VertexPositionNormalTexture[] vertices = terreno.getVertices();
             tank = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa,new Vector3(10,20,10), true,Content);
             tankEnimigo = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa,new Vector3(80,20,80) ,false,Content);
-
+            tankEnimigo2 = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa, new Vector3(80, 20, 20), false, Content);
             listaTanques.Add(tankEnimigo);
-
+            listaTanques.Add(tankEnimigo2);
             colisionManager = new ColisionManager(listaTanques);
 
 
@@ -109,7 +108,8 @@ namespace Game1
             //effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f), aspectRatio, 0.1f, 1000.0f);
             tank.LoadContent(Content);
             tankEnimigo.LoadContent(Content);
-            
+            tankEnimigo2.LoadContent(Content);
+            BulletManager.Initialize(tank,Content);
             //tank.world = Matrix.CreateRotationY(MathHelper.ToRadians(90));
             //tank.world = Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateScale(.001f); 
             //tank.world.Scale = new Vector3(0.01f, 0.01f, 0.01f);
@@ -175,7 +175,8 @@ namespace Game1
             }
             tank.Update(gameTime, tank);
             tankEnimigo.Update(gameTime,tank);
-            
+            tankEnimigo2.Update(gameTime, tank);
+            BulletManager.UpdateBalas(gameTime);
             //bala.Update(gameTime,tank);
             colisionManager.UpdateColisions(tank);
             base.Update(gameTime);
@@ -198,6 +199,8 @@ namespace Game1
                 terreno.Draw(GraphicsDevice, cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
                 tank.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
                 tankEnimigo.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
+                tankEnimigo2.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
+                BulletManager.DrawBalas(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
                 //terreno2.Draw2(GraphicsDevice, cameraSurfaceFollow.view);
                 DebugShapeRenderer.Draw(gameTime, cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
                 //bala.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
@@ -211,6 +214,8 @@ namespace Game1
                 DebugShapeRenderer.Draw(gameTime, camera.view, camera.projection);
                 tank.Draw(camera.view, camera.projection);
                 tankEnimigo.Draw(camera.view, camera.projection);
+                tankEnimigo2.Draw(camera.view, camera.projection);
+                BulletManager.DrawBalas(camera.view, camera.projection);
                 //bala.Draw(camera.view, camera.projection);
                 // terreno2.Draw2(GraphicsDevice, camera.view);
                 
@@ -223,6 +228,8 @@ namespace Game1
                 DebugShapeRenderer.Draw(gameTime, cameraTank.view, cameraTank.projection);
                 tank.Draw(cameraTank.view, cameraTank.projection);
                 tankEnimigo.Draw(cameraTank.view, cameraTank.projection);
+                tankEnimigo2.Draw(cameraTank.view, cameraTank.projection);
+                BulletManager.DrawBalas(cameraTank.view, cameraTank.projection);
                 //bala.Draw(cameraTank.view, cameraTank.projection);
                 
             }
