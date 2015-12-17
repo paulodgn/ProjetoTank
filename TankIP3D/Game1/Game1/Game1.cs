@@ -110,12 +110,7 @@ namespace Game1
             tankEnimigo.LoadContent(Content);
             tankEnimigo2.LoadContent(Content);
             BulletManager.Initialize(tank,Content);
-            //tank.world = Matrix.CreateRotationY(MathHelper.ToRadians(90));
-            //tank.world = Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateScale(.001f); 
-            //tank.world.Scale = new Vector3(0.01f, 0.01f, 0.01f);
-
-            //bala = new Bullet(new Vector3(1, 1, 1), tank, Content);
-            //bala.LoadContent(Content);
+            IA.Initialize();
         }
 
         /// <summary>
@@ -173,9 +168,9 @@ namespace Game1
                 //cameraTank.UpdateInput(gameTime, graphics,tank.getPosition());
                 cameraTank.updateCamera(tank.getPosition(), tank.getWorldMAtrix(),tank.view,tank);
             }
-            tank.Update(gameTime, tank);
-            tankEnimigo.Update(gameTime,tank);
-            tankEnimigo2.Update(gameTime, tank);
+            tank.Update(gameTime, tank, listaTanques);
+            tankEnimigo.Update(gameTime, tank, listaTanques);
+            tankEnimigo2.Update(gameTime, tank, listaTanques);
             BulletManager.UpdateBalas(gameTime);
             //bala.Update(gameTime,tank);
             colisionManager.UpdateColisions(tank);

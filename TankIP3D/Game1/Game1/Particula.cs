@@ -33,6 +33,7 @@ namespace Game1
             vertices = new VertexPositionColor[2];
             //effect
             effect = new BasicEffect(device);
+            
             worldMatrix = Matrix.Identity;
             // direcaoDeEsguelha define o limite de inclinaçao que a direcao da particula pode obter.
             direcaoDeEsguelha = 0.2f;
@@ -75,6 +76,7 @@ namespace Game1
 
         public void Update(GameTime gametime)
         {
+            effect.World = this.worldMatrix;
             //worldMatrix = Matrix.Identity;
             time = (float)gametime.ElapsedGameTime.TotalSeconds ;
 
@@ -97,7 +99,7 @@ namespace Game1
             this.effect.Projection = Cproj;
 
           
-            effect.World = this.worldMatrix;
+            
             effect.CurrentTechnique.Passes[0].Apply();
             //cada instancia da partcula desenha os seus dois vertices
             device.DrawUserPrimitives(PrimitiveType.LineList, vertices, 0, 1);

@@ -196,7 +196,7 @@ namespace Game1
             //lista de balas
             
 
-            velocidadeMaxima = 0.3f;
+            velocidadeMaxima = 0.005f;
 
             //particulas
             sistemaParticulasTraseira = new SistemaParticulas(device,this.position, 2.8f, 0.5f, this.world);
@@ -250,7 +250,7 @@ namespace Game1
             
         }
 
-        public void Update(GameTime gameTime, Tank playerTank)
+        public void Update(GameTime gameTime, Tank playerTank, List<Tank> listTanksInimigos)
         {
             if (!tankDestroyed)
             {
@@ -266,7 +266,7 @@ namespace Game1
                 }
                 else
                 {
-                    IAControl(playerTank.position);
+                    IAControl(playerTank.position, listTanksInimigos);
                               
                 }
 
@@ -512,13 +512,14 @@ namespace Game1
             
         }
 
-        private void IAControl(Vector3 playerPosition)
+        private void IAControl(Vector3 playerPosition, List<Tank> listaParceiros)
         {
-
+            
             Vector3 direcaoPlayer = playerPosition - position;
             direcaoPlayer=direcaoPlayer*velocidade;
-            Vector3 acelaracao = (direcaoPlayer - direcao)*0.005f;
-            direcao = direcao + acelaracao ;
+            Vector3 acelaracao = (direcaoPlayer - direcao) * velocidadeMaxima;
+            Vector3 desvioDeParceiro = IA.GerirDistancia(listaParceiros, this);
+            direcao = direcao + desvioDeParceiro * velocidadeMaxima + acelaracao ;
 
             DebugShapeRenderer.AddLine(this.position, this.position + direcaoPlayer,Color.Blue);
             position += Vector3.Normalize(direcao) * velocidade;
