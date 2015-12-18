@@ -25,9 +25,9 @@ namespace Game1
         Tank tank;
         Tank tankEnimigo;
         Tank tankEnimigo2;
-            
+        Tank tankEnimigo3;
         List<Tank> listaTanques;
-        Bullet bala;
+        
         ColisionManager colisionManager;
         enum CameraAtiva
         {
@@ -89,8 +89,11 @@ namespace Game1
             tank = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa,new Vector3(10,20,10), true,Content);
             tankEnimigo = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa,new Vector3(80,20,80) ,false,Content);
             tankEnimigo2 = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa, new Vector3(80, 20, 20), false, Content);
+            tankEnimigo3 = new Tank(GraphicsDevice, terreno.getVertices(), terreno.larguraMapa, new Vector3(70, 20, 50), false, Content);
+            listaTanques.Add(tank);
             listaTanques.Add(tankEnimigo);
             listaTanques.Add(tankEnimigo2);
+            listaTanques.Add(tankEnimigo3);
             colisionManager = new ColisionManager(listaTanques);
 
 
@@ -109,6 +112,7 @@ namespace Game1
             tank.LoadContent(Content);
             tankEnimigo.LoadContent(Content);
             tankEnimigo2.LoadContent(Content);
+            tankEnimigo3.LoadContent(Content);
             BulletManager.Initialize(tank,Content);
             IA.Initialize();
         }
@@ -132,47 +136,29 @@ namespace Game1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
-            //Camera.Update(gameTime, GraphicsDevice);
-            //input(gameTime);
-
-
-            //camera2.input(gameTime, graphics);
-
-
-
-
-            //camera.input(gameTime,graphics);
-            //cameraSurfaceFollow.UpdateInput(gameTime, graphics);
-
-
-            //camera.UpdateInput(gameTime,graphics);
-            //cameraSurfaceFollow.UpdateInput(gameTime, graphics);
+           
             escolherCamara();
             if (cameraAtiva == CameraAtiva.fps)
             {
                 cameraSurfaceFollow.UpdateInput(gameTime, graphics);
-                //tank.view = cameraSurfaceFollow.view;
-                //tank.projection = cameraSurfaceFollow.projection;
+          
             }
             else if(cameraAtiva==CameraAtiva.free)
             {
                 camera.UpdateInput(gameTime, graphics);
-                //tank.view = camera.view;
-                //tank.projection = camera.projection;
+       
             }
             else
             {
-                
-                //cameraSurfaceFollow.updateCamera();
-                //cameraTank.UpdateInput(gameTime, graphics,tank.getPosition());
+
                 cameraTank.updateCamera(tank.getPosition(), tank.getWorldMAtrix(),tank.view,tank);
             }
             tank.Update(gameTime, tank, listaTanques);
             tankEnimigo.Update(gameTime, tank, listaTanques);
             tankEnimigo2.Update(gameTime, tank, listaTanques);
+            tankEnimigo3.Update(gameTime, tank, listaTanques);
             BulletManager.UpdateBalas(gameTime);
-            //bala.Update(gameTime,tank);
+
             colisionManager.UpdateColisions(tank);
             base.Update(gameTime);
         }
@@ -188,17 +174,17 @@ namespace Game1
             // TODO: Add your drawing code here
 
 
-
             if (cameraAtiva == CameraAtiva.fps)
             {
                 terreno.Draw(GraphicsDevice, cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
                 tank.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
                 tankEnimigo.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
                 tankEnimigo2.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
+                tankEnimigo3.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
                 BulletManager.DrawBalas(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
-                //terreno2.Draw2(GraphicsDevice, cameraSurfaceFollow.view);
-                DebugShapeRenderer.Draw(gameTime, cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
-                //bala.Draw(cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
+
+                //DebugShapeRenderer.Draw(gameTime, cameraSurfaceFollow.view, cameraSurfaceFollow.projection);
+
                
             }
             else if(cameraAtiva == CameraAtiva.free)
@@ -210,22 +196,23 @@ namespace Game1
                 tank.Draw(camera.view, camera.projection);
                 tankEnimigo.Draw(camera.view, camera.projection);
                 tankEnimigo2.Draw(camera.view, camera.projection);
+                tankEnimigo3.Draw(camera.view, camera.projection);
                 BulletManager.DrawBalas(camera.view, camera.projection);
-                //bala.Draw(camera.view, camera.projection);
-                // terreno2.Draw2(GraphicsDevice, camera.view);
+
                 
             }
             else
             {
                 terreno.Draw(GraphicsDevice, cameraTank.view, cameraTank.projection);
-                DebugShapeRenderer.AddBoundingSphere(tank.boundingSphere, Color.Orange);
-                DebugShapeRenderer.AddBoundingSphere(tankEnimigo.boundingSphere, Color.Orange);
-                DebugShapeRenderer.Draw(gameTime, cameraTank.view, cameraTank.projection);
+                //DebugShapeRenderer.AddBoundingSphere(tank.boundingSphere, Color.Orange);
+                //DebugShapeRenderer.AddBoundingSphere(tankEnimigo.boundingSphere, Color.Orange);
+                //DebugShapeRenderer.Draw(gameTime, cameraTank.view, cameraTank.projection);
                 tank.Draw(cameraTank.view, cameraTank.projection);
                 tankEnimigo.Draw(cameraTank.view, cameraTank.projection);
                 tankEnimigo2.Draw(cameraTank.view, cameraTank.projection);
+                tankEnimigo3.Draw(cameraTank.view, cameraTank.projection);
                 BulletManager.DrawBalas(cameraTank.view, cameraTank.projection);
-                //bala.Draw(cameraTank.view, cameraTank.projection);
+                
                 
             }
 

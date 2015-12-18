@@ -28,17 +28,19 @@ namespace Game1
         {
            
                 //colisao de tanques inimigos com tanque do player
-                foreach (Tank TankInimigo in listaTanques)
+                foreach (Tank Tank in listaTanques)
                 {
-
-                    if (tank.boundingSphere.Intersects(TankInimigo.boundingSphere))
+                    if (!Tank.playerControl)
                     {
-                        //tank.velocidade = 0;
-                        TankInimigo.velocidade = 0;
-                    }
-                    else
-                    {
-                        TankInimigo.velocidade = 0.07f;
+                        if (tank.boundingSphere.Intersects(Tank.boundingSphere))
+                        {
+                            //tank.velocidade = 0;
+                            Tank.velocidade = 0;
+                        }
+                        else
+                        {
+                            Tank.velocidade = 0.07f;
+                        }
                     }
                 }
                 //colisao das balas com tanques inimigos

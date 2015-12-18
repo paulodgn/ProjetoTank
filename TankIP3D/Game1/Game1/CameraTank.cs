@@ -41,7 +41,7 @@ namespace Game1
             Mouse.SetPosition(graphics.GraphicsDevice.Viewport.Height / 2, graphics.GraphicsDevice.Viewport.Width / 2);
             posicaoRatoInicial = Mouse.GetState();
             this.frente();
-            //updateCamera(posicaoTank,worldTank,tankView);
+
         }
 
         //surface follow
@@ -210,7 +210,7 @@ namespace Game1
                 }
                 catch (Exception e)
                 { }
-                //updateCamera(posicaoTank, worldTank);
+
                 
                 
             }
@@ -239,17 +239,7 @@ namespace Game1
             {
 
             }
-            //worldMatrix = rotacao;
-            
-            //direcao = Vector3.Transform(vetorBase, rotacao);
-            //target = posicao + direcao;
-            //Matrix rotate = Matrix.CreateRotationY(MathHelper.ToRadians(tank.rotacaoY));
-            //posicao = Vector3.Transform(posicao, rotate);
-            ////this.posicao = posicaoTank + new Vector3(0, 10, -20);
-            //worldMatrix = worldTank;
-            //view = Matrix.CreateLookAt(posicao, posicaoTank, Vector3.Up);
-            
-            //this.posicao.Y = posicaoTank.Y;
+
             Vector3 offset = new Vector3(0,10,-20);
             rotacao = Matrix.CreateRotationY(MathHelper.ToRadians(tank.rotacaoY));
             Vector3 transformOffset = Vector3.Transform(offset, rotacao);

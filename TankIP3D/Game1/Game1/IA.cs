@@ -8,40 +8,68 @@ namespace Game1
 {
     static class IA
     {
-        static Vector3 distancia;
+        static float distancia;
         static float distanciaMinima;
+        static Vector3 somaForcas;
+        static int cont;
         static public void Initialize()
         {
-            distancia = new Vector3(0, 0, 0);
-            distanciaMinima = 4f;
+            
+            distanciaMinima = 20f;
         }
 
         static public Vector3 GerirDistancia(List<Tank> listaTank, Tank tank)
         {
+            cont = 0;
+            somaForcas = Vector3.Zero;
             foreach (Tank otherTank in listaTank)
             {
-                if(tank != otherTank)
+                if (!otherTank.playerControl)
                 {
-                    distancia = distancia - (otherTank.position - tank.position);
-                    if(Vector3.Distance(tank.position, otherTank.position) < distanciaMinima)
+                    distancia = Vector3.Distance(tank.position, otherTank.position);
+                    if (distancia > 0 && distancia < distanciaMinima)
                     {
-                        distancia -= distancia - (tank.position - otherTank.position);
-                        Vector3.Normalize(distancia);
-                    }
-                    else
-                    {
-                        //break;
-                        distancia = new Vector3(0, 0, 0);
-                    }
+                        Vector3 diferenca = tank.position - otherTank.position;
+                        Vector3.Normalize(diferenca);
+                        somaForcas += diferenca;
 
+                        cont++;
+                    }
                 }
-
-                
+                    
             }
-            return distancia;
+            if (cont > 0)
+            {
+                somaForcas = somaForcas / cont;
+            }
 
-            
+            return somaForcas;
         }
 
     }
 }
+ //foreach (Tank otherTank in listaTank)
+ //           {
+ //               if(tank != otherTank)
+ //               {
+ //                   //distancia = new Vector3(0, 0, 0);
+ //                   distancia = distancia - (otherTank.position - tank.position);
+
+ //                   if (Vector3.Distance(otherTank.position, tank.position) < distanciaMinima && distanciaMinima>0)
+ //                   {
+ //                       DebugShapeRenderer.AddLine(tank.position, tank.position + distancia, Color.Orange);
+ //                       distancia -= (tank.position - otherTank.position);
+ //                       Vector3.Normalize(distancia);
+ //                   }
+ //                   else
+ //                   {
+                        
+ //                       distancia = new Vector3(0, 0, 0);
+
+ //                   }
+
+ //               }
+
+                
+ //           }
+ //           return distancia;

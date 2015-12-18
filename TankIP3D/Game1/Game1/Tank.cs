@@ -65,6 +65,8 @@ namespace Game1
         BasicEffect Teffect;
         public bool tankDestroyed;
         float scale;
+        Vector3 direcaoFuga;
+        Vector3 acelaracao;
         // Shortcut references to the bones that we are going to animate.
         // We could just look these up inside the Draw method, but it is more
         // efficient to do the lookups while loading and cache the results.
@@ -484,7 +486,7 @@ namespace Game1
             {
                 
                 gTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (gTime - timePassed > 1f)
+                if (gTime - timePassed > 0.5f)
                 {
                     BulletManager.disparaBala();
                     timePassed = gTime;
@@ -499,7 +501,7 @@ namespace Game1
 
         private void UpdateTankRotation()
         {
-            
+            verificarLimites();
             position.Y = newAltura;
             rotacao =  Matrix.CreateRotationY(MathHelper.ToRadians(-90)) * Matrix.CreateRotationY(MathHelper.ToRadians(rotacaoY));
             direcao = Vector3.Transform(vetorBase, rotacao);
@@ -514,14 +516,29 @@ namespace Game1
 
         private void IAControl(Vector3 playerPosition, List<Tank> listaParceiros)
         {
-            
-            Vector3 direcaoPlayer = playerPosition - position;
-            direcaoPlayer=direcaoPlayer*velocidade;
-            Vector3 acelaracao = (direcaoPlayer - direcao) * velocidadeMaxima;
-            Vector3 desvioDeParceiro = IA.GerirDistancia(listaParceiros, this);
-            direcao = direcao + desvioDeParceiro * velocidadeMaxima + acelaracao ;
 
-            DebugShapeRenderer.AddLine(this.position, this.position + direcaoPlayer,Color.Blue);
+            verificarLimites();
+            
+            Vector3 desvioDeParceiro = IA.GerirDistancia(listaParceiros, this);
+            desvioDeParceiro = desvioDeParceiro * velocidade;
+            Vector3 acelaracaoDesvioParceiro = (desvioDeParceiro - direcao) * velocidadeMaxima;
+
+            Vector3 direcaoPlayer = playerPosition - position;
+            direcaoPlayer = direcaoPlayer * velocidade;
+            acelaracao = (direcaoPlayer - direcao) * velocidadeMaxima;
+
+            //se a direcao desejada for o player
+            if (desvioDeParceiro == Vector3.Zero)
+            {
+                direcao = direcao + acelaracao;
+            }
+            //se a direcao desejada for fugir do parceiro
+            else
+            {
+                direcao = direcao + acelaracaoDesvioParceiro;
+            }
+
+            //DebugShapeRenderer.AddLine(this.position, this.position + desvioDeParceiro,Color.Yellow);
             position += Vector3.Normalize(direcao) * velocidade;
 
             position.Y = newAltura;
@@ -543,7 +560,26 @@ namespace Game1
             return (world);
         }
 
-
+        public void verificarLimites()
+        {
+            //verificar se esta fora do terreno
+            if (this.position.X - 1 < 0)
+            {
+                this.position.X += 0.5f;
+            }
+            if (this.position.Z - 1 < 0)
+            {
+                this.position.Z += 0.5f;
+            }
+            if (this.position.X + 1 > 127)
+            {
+                this.position.X -= 0.5f;
+            }
+            if (this.position.Z + 1 > 127)
+            {
+                this.position.Z -= 0.5f;
+            }
+        }
 
     }
 }
