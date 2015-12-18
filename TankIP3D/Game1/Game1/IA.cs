@@ -48,28 +48,3 @@ namespace Game1
 
     }
 }
- //foreach (Tank otherTank in listaTank)
- //           {
- //               if(tank != otherTank)
- //               {
- //                   //distancia = new Vector3(0, 0, 0);
- //                   distancia = distancia - (otherTank.position - tank.position);
-
- //                   if (Vector3.Distance(otherTank.position, tank.position) < distanciaMinima && distanciaMinima>0)
- //                   {
- //                       DebugShapeRenderer.AddLine(tank.position, tank.position + distancia, Color.Orange);
- //                       distancia -= (tank.position - otherTank.position);
- //                       Vector3.Normalize(distancia);
- //                   }
- //                   else
- //                   {
-                        
- //                       distancia = new Vector3(0, 0, 0);
-
- //                   }
-
- //               }
-
-                
- //           }
- //           return distancia;
