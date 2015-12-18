@@ -150,10 +150,11 @@ namespace Game1
                 }
                 public void verificarLimites()
                 {
+                    Vector3 posicaoAnterior = this.posicao;
                     //verificar se esta fora do terreno
                     if (this.posicao.X - 1 < 0)
                     {
-                        this.posicao.X += 0.5f;
+                        this.posicao.X = posicaoAnterior.X;
                     }
                     if (this.posicao.Z - 1 < 0)
                     {

@@ -190,9 +190,9 @@ namespace Game1
             else if(cameraAtiva == CameraAtiva.free)
             {
                 terreno.Draw(GraphicsDevice, camera.view, camera.projection);
-                DebugShapeRenderer.AddBoundingSphere(tank.boundingSphere, Color.Orange);
-                DebugShapeRenderer.AddBoundingSphere(tankEnimigo.boundingSphere, Color.Orange);
-                DebugShapeRenderer.Draw(gameTime, camera.view, camera.projection);
+                //DebugShapeRenderer.AddBoundingSphere(tank.boundingSphere, Color.Orange);
+                //DebugShapeRenderer.AddBoundingSphere(tankEnimigo.boundingSphere, Color.Orange);
+                //DebugShapeRenderer.Draw(gameTime, camera.view, camera.projection);
                 tank.Draw(camera.view, camera.projection);
                 tankEnimigo.Draw(camera.view, camera.projection);
                 tankEnimigo2.Draw(camera.view, camera.projection);

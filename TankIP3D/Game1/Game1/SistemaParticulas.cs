@@ -96,7 +96,7 @@ namespace Game1
             {
                 p.Draw(view, proj, worldMatrix, device);
             }
-            Create3DAxis.Draw(device, this.effect, view, proj, this.worldMatrix);
+            //Create3DAxis.Draw(device, this.effect, view, proj, this.worldMatrix);
         }
             
         private void moverParaTraseiraTank(Tank tank)

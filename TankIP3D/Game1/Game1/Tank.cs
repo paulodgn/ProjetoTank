@@ -67,6 +67,7 @@ namespace Game1
         float scale;
         Vector3 direcaoFuga;
         Vector3 acelaracao;
+        Vector3 posicaoAnterior;
         // Shortcut references to the bones that we are going to animate.
         // We could just look these up inside the Draw method, but it is more
         // efficient to do the lookups while loading and cache the results.
@@ -501,7 +502,8 @@ namespace Game1
 
         private void UpdateTankRotation()
         {
-            verificarLimites();
+            
+            verificarLimites(posicaoAnterior);
             position.Y = newAltura;
             rotacao =  Matrix.CreateRotationY(MathHelper.ToRadians(-90)) * Matrix.CreateRotationY(MathHelper.ToRadians(rotacaoY));
             direcao = Vector3.Transform(vetorBase, rotacao);
@@ -510,14 +512,14 @@ namespace Game1
             rotacaoFinal = Matrix.CreateWorld(position, Vector3.Cross(newNormal, newRigth), newNormal);
 
             world = Matrix.CreateScale(scale) * rotacaoFinal;
-            
+            posicaoAnterior = this.position;
             
         }
 
         private void IAControl(Vector3 playerPosition, List<Tank> listaParceiros)
         {
-
-            verificarLimites();
+            
+            verificarLimites(posicaoAnterior);
             
             Vector3 desvioDeParceiro = IA.GerirDistancia(listaParceiros, this);
             desvioDeParceiro = desvioDeParceiro * velocidade;
@@ -547,7 +549,7 @@ namespace Game1
             Matrix rotacaoUp = Matrix.CreateWorld(position, Vector3.Cross(newNormal, newRigth), newNormal);
             world = Matrix.CreateScale(scale) * rotacaoUp;
             DebugShapeRenderer.AddLine(this.position + new Vector3(0, 1, 0), (this.position + new Vector3(0, 1, 0)) + this.direcao * 4, Color.Red);
-            
+            posicaoAnterior = this.position;
         }
 
 
@@ -560,24 +562,25 @@ namespace Game1
             return (world);
         }
 
-        public void verificarLimites()
+        public void verificarLimites(Vector3 posicaoAnterior)
         {
+            
             //verificar se esta fora do terreno
             if (this.position.X - 1 < 0)
             {
-                this.position.X += 0.5f;
+                this.position.X = posicaoAnterior.X;
             }
             if (this.position.Z - 1 < 0)
             {
-                this.position.Z += 0.5f;
+                this.position.Z = posicaoAnterior.Z;
             }
             if (this.position.X + 1 > 127)
             {
-                this.position.X -= 0.5f;
+                this.position.X = posicaoAnterior.X;
             }
             if (this.position.Z + 1 > 127)
             {
-                this.position.Z -= 0.5f;
+                this.position.Z = posicaoAnterior.Z; ;
             }
         }
 
